@@ -1,0 +1,32 @@
+{
+  "name": "chuanqi",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@wangeditor/editor": "^5.1.23",
+    "alpinejs": "^3.13.10",
+    "swiper": "^11.1.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "postcss": "^8.4.38",
+    "prettier": "3.2.5",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.11"
+  }
+}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+
+    <div x-data="data" x-html="header"></div>
+
+    <main
+      x-data="{
+        name: '',
+        publishDate: '',
+        viewsNum: 0,
+        description: '',
+        async getDetail() {
+          const searchParams = new URLSearchParams(location.search);
+          const id= searchParams.get('id');
+          const res =await fetch(`/api/web/cqInformationCenter/${id}`);
+          const data=await res.json();
+          const { name, publishDate, viewsNum, description, content } = data;
+          this.name = name;
+          this.publishDate = publishDate;
+          this.viewsNum = viewsNum;
+          this.description = description;
+          this.initEditor(content);
+        },
+        initEditor(data) {
+          createEditor({
+            selector:'#editor-container',
+            html: data,
+            mode: 'simple',
+            readOnly: true,
+          });
+        },
+      }"
+      x-init="getDetail()"
+      class="flex flex-col justify-between"
+    >
+      <div class="bg-[#f6f7f8] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 top">
+        <div class="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-32 2xl:-mx-64">
+          <img
+            src="../images/news.jpg"
+            class="bg-no-repeat bg-[length:100%_auto]"
+            alt="banner"
+          />
+        </div>
+        <div class="flex flex-col bg-white p-4 sm:p-8 lg:p-16 my-4 lg:my-8">
+          <div
+            class="text-xl lg:text-4xl lg:text-center lg:mb-5 xl:text-4xl text-[#333]"
+            x-text="name"
+          ></div>
+          <div class="flex justify-center gap-4">
+            <span class="text-[#bbb] text-[10px] lg:text-base">
+              <i class="el-icon-time"></i>
+              <span class="pl-1"
+                >发布时间： <span x-text="publishDate"></span
+              ></span>
+            </span>
+            <span class="text-[#bbb] text-[10px] lg:text-base">
+              <i class="el-icon-view"></i>
+              <span class="pl-1"
+                >浏览量： <span x-text="viewsNum"></span>
+              </span>
+            </span>
+          </div>
+          <div
+            class="p-2.5 text-xs text-[#333] bg-[#f6f7f8] lg:mt-8 lg:text-base"
+          >
+            <span class="text-3xl text-[#888]" x-text="description"></span>
+          </div>
+
+          <div
+            id="editor-container"
+            class="t-mx-2.5 text-xs lg:text-base text-[#333]"
+            style="min-height: 500px"
+          ></div>
+        </div>
+      </div>
+    </main>
+
+    <div x-data="data" x-html="footer"></div>
+    <script type="module" src="./news-detail.js"></script>
+  </body>
+</html>

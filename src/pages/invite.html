@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>诚邀才俊 - 传麒科技</title>
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <div x-data="data" x-html="header"></div>
+
+    <main
+      x-data="{
+        inviteList: [],
+      }"
+      x-init="inviteList=(await (await fetch('/api/web/cqJoinUs/list')).json()).items"
+      class="flex flex-col justify-between"
+    >
+      <div
+        class="bg-[#f6f7f8] bg-[url(./images/invite.webp)] bg-no-repeat bg-[length:100%_auto] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 top"
+      >
+        <div class="mt-24 p-2 bg-white sm:mt-40 sm:p-8 lg:mt-64 xl:mt-64 2xl:mt-[400px]">
+          <h1 class="text-center text-xl lg:text-4xl text-[#333]">来了，就是传麒人</h1>
+          <template x-for="item in inviteList" :key="item.id">
+            <div class="pt-5">
+              <div
+                class="flex flex-col justify-center items-center mb-3 gap-1 after:w-2 lg:after:w-4 after:h-0.5 after:bg-[#4eb0b3]"
+              >
+                <span class="text-[#333] text-lg lg:text-2xl" x-text="item.name"> </span>
+              </div>
+
+              <ul class="border text-[#d8d8d8]">
+                <li class="flex flex-nowrap">
+                  <label
+                    class="flex justify-center items-center w-14 py-4 text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg text-white bg-[#4eb0b3] border-b border-b-solid border-b-white"
+                    >学历</label
+                  >
+                  <div
+                    class="flex-1 flex justify-start items-center pl-2 text-[#333] text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg bg-white border-b border-b-[#d8d8d8]"
+                    x-text="item.education"
+                  ></div>
+                </li>
+                <li class="flex flex-nowrap">
+                  <label
+                    class="flex justify-center items-center w-14 py-4 text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg text-white bg-[#4eb0b3] border-b border-b-solid border-b-white"
+                    >专业</label
+                  >
+                  <div
+                    class="flex-1 flex justify-start items-center pl-2 text-[#333] text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg bg-white border-b border-b-[#d8d8d8]"
+                    x-text="item.major "
+                  ></div>
+                </li>
+                <li class="flex flex-nowrap">
+                  <label
+                    class="flex justify-center items-center w-14 py-4 text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg text-white bg-[#4eb0b3] border-b border-b-solid border-b-white"
+                    >岗位职责</label
+                  >
+                  <div
+                    class="flex-1 flex justify-start items-center pl-2 text-[#333] text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg bg-white border-b border-b-[#d8d8d8]"
+                  >
+                    <ul class="pt20 pb20 pl0" style="list-style: none">
+                      <template x-for="(it, index) in item.duty.split('\n')" :key="index">
+                        <li>
+                          <span x-text="it"></span>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </li>
+                <li class="flex flex-nowrap">
+                  <label
+                    class="flex justify-center items-center w-14 py-4 text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg text-white bg-[#4eb0b3] border-b border-b-solid border-b-white"
+                    >出差</label
+                  >
+                  <div
+                    class="flex-1 flex justify-start items-center pl-2 text-[#333] text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg bg-white border-b border-b-[#d8d8d8]"
+                    x-text="item.business"
+                  ></div>
+                </li>
+                <li class="flex flex-nowrap">
+                  <label
+                    class="flex justify-center items-center w-14 py-4 text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg text-white bg-[#4eb0b3] border-b border-b-solid border-b-white"
+                    >性格</label
+                  >
+                  <div
+                    class="flex-1 flex justify-start items-center pl-2 text-[#333] text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg bg-white border-b border-b-[#d8d8d8]"
+                    x-text="item.personality"
+                  ></div>
+                </li>
+                <li class="flex flex-nowrap">
+                  <label
+                    class="flex justify-center items-center w-14 py-4 text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg text-white bg-[#4eb0b3]"
+                    >加分项</label
+                  >
+                  <div
+                    class="flex-1 flex justify-start items-center pl-2 text-[#333] text-xs 2xl:text-base 2xl:w-24 3xl:w-36 3xl:text-lg bg-white"
+                    x-text="item.plusPoints"
+                  ></div>
+                </li>
+              </ul>
+            </div>
+          </template>
+        </div>
+      </div>
+    </main>
+
+    <div x-data="data" x-html="footer"></div>
+    <script type="module" src="./invite.js"></script>
+  </body>
+</html>
