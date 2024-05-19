@@ -11,7 +11,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1024,
     rollupOptions: {
       input: {
-        about: resolve(__dirname, "src/pages/about.html"),
+        about: resolve(__dirname, "src/about.html"),
         invite: resolve(__dirname, "src/pages/invite.html"),
         news: resolve(__dirname, "src/pages/news.html"),
         "news-detail": resolve(__dirname, "src/pages/news-detail.html"),

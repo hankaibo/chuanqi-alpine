@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs';
-import '../style.css';
+import './style.css';
 
 import { createEditor } from '@wangeditor/editor';
 import { register } from 'swiper/element/bundle';
@@ -10,9 +10,8 @@ window.Alpine = Alpine;
 Alpine.data('data', () => ({
   header: '',
   footer: '',
-
+  isLink: 'about',
   aboutData: {},
-  pictureList: [],
   mapList: [
     {
       id: 'beijing',
@@ -23,7 +22,7 @@ Alpine.data('data', () => ({
       email: 'sales@powerail.com.cn',
       address: '北京市经济技术开发区北工大软件园26-2号楼三层',
       addressEN: '3 / F, Building 26-2, BeIGU Software Park, Beijing Economic and Technological Development Zone',
-      lnglat: [116.5, 39.78],
+      lnglat: [116.473190, 39.797787],
     },
     {
       id: 'nanjing',
@@ -33,7 +32,7 @@ Alpine.data('data', () => ({
       email: 'caic@powerail.com.cn',
       address: '南京市江宁区智江路300号麒麟科创园',
       addressEN: 'Qilin Science Innovation Park, 300 Zhijiang Road, Jiangning District, Nanjing',
-      lnglat: [118.89, 32.01],
+      lnglat: [118.882830, 32.015280],
     },
     {
       id: 'zhuzhou',
@@ -47,49 +46,61 @@ Alpine.data('data', () => ({
       lnglat: [113.12, 27.91],
     },
     {
+      id: 'shanghai',
+      name: '上海总部',
+      phone: '010-67874677',
+      mobile: '13916848403',
+      email: 'daidm@powerail.com.cn',
+      address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
+      addressEN: "Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai",
+      lnglat: [121.483400, 31.292160],
+    },
+    {
       id: 'xian',
       name: '西安办事处',
       phone: '010-67874677',
       mobile: '13220186200',
       email: 'yangc@powerail.com.cn',
       address: '西安市高新区锦业路69号',
-      addressEN: " 69 Jinye Road, High tech Zone, Xi'an City",
-      lnglat: [108.860014, 34.19433],
-    },
+      addressEN: "69 Jinye Road, High tech Zone, Xi'an City",
+      lnglat: [108.858600, 34.196834],
+    }
   ],
   isMobile: false,
-  menuList: [
-    { id: '1', name: '首页', path: '/index' },
-    { id: '2', name: '行业应用', path: '/indutry' },
-    { id: '3', name: '产品中心', path: '/product' },
-    { id: '4', name: '工程案例', path: '/cases' },
-    { id: '5', name: '资讯中心', path: '/news' },
-    { id: '6', name: '诚邀才俊', path: '/invite' },
-    { id: '7', name: '关于我们', path: '/about' },
-  ],
   async getList() {
-    const res = await fetch('/api/about');
+    const res = await fetch('/api/about/1');
     const data = await res.json();
-    this.aboutData = data.data[0];
-    this.initEditor(this.aboutData.description);
+    this.aboutData = {
+      ...data,
+      files: data.files.map(({ id, path }) => {
+        const [http, name] = path.split('files/');
+        const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+        return {
+          id,
+          path: thumbnailUrl,
+          originalPath: path,
+        }
+      })
+    };
+    this.initEditor(this.aboutData.content);
+    const swiperEl = document.querySelector('swiper-container');
+    swiperEl.addEventListener('swiperslidechange', (event) => {
+      console.log('slide changed');
+    });
   },
   initEditor(data) {
     createEditor({
       selector: '#editor-container',
       html: data,
       mode: 'simple',
-      readOnly: true,
+      config: {
+        readOnly: true,
+      }
     });
-  },
-  //
-  async getListPicture() {
-    const res = await fetch('/api/web/file/type/ryzz');
-    const data = res.json();
-    this.pictureList = data;
   },
   initMap() {
     this.mapList.forEach((item) => {
-      const zoom = 12;
+      const zoom = 16;
       const map = new window.T.Map(item.id);
       map.centerAndZoom(new window.T.LngLat(...item.lnglat), zoom);
       const marker = new window.T.Marker(new window.T.LngLat(...item.lnglat));
@@ -103,7 +114,6 @@ Alpine.data('data', () => ({
       map.addOverLay(label);
     });
   },
-
   init() {
     fetch('../header.html')
       .then((res) => res.text())

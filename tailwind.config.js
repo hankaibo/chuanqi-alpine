@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {
+      colors: {
+        primary: "#4eb0b3",
+      },
       animation: {
         "spin-2": "spin 2s linear infinite",
         "spin-3": "spin 3s linear infinite",
