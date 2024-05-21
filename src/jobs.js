@@ -1,9 +1,17 @@
 import Alpine from 'alpinejs';
-import '../style.css';
+import './style.css';
 
 Alpine.data('data', () => ({
   header: '',
   footer: '',
+  isLink: 'jobs',
+  jobs: [],
+  isMobile: false,
+  async getList() {
+    const res = await fetch('/api/jobs');
+    const data = await res.json();
+    this.jobs = data.data;
+  },
 
   init() {
     fetch('../header.html')

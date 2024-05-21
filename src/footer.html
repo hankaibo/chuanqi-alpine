@@ -1,60 +1,50 @@
 <footer class="p-16 pb-5 bg-[#171c2f] lg:px-16 xl:px-32 2xl:px-64 divide-y divide-[#353948]">
   <div class="pb-5 flex justify-between">
-    <ul
-      x-data="{
+    <ul x-data="{
       products:[
       'DEWE产品系列', 'CPSS定制化电源系统', '功率分析仪及电流信号采集仪', '电力仿真系统', '检测装备及集成系统'
       ]
-    }"
-    >
+    }">
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">产品中心</li>
       <template x-for="product in products">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="product"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
+    <ul x-data="{
       solutions:[
       '新能源检测', '轨道交通', '传统电力系统', '其他能源测试'
       ]
-    }"
-    >
+    }">
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">解决方案</li>
       <template x-for="solution in solutions">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="solution"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
+    <ul x-data="{
       cases:[
       '新能源应用', '轨道交通', '电力系统应用'
       ]
-    }"
-    >
+    }">
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">案例展示</li>
       <template x-for="c in cases">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="c"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
+    <ul x-data="{
       news:[
       '公司新闻', '行业新闻'
       ]
-    }"
-    >
+    }">
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">新闻中心</li>
       <template x-for="n in news">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="n"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
+    <ul x-data="{
       abouts:[
       '公司简介', '资质荣誉', '晋升空间', '组织架构'
       ]
-    }"
-    >
+    }">
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">关于我们</li>
       <template x-for="about in abouts">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="about"></li>
@@ -68,8 +58,7 @@
     </ul>
   </div>
 
-  <div
-    x-data="{
+  <div x-data="{
       companies:[
         {
           title: '北京总部',
@@ -102,27 +91,24 @@
           tel: '010-67874677',
           email: 'yangc@powerail.com.cn',
           addressEnglish: '69 Jinye Road, High tech Zone, Xi\'an City'
+        },
+        {
+          title:'上海总部',
+          address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
+          phone: '13916848403',
+          tel: '010-67874677',
+          email: 'daidm@powerail.com.cn',
+          addressEnglish: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai'
         }
       ]
-    }"
-    class="py-5 flex justify-between gap-2 lg:gap-4 divide-x divide-[#353948]"
-  >
+    }" class="py-5 flex justify-between gap-2 lg:gap-4 divide-x divide-[#353948]">
     <template x-for="(contact,index) in companies" :key="index">
       <ul class="flex-shrink-0 flex-1 space-y-2" :class="index===0?'border-none':'pl-4'">
         <li class="text-sm font-medium text-[#d8d8d8] pb-2.5" x-text="contact.title"></li>
         <li class="flex items-center gap-2 text-[#999999]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile w-4 h-4"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile w-4 h-4">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" />
             <path d="M11 4h2" />
@@ -131,38 +117,19 @@
           <span class="text-sm" x-text="contact.phone"></span>
         </li>
         <li class="flex items-center gap-2 text-[#999999]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-4 h-4"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-4 h-4">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path
-              d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"
-            />
+              d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
           </svg>
           <span class="text-sm" x-text="contact.tel"></span>
         </li>
         <li class="flex items-center gap-2 text-[#999999]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-mail w-4 h-4"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-mail w-4 h-4">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
             <path d="M3 7l9 6l9 -6" />
@@ -170,18 +137,9 @@
           <span class="text-sm" x-text="contact.email"></span>
         </li>
         <li class="flex items-center gap-2 text-[#999999]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin w-4 h-4"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin w-4 h-4">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
             <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
