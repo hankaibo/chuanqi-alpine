@@ -13,8 +13,8 @@ export default defineConfig({
       input: {
         about: resolve(__dirname, "src/about.html"),
         jobs: resolve(__dirname, "src/jobs.html"),
-        news: resolve(__dirname, "src/pages/news.html"),
-        "news-detail": resolve(__dirname, "src/pages/news-detail.html"),
+        news: resolve(__dirname, "src/news.html"),
+        "news-detail": resolve(__dirname, "src/news-detail.html"),
       },
     },
   },
