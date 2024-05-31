@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工程案例 - 传麒科技</title>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body x-data="data" x-init="getList">
+  <div x-html="header"></div>
+
+  <main class="flex flex-col justify-between">
+    <div class="bg-[#f6f7f8] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 top">
+      <div class="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-32 2xl:-mx-64">
+        <img src="../images/case.jpg" class="bg-no-repeat bg-[length:100%_auto]" alt="banner" />
+      </div>
+
+      <template x-if="loading">
+        <div class="shadow rounded-md p-4 w-full">
+          <div class="animate-pulse flex space-x-4">
+            <div class="rounded-full bg-slate-700 h-10 w-10"></div>
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-2 bg-slate-700 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-2 bg-slate-700 rounded col-span-2"></div>
+                  <div class="h-2 bg-slate-700 rounded col-span-1"></div>
+                </div>
+                <div class="h-2 bg-slate-700 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <div class="mt-2 sm:mt-4">
+        <div x-data="tabsData" class="relative w-full">
+          <div x-ref="tabButtons"
+            class="relative flex items-center w-full h-10  p-1 text-gray-500 bg-white border border-gray-100 rounded-lg select-none">
+            <template x-for="tab in tabs" :key="tab.id">
+              <button :id="$id(tabId)" @click="tabButtonClicked($el, tab);" type="button"
+                :class="{ 'bg-gray-100 text-primary' : tabButtonActive($el) }"
+                class="relative z-20 inline-flex items-center justify-center h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap"
+                x-text="tab.name">
+              </button>
+            </template>
+            <div x-ref="tabMarker" class="absolute left-0 z-10 w-1/2 h-full duration-300 ease-out" x-cloak>
+              <div class="w-full h-full bg-gray-100 rounded-md shadow-sm"></div>
+            </div>
+          </div>
+          <div
+            class="relative flex items-center justify-center w-full p-5 mt-2 text-xs text-gray-400 border rounded-md content border-gray-200/70">
+            <template x-for="tab in tabs" :key="tab.id">
+              <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)"
+                class="relative grid grid-cols-1 gap-4 py-4 lg:grid-cols-2 lg:gap-6 lg:pb-6 xl:grid-cols-3 xl:gap-8 xl:pb-8">
+                <template x-for="tabContent in tabContents[tab.id]" :key="tabContent.id">
+                  <div @click="handleDetail(tabContent)" class="hover:-translate-y-5 transition duration-200">
+                    <div class="h-44 cursor-pointer w-96">
+                      <img class="w-full h-full cursor-pointer" :src="tabContent.cover?.path" fit="cover"></img>
+                    </div>
+
+                    <div class="flex flex-col justify-between p-3 h-48 bg-white">
+                      <div class="text-sm text-[#333333] mb-3 cursor-pointer" x-text="tabContent.name"></div>
+                      <div class="text-xs text-[#888] cursor-pointer text-ellipsis line-clamp-4"
+                        x-text="tabContent.summary">
+                      </div>
+
+                      <span class="text-[#bbb] text-[10px]">
+                        <i class="el-icon-time"></i>
+                        <span class="pl-1">发布时间： <span x-text="tabContent.updatedAt"></span></span>
+                      </span>
+                    </div>
+                  </div>
+                </template>
+
+                <template x-if="tabContents[tab.id] && tabContents[tab.id].length ===0 ">
+                  <el-empty style="height: 570px"></el-empty>
+                </template>
+              </div>
+          </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div x-html="footer"></div>
+  <script type="module" src="./cases.js"></script>
+</body>
+
+</html>

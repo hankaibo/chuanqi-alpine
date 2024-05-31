@@ -15,6 +15,8 @@ export default defineConfig({
         jobs: resolve(__dirname, "src/jobs.html"),
         news: resolve(__dirname, "src/news.html"),
         "news-detail": resolve(__dirname, "src/news-detail.html"),
+        cases: resolve(__dirname, "src/cases.html"),
+        "cases-detail": resolve(__dirname, "src/cases-detail.html"),
       },
     },
   },
