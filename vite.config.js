@@ -17,6 +17,8 @@ export default defineConfig({
         "news-detail": resolve(__dirname, "src/news-detail.html"),
         cases: resolve(__dirname, "src/cases.html"),
         "cases-detail": resolve(__dirname, "src/cases-detail.html"),
+        industry: resolve(__dirname, "src/industry.html"),
+        index: resolve(__dirname, "src/index.html"),
       },
     },
   },

@@ -65,10 +65,10 @@ Alpine.data('data', () => ({
   },
 
   init() {
-    fetch('../header.html')
+    fetch('./header.html')
       .then((res) => res.text())
       .then((text) => (this.header = text));
-    fetch('../footer.html')
+    fetch('./footer.html')
       .then((res) => res.text())
       .then((text) => (this.footer = text));
   },
