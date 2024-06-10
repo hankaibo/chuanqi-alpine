@@ -19,7 +19,7 @@
     navigationMenuReposition(navElement) {
         console.log(navElement.getBoundingClientRect())
         this.navigationMenuClearCloseTimeout();
-        this.$refs.navigationDropdown.style.left = navElement.offsetLeft + 'px';
+        this.$refs.navigationDropdown.style.left = 0;
         this.$refs.navigationDropdown.style.marginLeft = (navElement.offsetWidth/2) + 'px';
     },
     navigationMenuClearCloseTimeout(){
