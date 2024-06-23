@@ -22,7 +22,7 @@ Alpine.data('data', () => ({
       email: 'sales@powerail.com.cn',
       address: '北京市经济技术开发区北工大软件园26-2号楼三层',
       addressEN: '3 / F, Building 26-2, BeIGU Software Park, Beijing Economic and Technological Development Zone',
-      lnglat: [116.473190, 39.797787],
+      lnglat: [116.47319, 39.797787],
     },
     {
       id: 'nanjing',
@@ -32,7 +32,7 @@ Alpine.data('data', () => ({
       email: 'caic@powerail.com.cn',
       address: '南京市江宁区智江路300号麒麟科创园',
       addressEN: 'Qilin Science Innovation Park, 300 Zhijiang Road, Jiangning District, Nanjing',
-      lnglat: [118.882830, 32.015280],
+      lnglat: [118.88283, 32.01528],
     },
     {
       id: 'zhuzhou',
@@ -52,8 +52,8 @@ Alpine.data('data', () => ({
       mobile: '13916848403',
       email: 'daidm@powerail.com.cn',
       address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
-      addressEN: "Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai",
-      lnglat: [121.483400, 31.292160],
+      addressEN: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai',
+      lnglat: [121.4834, 31.29216],
     },
     {
       id: 'xian',
@@ -63,8 +63,8 @@ Alpine.data('data', () => ({
       email: 'yangc@powerail.com.cn',
       address: '西安市高新区锦业路69号',
       addressEN: "69 Jinye Road, High tech Zone, Xi'an City",
-      lnglat: [108.858600, 34.196834],
-    }
+      lnglat: [108.8586, 34.196834],
+    },
   ],
   isMobile: false,
   async getList() {
@@ -79,8 +79,8 @@ Alpine.data('data', () => ({
           id,
           path: thumbnailUrl,
           originalPath: path,
-        }
-      })
+        };
+      }),
     };
     this.initEditor(this.aboutData.content);
     const swiperEl = document.querySelector('swiper-container');
@@ -95,7 +95,7 @@ Alpine.data('data', () => ({
       mode: 'simple',
       config: {
         readOnly: true,
-      }
+      },
     });
   },
   initMap() {
@@ -114,22 +114,48 @@ Alpine.data('data', () => ({
       map.addOverLay(label);
     });
   },
+  handleSetIndustry(data) {
+    // 导航栏使用数据
+    this.parentIndustries = data;
+    this.childIndustry = this.parentIndustries[0] || [];
+  },
+
+  handleSetCategory(data) {
+    // 导航栏
+    this.parentCategories = data;
+    this.childCategory = this.parentCategories[0];
+    this.grandsonCategory = this.childCategory?.children || [];
+  },
+
   init() {
-    const cachedData = sessionStorage.getItem('parentCategories');
+    // 缓存行业
+    const INDUSTRY_KEY = '__industry__';
+    const cachedIndustryData = sessionStorage.getItem(INDUSTRY_KEY);
+    if (cachedIndustryData && cachedIndustryData !== '{}') {
+      const data = JSON.parse(cachedIndustryData);
+      this.handleSetIndustry(data);
+    } else {
+      fetch('/api/industries')
+        .then((res) => res.json())
+        .then((data) => {
+          this.handleSetIndustry(data);
+          sessionStorage.setItem(INDUSTRY_KEY, JSON.stringify(data));
+        });
+    }
+
+    // 缓存产品分类
+    const CATEGORY_KEY = '__categroy__';
+    const cachedData = sessionStorage.getItem(CATEGORY_KEY);
     if (cachedData && cachedData !== '{}') {
       const data = JSON.parse(cachedData);
-      this.parentCategories = data;
-      this.childCategory = this.parentCategories[0];
-      this.grandsonCategory = this.childCategory.children;
+      this.handleSetCategory(data);
     } else {
       fetch('/api/categories')
-        .then(res => res.json())
-        .then(data => {
-          this.parentCategories = data;
-          this.childCategory = this.parentCategories[0];
-          this.grandsonCategory = this.childCategory.children;
-          sessionStorage.setItem('parentCategories', JSON.stringify(data))
-        })
+        .then((res) => res.json())
+        .then((data) => {
+          this.handleSetCategory(data);
+          sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
+        });
     }
 
     fetch('./header.html')

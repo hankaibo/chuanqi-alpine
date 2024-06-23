@@ -1,5 +1,5 @@
-import Alpine from "alpinejs";
-import "./style.css";
+import Alpine from 'alpinejs';
+import './style.css';
 
 Alpine.data('data', () => ({
   header: '',
@@ -23,31 +23,57 @@ Alpine.data('data', () => ({
   },
   handleDetail(item) {
     const { id } = item;
-    window.location.href = `news-detail.html?id=${id}`
+    window.location.href = `news-detail.html?id=${id}`;
+  },
+
+  handleSetIndustry(data) {
+    // 导航栏使用数据
+    this.parentIndustries = data;
+    this.childIndustry = this.parentIndustries[0] || [];
+  },
+
+  handleSetCategory(data) {
+    // 导航栏
+    this.parentCategories = data;
+    this.childCategory = this.parentCategories[0];
+    this.grandsonCategory = this.childCategory?.children || [];
   },
 
   init() {
-    const cachedData = sessionStorage.getItem('parentCategories');
-    if (cachedData && cachedData !== '{}') {
-      const data = JSON.parse(cachedData);
-      this.parentCategories = data;
-      this.childCategory = this.parentCategories[0];
-      this.grandsonCategory = this.childCategory.children;
+    // 缓存行业
+    const INDUSTRY_KEY = '__industry__';
+    const cachedIndustryData = sessionStorage.getItem(INDUSTRY_KEY);
+    if (cachedIndustryData && cachedIndustryData !== '{}') {
+      const data = JSON.parse(cachedIndustryData);
+      this.handleSetIndustry(data);
     } else {
-      fetch('/api/categories')
-        .then(res => res.json())
-        .then(data => {
-          this.parentCategories = data;
-          this.childCategory = this.parentCategories[0];
-          this.grandsonCategory = this.childCategory.children;
-          sessionStorage.setItem('parentCategories', JSON.stringify(data))
-        })
+      fetch('/api/industries')
+        .then((res) => res.json())
+        .then((data) => {
+          this.handleSetIndustry(data);
+          sessionStorage.setItem(INDUSTRY_KEY, JSON.stringify(data));
+        });
     }
 
-    fetch('../header.html')
+    // 缓存产品分类
+    const CATEGORY_KEY = '__categroy__';
+    const cachedData = sessionStorage.getItem(CATEGORY_KEY);
+    if (cachedData && cachedData !== '{}') {
+      const data = JSON.parse(cachedData);
+      this.handleSetCategory(data);
+    } else {
+      fetch('/api/categories')
+        .then((res) => res.json())
+        .then((data) => {
+          this.handleSetCategory(data);
+          sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
+        });
+    }
+
+    fetch('./header.html')
       .then((res) => res.text())
       .then((text) => (this.header = text));
-    fetch('../footer.html')
+    fetch('./footer.html')
       .then((res) => res.text())
       .then((text) => (this.footer = text));
   },
