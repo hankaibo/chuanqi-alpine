@@ -15,6 +15,12 @@ Alpine.data('data', () => ({
   isLink: 'index',
   isMobile: false,
 
+  parentIndustries: [],
+  childIndustry: [],
+  parentCategories: [],
+  childCategory: [],
+  grandsonCategory: [],
+
   products: [], // 产品轮播图片数据
   industries: [], // 行业数据
   categories: [], // 产品的分类数据
