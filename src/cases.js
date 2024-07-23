@@ -37,7 +37,7 @@ Alpine.data('data', () => ({
   async getList() {
     this.loading = true;
     // 获取所有行业数据
-    const res = await fetch('/api/industries/roots');
+    const res = await fetch('/api/v1/industries/roots');
     const data = await res.json();
     this.loading = false;
     this.tabs = data;
@@ -53,14 +53,14 @@ Alpine.data('data', () => ({
     }
     this.loading = true;
     // 获取所有行业数据
-    const res = await fetch(`/api/cases/industry/${id}`);
+    const res = await fetch(`/api/v1/cases/industry/${id}`);
     const data = await res.json();
     this.loading = false;
     this.tabContents[id] = data;
   },
 
   handleDetail(item) {
-    const { id } = item;
+    const {id} = item;
     window.location.href = `cases-detail.html?id=${id}`;
   },
 
@@ -85,7 +85,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedIndustryData);
       this.handleSetIndustry(data);
     } else {
-      fetch('/api/industries')
+      fetch('/api/v1/industries')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetIndustry(data);
@@ -100,20 +100,13 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedData);
       this.handleSetCategory(data);
     } else {
-      fetch('/api/categories')
+      fetch('/api/v1/categories')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetCategory(data);
           sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
         });
     }
-
-    fetch('./header.html')
-      .then((res) => res.text())
-      .then((text) => (this.header = text));
-    fetch('./footer.html')
-      .then((res) => res.text())
-      .then((text) => (this.footer = text));
   },
 }));
 

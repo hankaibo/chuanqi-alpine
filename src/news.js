@@ -15,14 +15,14 @@ Alpine.data('data', () => ({
   },
   async getList() {
     this.loading = true;
-    const res = await fetch(`/api/news?count=${this.queryParams.count}&page=${this.queryParams.page}`);
+    const res = await fetch(`/api/v1/news?count=${this.queryParams.count}&page=${this.queryParams.page}`);
     const data = await res.json();
     this.loading = false;
     this.newsList = data.data;
     this.total = data.total;
   },
   handleDetail(item) {
-    const { id } = item;
+    const {id} = item;
     window.location.href = `news-detail.html?id=${id}`;
   },
 
@@ -47,7 +47,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedIndustryData);
       this.handleSetIndustry(data);
     } else {
-      fetch('/api/industries')
+      fetch('/api/v1/industries')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetIndustry(data);
@@ -62,20 +62,13 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedData);
       this.handleSetCategory(data);
     } else {
-      fetch('/api/categories')
+      fetch('/api/v1/categories')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetCategory(data);
           sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
         });
     }
-
-    fetch('./header.html')
-      .then((res) => res.text())
-      .then((text) => (this.header = text));
-    fetch('./footer.html')
-      .then((res) => res.text())
-      .then((text) => (this.footer = text));
   },
 }));
 

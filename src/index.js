@@ -1,17 +1,15 @@
 import Alpine from 'alpinejs';
 import './style.css';
 
-import { createEditor } from '@wangeditor/editor';
+import {createEditor} from '@wangeditor/editor';
 import Swiper from 'swiper';
-import { Autoplay, Pagination, Mousewheel } from 'swiper/modules';
+import {Autoplay, Pagination, Mousewheel} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 window.Alpine = Alpine;
 
 Alpine.data('data', () => ({
-  header: '',
-  footer: '',
   isLink: 'index',
   isMobile: false,
 
@@ -33,9 +31,9 @@ Alpine.data('data', () => ({
    * 获取产品数据，这些产品是后台配置专门在首页轮播显示的。
    */
   async getProducts() {
-    const res = await fetch('api/products/index');
+    const res = await fetch('/api/v1/products/index');
     const data = await res.json();
-    this.products = data.map((item) => ({
+    this.products = data?.map((item) => ({
       ...item,
       imageUrl: item.cover
         .map((it) => {
@@ -95,7 +93,7 @@ Alpine.data('data', () => ({
       return this.industryCase[id];
     }
     // 获取所有行业数据
-    const res = await fetch(`/api/cases/industry/${id}`);
+    const res = await fetch(`/api/v1/cases/industry/${id}`);
     const data = await res.json();
     this.industryCase[id] = data;
 
@@ -111,9 +109,9 @@ Alpine.data('data', () => ({
    * 获取关于我们数据。
    */
   async getAbout() {
-    const res = await fetch('/api/about/1');
+    const res = await fetch('/api/v1/about/1');
     const data = await res.json();
-    const { indexFile, indexContent } = data;
+    const {indexFile, indexContent} = data;
     let thumbnailUrl;
     if (Array.isArray(indexFile) && indexFile.length) {
       const [file] = indexFile;
@@ -139,17 +137,13 @@ Alpine.data('data', () => ({
    * 获取资讯中心数据。
    */
   async getNews() {
-    const res = await fetch(`/api/news?count=4&page=1`);
+    const res = await fetch(`/api/v1/news?count=4&page=1`);
     const data = await res.json();
-    this.news = data.data.map((item) => {
-      const { coverImage } = item;
+    this.news = data?.data.map((item) => {
+      const {coverImage} = item;
       let thumbnailUrl;
       if (coverImage) {
-        const separator = coverImage.path.includes('files/')
-          ? 'files/'
-          : coverImage.path?.includes('files\\')
-            ? 'files\\'
-            : '';
+        const separator = coverImage.path.includes('files/') ? 'files/' : coverImage.path?.includes('files\\') ? 'files\\' : '';
         const [http, name] = coverImage.path.split(separator);
         thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
       }
@@ -161,13 +155,13 @@ Alpine.data('data', () => ({
   },
 
   handleDetail(product) {
-    const { id } = product;
-    this.$router.push({ name: 'ChuanQiProductDetail', params: { id } });
+    const {id} = product;
+    this.$router.push({name: 'ChuanQiProductDetail', params: {id}});
   },
   handleMore(industry) {
-    const { chineseName, englishName } = industry;
-    const tabs = JSON.stringify(industry.children.map((it) => ({ id: it.id, name: it.name })));
-    this.$router.push({ name: 'ChuanQiIndustry', query: { chineseName, englishName, tabs } });
+    const {chineseName, englishName} = industry;
+    const tabs = JSON.stringify(industry.children.map((it) => ({id: it.id, name: it.name})));
+    this.$router.push({name: 'ChuanQiIndustry', query: {chineseName, englishName, tabs}});
   },
 
   handleSetIndustry(data) {
@@ -176,11 +170,7 @@ Alpine.data('data', () => ({
       if (!item.indexFile) {
         return item;
       }
-      const separator = item.indexFile.path.includes('files/')
-        ? 'files/'
-        : item.indexFile.path?.includes('files\\')
-          ? 'files\\'
-          : '';
+      const separator = item.indexFile.path.includes('files/') ? 'files/' : item.indexFile.path?.includes('files\\') ? 'files\\' : '';
       const [http, name] = item.indexFile.path.split(separator);
       const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
       return {
@@ -199,11 +189,7 @@ Alpine.data('data', () => ({
       if (!item.indexFile) {
         return item;
       }
-      const separator = item.indexFile.path.includes('files/')
-        ? 'files/'
-        : item.indexFile.path?.includes('files\\')
-          ? 'files\\'
-          : '';
+      const separator = item.indexFile.path.includes('files/') ? 'files/' : item.indexFile.path?.includes('files\\') ? 'files\\' : '';
       const [http, name] = item.indexFile.path.split(separator);
       const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
       return {
@@ -230,7 +216,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedIndustryData);
       this.handleSetIndustry(data);
     } else {
-      fetch('/api/industries/index')
+      fetch('/api/v1/industries/index')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetIndustry(data);
@@ -245,17 +231,13 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedData);
       this.handleSetCategory(data);
     } else {
-      fetch('/api/categories/index')
+      fetch('/api/v1/categories/index')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetCategory(data);
           sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
         });
     }
-
-    fetch('./header.html')
-      .then((res) => res.text())
-      .then((text) => (this.header = text));
   },
 }));
 

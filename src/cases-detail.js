@@ -1,7 +1,7 @@
 import Alpine from 'alpinejs';
 import './style.css';
 
-import { createEditor } from '@wangeditor/editor';
+import {createEditor} from '@wangeditor/editor';
 window.createEditor = createEditor;
 
 Alpine.data('data', () => ({
@@ -16,9 +16,9 @@ Alpine.data('data', () => ({
   async getDetail() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
-    const res = await fetch(`/api/cases/${id}`);
+    const res = await fetch(`/api/v1/cases/${id}`);
     const data = await res.json();
-    const { name, updatedAt, views, summary, content } = data;
+    const {name, updatedAt, views, summary, content} = data;
     this.name = name;
     this.publishDate = updatedAt;
     this.views = views;
@@ -58,7 +58,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedIndustryData);
       this.handleSetIndustry(data);
     } else {
-      fetch('/api/industries')
+      fetch('/api/v1/industries')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetIndustry(data);
@@ -73,20 +73,13 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedData);
       this.handleSetCategory(data);
     } else {
-      fetch('/api/categories')
+      fetch('/api/v1/categories')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetCategory(data);
           sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
         });
     }
-
-    fetch('./header.html')
-      .then((res) => res.text())
-      .then((text) => (this.header = text));
-    fetch('./footer.html')
-      .then((res) => res.text())
-      .then((text) => (this.footer = text));
   },
 }));
 

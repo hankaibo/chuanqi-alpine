@@ -1,8 +1,8 @@
 import Alpine from 'alpinejs';
 import './style.css';
 
-import { createEditor } from '@wangeditor/editor';
-import { register } from 'swiper/element/bundle';
+import {createEditor} from '@wangeditor/editor';
+import {register} from 'swiper/element/bundle';
 register();
 
 window.Alpine = Alpine;
@@ -41,8 +41,7 @@ Alpine.data('data', () => ({
       mobile: '13810062921',
       email: 'tangz@powerail.com.cn',
       address: '株洲市石峰区联城路79号轨道交通创新创业园',
-      addressEN:
-        'Rail transit innovation and entrepreneurship Park, No.79 Liancheng Road, Shifeng District, Zhuzhou City',
+      addressEN: 'Rail transit innovation and entrepreneurship Park, No.79 Liancheng Road, Shifeng District, Zhuzhou City',
       lnglat: [113.12, 27.91],
     },
     {
@@ -68,11 +67,11 @@ Alpine.data('data', () => ({
   ],
   isMobile: false,
   async getList() {
-    const res = await fetch('/api/about/1');
+    const res = await fetch('/api/v1/about/1');
     const data = await res.json();
     this.aboutData = {
       ...data,
-      files: data.files.map(({ id, path }) => {
+      files: data.files.map(({id, path}) => {
         const separator = path.includes('files/') ? 'files/' : path?.includes('files\\') ? 'files\\' : '';
         const [http, name] = path.split(separator);
         const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
@@ -108,7 +107,7 @@ Alpine.data('data', () => ({
       map.addOverLay(marker);
       const latlng = new window.T.LngLat(...item.lnglat);
       const label = new window.T.Label({
-        text: `${item.name}：<a href='http://www.powerail.com.cn/' target='_blank'>http://www.powerail.com.cn/</a>`,
+        text: `${item.name}：<a href='https://www.powerail.com.cn/' target='_blank'>https://www.powerail.com.cn/</a>`,
         position: latlng,
         offset: new window.T.Point(-150, 20),
       });
@@ -136,7 +135,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedIndustryData);
       this.handleSetIndustry(data);
     } else {
-      fetch('/api/industries')
+      fetch('/api/v1/industries')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetIndustry(data);
@@ -151,36 +150,29 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedData);
       this.handleSetCategory(data);
     } else {
-      fetch('/api/categories')
+      fetch('/api/v1/categories')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetCategory(data);
           sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
         });
     }
-
-    fetch('./header.html')
-      .then((res) => res.text())
-      .then((text) => (this.header = text));
-    fetch('./footer.html')
-      .then((res) => res.text())
-      .then((text) => (this.footer = text));
   },
 }));
 
 function handleTop() {
   const el = document.querySelector('.top');
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  el.scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 function handleLink(path) {
   if (typeof path === 'string') {
-    this.$router.push({ path });
+    this.$router.push({path});
   } else {
-    const { chineseName, englishName, parentName } = path;
-    const tabs = JSON.stringify(path.children.map((it) => ({ id: it.id, name: it.name })));
+    const {chineseName, englishName, parentName} = path;
+    const tabs = JSON.stringify(path.children.map((it) => ({id: it.id, name: it.name})));
     this.$router.push({
       name: parentName,
-      query: { chineseName, englishName, tabs },
+      query: {chineseName, englishName, tabs},
     });
   }
 }
