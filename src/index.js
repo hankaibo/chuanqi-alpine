@@ -39,7 +39,8 @@ Alpine.data('data', () => ({
       ...item,
       imageUrl: item.cover
         .map((it) => {
-          const [http, name] = it.path.split('files/');
+          const separator = it.path.includes('files/') ? 'files/' : it.path?.includes('files\\') ? 'files\\' : '';
+          const [http, name] = it.path.split(separator);
           return `${http}files/thumbnail_${name.split('.')[0]}.webp`;
         })
         .find((it) => it),
@@ -116,7 +117,8 @@ Alpine.data('data', () => ({
     let thumbnailUrl;
     if (Array.isArray(indexFile) && indexFile.length) {
       const [file] = indexFile;
-      const [http, name] = file.path.split('files/');
+      const separator = file.path.includes('files/') ? 'files/' : file.path?.includes('files\\') ? 'files\\' : '';
+      const [http, name] = file.path.split(separator);
       thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
     }
     this.about = {
@@ -141,8 +143,16 @@ Alpine.data('data', () => ({
     const data = await res.json();
     this.news = data.data.map((item) => {
       const { coverImage } = item;
-      const [http, name] = coverImage.path.split('files/');
-      const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+      let thumbnailUrl;
+      if (coverImage) {
+        const separator = coverImage.path.includes('files/')
+          ? 'files/'
+          : coverImage.path?.includes('files\\')
+            ? 'files\\'
+            : '';
+        const [http, name] = coverImage.path.split(separator);
+        thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+      }
       return {
         ...item,
         imageUrl: thumbnailUrl,
@@ -166,7 +176,12 @@ Alpine.data('data', () => ({
       if (!item.indexFile) {
         return item;
       }
-      const [http, name] = item.indexFile.path.split('files/');
+      const separator = item.indexFile.path.includes('files/')
+        ? 'files/'
+        : item.indexFile.path?.includes('files\\')
+          ? 'files\\'
+          : '';
+      const [http, name] = item.indexFile.path.split(separator);
       const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
       return {
         ...item,
@@ -184,7 +199,12 @@ Alpine.data('data', () => ({
       if (!item.indexFile) {
         return item;
       }
-      const [http, name] = item.indexFile.path.split('files/');
+      const separator = item.indexFile.path.includes('files/')
+        ? 'files/'
+        : item.indexFile.path?.includes('files\\')
+          ? 'files\\'
+          : '';
+      const [http, name] = item.indexFile.path.split(separator);
       const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
       return {
         ...item,
@@ -210,7 +230,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedIndustryData);
       this.handleSetIndustry(data);
     } else {
-      fetch('/api/industries')
+      fetch('/api/industries/index')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetIndustry(data);
@@ -225,7 +245,7 @@ Alpine.data('data', () => ({
       const data = JSON.parse(cachedData);
       this.handleSetCategory(data);
     } else {
-      fetch('/api/categories')
+      fetch('/api/categories/index')
         .then((res) => res.json())
         .then((data) => {
           this.handleSetCategory(data);

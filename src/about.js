@@ -73,7 +73,8 @@ Alpine.data('data', () => ({
     this.aboutData = {
       ...data,
       files: data.files.map(({ id, path }) => {
-        const [http, name] = path.split('files/');
+        const separator = path.includes('files/') ? 'files/' : path?.includes('files\\') ? 'files\\' : '';
+        const [http, name] = path.split(separator);
         const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
         return {
           id,
