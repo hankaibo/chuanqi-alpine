@@ -8,11 +8,16 @@
     <base href="/temp/" />
     <link rel="icon" href="/favicon.ico" />
     <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet" />
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body>
     <div x-data="data">
-      <header class="fixed top-0 left-0 right-0 flex justify-center h-18 z-[9999] text-white bg-[rgba(0,0,0,0.6)]">
+      <header class="fixed top-0 left-0 right-0 flex justify-center h-18 z-[9999]" :class="swiperIndex ?'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
         <div class="flex items-center">
           <a href="/">
             <img src="/images/login/logo.png" class="w-[100px]" />
@@ -184,7 +189,7 @@
                           <img :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" loading="lazy" />
                           <div class="absolute top-1/3 left-[260px] flex flex-col text-white">
                             <span class="text-5xl mb-7" x-text="product.name"></span>
-                            <button type="primary" @click="handleDetail(product?.id)" style="width: 160px">查看详情</button>
+                            <button class="btn-primary w-40" @click="handleDetail(product.id)">查看详情</button>
                           </div>
                         </div>
                       </div>
@@ -198,9 +203,7 @@
                 <section class="flex flex-col justify-start items-center h-full lg:pt-[72px] bg-white top">
                   <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">行业应用</span>
-                    <span
-                      class="relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-[#4eb0b3] after:-translate-x-1/2 after:-translate-y-1/2 lg:w-64 lg:after:w-8 lg:after:h-1.5"
-                    ></span>
+                    <span class="divider-primary"></span>
                     <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Industry application</span>
                   </h2>
                   <div class="flex lg:gap-4 xl:gap-8 pb-4 lg:pb-8 xl:pb-16 h-full">
@@ -238,11 +241,11 @@
                                 <li
                                   class="flex justify-between items-center p-1 text-xl text-white border-b border-b-transparent cursor-pointer transition-all hover:font-semibold hover:transition-all hover:border-b hover:border-b-slate-50 group"
                                 >
-                                  <span x-tetx="it.name"></span>
+                                  <span x-text="it.name"></span>
                                 </li>
                               </template>
                             </ul>
-                            <button class="absolute bottom-12 left-12 text-[#4eb0b3] bg-white" @click="handleMore(industry)">查看更多>></button>
+                            <button class="absolute bottom-12 left-12 btn-second" @click="handleMore(industry)">查看更多>></button>
                           </div>
                         </div>
                       </div>
@@ -261,46 +264,50 @@
                         <div class="flex flex-col gap-1.5 mb-3 after:w-5 after:h-0.5 after:bg-[#4eb0b3] lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-5">
                           <span class="text-lg lg:text-4xl text-white" x-text="category.name"></span>
                         </div>
-                        <div class="text-sm text-white leading-normal" x-text="category.summary"></div>
+                        <div class="text-sm text-white leading-normal" x-text="category.description"></div>
                       </div>
                     </div>
                     <div class="lg:basis-1/3 p-4 xl:px-8 xl:py-16 2xl:px-16 2xl:py-24 w-full">
-                      <span class="w-9 h-9 lg:w-12 lg:h-12 xl:w-20 xl:h-20">
-                        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <title>icon</title>
-                          <defs>
-                            <polygon id="path-1" points="0 0.144728033 12.7505376 0.144728033 12.7505376 10.5376344 0 10.5376344"></polygon>
-                          </defs>
-                          <g id="官网" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g id="编组-66" transform="translate(-30.000000, -60.000000)">
-                              <g id="icon" transform="translate(30.000000, 60.000000)">
-                                <circle id="椭圆形备份-2" fill="#4EB0B3" cx="10" cy="10" r="10"></circle>
-                                <g id="编组" transform="translate(3.333333, 4.166667)">
+                      <svg
+                        class="fill-current overflow-hidden w-9 h-9 lg:w-12 lg:h-12 xl:w-20 xl:h-20"
+                        viewBox="0 0 20 20"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                      >
+                        <title>icon</title>
+                        <defs>
+                          <polygon id="path-1" points="0 0.144728033 12.7505376 0.144728033 12.7505376 10.5376344 0 10.5376344"></polygon>
+                        </defs>
+                        <g id="官网" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g id="编组-66" transform="translate(-30.000000, -60.000000)">
+                            <g id="icon" transform="translate(30.000000, 60.000000)">
+                              <circle id="椭圆形备份-2" fill="#4EB0B3" cx="10" cy="10" r="10"></circle>
+                              <g id="编组" transform="translate(3.333333, 4.166667)">
+                                <path
+                                  d="M5.9193405,7.44318781 C5.9193405,6.73681505 5.3467957,6.16427025 4.64042294,6.16427025 C3.93440143,6.16427025 3.36185663,6.73681505 3.36185663,7.44318781 C3.36185663,8.02556774 3.75139785,8.51732401 4.28389964,8.67152473 C4.28389964,8.67152473 3.41524731,7.60968244 4.14796416,6.94510896 C4.14796416,6.94510896 4.91369892,6.31249964 5.9193405,7.44318781"
+                                  id="Fill-1"
+                                  fill="#FFFFFF"
+                                ></path>
+                                <g transform="translate(0.000000, 0.206573)">
+                                  <mask id="mask-2" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                  </mask>
+                                  <g id="Clip-4"></g>
                                   <path
-                                    d="M5.9193405,7.44318781 C5.9193405,6.73681505 5.3467957,6.16427025 4.64042294,6.16427025 C3.93440143,6.16427025 3.36185663,6.73681505 3.36185663,7.44318781 C3.36185663,8.02556774 3.75139785,8.51732401 4.28389964,8.67152473 C4.28389964,8.67152473 3.41524731,7.60968244 4.14796416,6.94510896 C4.14796416,6.94510896 4.91369892,6.31249964 5.9193405,7.44318781"
-                                    id="Fill-1"
+                                    d="M12.4319498,10.5340867 C12.8162222,10.4701584 12.7596703,9.54987168 12.7277061,9.31663871 C12.7277061,9.31663871 12.2057419,6.02116918 9.16071685,5.83359928 C9.16071685,5.83359928 7.88812186,5.83359928 8.30541219,5.40331254 C8.30541219,5.40331254 9.25941935,4.83217276 9.57484588,3.97721935 C9.57484588,3.97721935 9.68232975,3.33055986 9.03567025,3.97721935 C9.03567025,3.97721935 8.78979211,4.83217276 7.15575627,5.12441649 C7.15575627,5.12441649 5.92531183,5.0826172 5.50942652,4.6235276 C5.50942652,4.6235276 5.30499642,4.28983584 4.36503943,4.26911183 C4.36503943,4.26911183 4.05593548,3.66425161 4.86663082,3.41380717 C4.86663082,3.41380717 5.74968459,3.41380717 5.89053763,2.74642366 C5.89053763,2.74642366 5.62955556,2.07904014 5.24809319,2.74642366 C5.24809319,2.74642366 4.30392115,3.10083943 4.36503943,2.12048817 C4.36503943,2.12048817 4.19046595,1.58342007 4.86663082,2.01897563 C5.06192832,2.14472803 5.16098208,2.23745591 5.42653047,2.2167319 C5.90248029,2.17985018 6.34822222,1.92378566 6.7226595,1.64348459 C6.91760573,1.49736272 7.10131183,1.33508315 7.26991398,1.15875341 C7.30363441,1.12362796 7.63978495,0.627305376 7.57691039,0.645921864 C7.51403584,0.664187097 7.46169892,0.696853763 7.40268817,0.727061649 C6.74724731,1.06040215 5.59724014,0.997176344 4.97376344,0.614660215 C4.78759857,0.500502509 4.57579211,0.466430824 4.36187814,0.449921864 C4.15674552,0.433764158 3.88417204,0.507176344 3.69870968,0.406717563 C3.63407885,0.371943369 3.58420072,0.315742652 3.52624373,0.271133333 C3.38258065,0.16189319 3.19114695,0.127118996 3.01270968,0.152760573 C2.82162724,0.180509677 2.62597849,0.270430824 2.48091039,0.397936201 C2.38782796,0.47942724 2.273319,0.791692473 2.19639427,0.82752043 C2.19639427,0.82752043 1.72536201,1.04600072 1.3133405,0.848244444 C1.07554122,0.734437993 0.534960573,0.776237276 0.433799283,1.06742724 C0.375139785,1.23743441 0.494566308,1.64067455 0.168602151,1.62030179 C-0.271519713,1.91219427 0.289082437,1.89147025 0.289082437,1.89147025 C0.866193548,1.87039498 1.5641362,1.93291828 1.5641362,1.93291828 C2.35235125,2.39165663 1.05200717,2.39165663 1.05200717,2.39165663 C0.264494624,2.53777849 0.550064516,2.80894695 0.550064516,2.80894695 C0.929419355,3.22623728 1.31298925,2.91326953 1.31298925,2.91326953 C1.66248746,2.64210108 1.94524731,2.64210108 1.94559857,2.64210108 C2.09312545,2.64210108 2.4893405,2.58379283 2.54905376,2.79033047 C2.66777778,3.20340573 1.71939068,3.30281075 1.97756272,3.75241649 C2.03341219,3.85006523 2.56661649,4.15319785 2.67339785,4.06046667 C2.01444444,4.63301147 1.24414337,5.25508315 1.20129032,6.18661004 C1.14614337,7.39597921 1.81949821,8.52350609 2.70676703,9.3043448 C3.06329032,9.61801505 3.53713262,9.89199355 3.99200717,9.75640932 C4.1044086,9.72268889 4.22734767,9.63171398 4.20416487,9.51650251 C4.19116846,9.45222294 4.13602151,9.4062086 4.08473835,9.36581434 C3.41946237,8.84209391 2.81670968,8.29343441 2.81670968,7.379119 C2.81670968,6.21400789 3.76088172,5.26948459 4.92599283,5.26948459 C4.92599283,5.26948459 5.65063082,5.28599355 6.01136918,5.81814409 C6.06335484,5.89542007 6.10796416,5.98323369 6.14168459,6.08369247 C6.14168459,6.08369247 6.99136918,8.27376416 9.09819355,8.35736272 C9.45155556,8.32926237 9.81967025,8.32996487 10.1702222,8.38511183 C11.2682437,8.5589828 11.2917778,10.2232265 12.2861792,10.5214416 C12.3402724,10.5379505 12.3890968,10.5414631 12.4319498,10.5340867"
+                                    id="Fill-3"
                                     fill="#FFFFFF"
+                                    mask="url(#mask-2)"
                                   ></path>
-                                  <g transform="translate(0.000000, 0.206573)">
-                                    <mask id="mask-2" fill="white">
-                                      <use xlink:href="#path-1"></use>
-                                    </mask>
-                                    <g id="Clip-4"></g>
-                                    <path
-                                      d="M12.4319498,10.5340867 C12.8162222,10.4701584 12.7596703,9.54987168 12.7277061,9.31663871 C12.7277061,9.31663871 12.2057419,6.02116918 9.16071685,5.83359928 C9.16071685,5.83359928 7.88812186,5.83359928 8.30541219,5.40331254 C8.30541219,5.40331254 9.25941935,4.83217276 9.57484588,3.97721935 C9.57484588,3.97721935 9.68232975,3.33055986 9.03567025,3.97721935 C9.03567025,3.97721935 8.78979211,4.83217276 7.15575627,5.12441649 C7.15575627,5.12441649 5.92531183,5.0826172 5.50942652,4.6235276 C5.50942652,4.6235276 5.30499642,4.28983584 4.36503943,4.26911183 C4.36503943,4.26911183 4.05593548,3.66425161 4.86663082,3.41380717 C4.86663082,3.41380717 5.74968459,3.41380717 5.89053763,2.74642366 C5.89053763,2.74642366 5.62955556,2.07904014 5.24809319,2.74642366 C5.24809319,2.74642366 4.30392115,3.10083943 4.36503943,2.12048817 C4.36503943,2.12048817 4.19046595,1.58342007 4.86663082,2.01897563 C5.06192832,2.14472803 5.16098208,2.23745591 5.42653047,2.2167319 C5.90248029,2.17985018 6.34822222,1.92378566 6.7226595,1.64348459 C6.91760573,1.49736272 7.10131183,1.33508315 7.26991398,1.15875341 C7.30363441,1.12362796 7.63978495,0.627305376 7.57691039,0.645921864 C7.51403584,0.664187097 7.46169892,0.696853763 7.40268817,0.727061649 C6.74724731,1.06040215 5.59724014,0.997176344 4.97376344,0.614660215 C4.78759857,0.500502509 4.57579211,0.466430824 4.36187814,0.449921864 C4.15674552,0.433764158 3.88417204,0.507176344 3.69870968,0.406717563 C3.63407885,0.371943369 3.58420072,0.315742652 3.52624373,0.271133333 C3.38258065,0.16189319 3.19114695,0.127118996 3.01270968,0.152760573 C2.82162724,0.180509677 2.62597849,0.270430824 2.48091039,0.397936201 C2.38782796,0.47942724 2.273319,0.791692473 2.19639427,0.82752043 C2.19639427,0.82752043 1.72536201,1.04600072 1.3133405,0.848244444 C1.07554122,0.734437993 0.534960573,0.776237276 0.433799283,1.06742724 C0.375139785,1.23743441 0.494566308,1.64067455 0.168602151,1.62030179 C-0.271519713,1.91219427 0.289082437,1.89147025 0.289082437,1.89147025 C0.866193548,1.87039498 1.5641362,1.93291828 1.5641362,1.93291828 C2.35235125,2.39165663 1.05200717,2.39165663 1.05200717,2.39165663 C0.264494624,2.53777849 0.550064516,2.80894695 0.550064516,2.80894695 C0.929419355,3.22623728 1.31298925,2.91326953 1.31298925,2.91326953 C1.66248746,2.64210108 1.94524731,2.64210108 1.94559857,2.64210108 C2.09312545,2.64210108 2.4893405,2.58379283 2.54905376,2.79033047 C2.66777778,3.20340573 1.71939068,3.30281075 1.97756272,3.75241649 C2.03341219,3.85006523 2.56661649,4.15319785 2.67339785,4.06046667 C2.01444444,4.63301147 1.24414337,5.25508315 1.20129032,6.18661004 C1.14614337,7.39597921 1.81949821,8.52350609 2.70676703,9.3043448 C3.06329032,9.61801505 3.53713262,9.89199355 3.99200717,9.75640932 C4.1044086,9.72268889 4.22734767,9.63171398 4.20416487,9.51650251 C4.19116846,9.45222294 4.13602151,9.4062086 4.08473835,9.36581434 C3.41946237,8.84209391 2.81670968,8.29343441 2.81670968,7.379119 C2.81670968,6.21400789 3.76088172,5.26948459 4.92599283,5.26948459 C4.92599283,5.26948459 5.65063082,5.28599355 6.01136918,5.81814409 C6.06335484,5.89542007 6.10796416,5.98323369 6.14168459,6.08369247 C6.14168459,6.08369247 6.99136918,8.27376416 9.09819355,8.35736272 C9.45155556,8.32926237 9.81967025,8.32996487 10.1702222,8.38511183 C11.2682437,8.5589828 11.2917778,10.2232265 12.2861792,10.5214416 C12.3402724,10.5379505 12.3890968,10.5414631 12.4319498,10.5340867"
-                                      id="Fill-3"
-                                      fill="#FFFFFF"
-                                      mask="url(#mask-2)"
-                                    ></path>
-                                  </g>
                                 </g>
                               </g>
                             </g>
                           </g>
-                        </svg>
-                      </span>
+                        </g>
+                      </svg>
                       <div class="flex flex-col gap-1.5 my-2 after:w-5 after:h-0.5 after:bg-[#4eb0b3] lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-10">
-                        <h3 class="text-lg lg:text-4xl text-slate-900" x-text="category.name"></h3>
+                        <h3 class="text-lg lg:text-2xl 3xl:text-4xl text-slate-900" x-text="category.name"></h3>
                       </div>
                       <ul class="mb-6">
                         <template x-for="product in category.children" :key="product.id">
@@ -314,12 +321,7 @@
                         </template>
                       </ul>
                       <div class="flex justify-start items-center py-4 sm:py-8">
-                        <a
-                          href="javascript: void(0)"
-                          @click="handleMore(product)"
-                          class="text-[#4eb0b3] text-xs lg:bg-[#4eb0b3] lg:text-white lg:rounded lg:text-sm lg:px-5 lg:py-2.5 lg:border lg:border-[#4eb0b3]"
-                          >查看更多>></a
-                        >
+                        <button class="btn-primary" @click="handleMore(product)">查看更多>></button>
                       </div>
                     </div>
                   </section>
@@ -328,13 +330,11 @@
               <!-- 工程案例 -->
               <div class="swiper-slide">
                 <section class="flex flex-col justify-start items-center px-4 h-full lg:pt-[72px] bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-44">
-                  <h3 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                  <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">工程案例</span>
-                    <span
-                      class="relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-[#4eb0b3] after:-translate-x-1/2 after:-translate-y-1/2"
-                    ></span>
-                    <span class="text-xs text-[#d8d8d8] pt-1">Application case</span>
-                  </h3>
+                    <span class="divider-primary"></span>
+                    <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Application case</span>
+                  </h2>
 
                   <div
                     x-data="{
@@ -409,13 +409,11 @@
               <!-- 关于我们 -->
               <div class="swiper-slide">
                 <section class="flex flex-col justify-start items-center px-4 h-full lg:pt-[72px] bg-white sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
-                  <h3 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                  <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">关于我们</span>
-                    <span
-                      class="relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-[#4eb0b3] after:-translate-x-1/2 after:-translate-y-1/2"
-                    ></span>
-                    <span class="text-xs text-[#d8d8d8] pt-1">About US</span>
-                  </h3>
+                    <span class="divider-primary"></span>
+                    <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">About US</span>
+                  </h2>
 
                   <div class="flex flex-col lg:flex-row gap-4 lg:gap-9 mb-4 lg:mb-16">
                     <div class="hidden lg:block lg:basis-2/5">
@@ -424,13 +422,7 @@
                     <div class="lg:basis-3/5">
                       <div id="editor-container" class="-mx-2.5 text-xs sm:text-sm lg:text-base" style="min-height: 300px"></div>
                       <div class="pt-4 lg:pt-8">
-                        <button
-                          type="button"
-                          class="text-sm text-[#4EB0B3] lg:inline-block lg:py-2 lg:px-5 lg:text-base lg:rounded lg:text-center lg:outline-none lg:bg-[#4EB0B3] lg:text-white"
-                          @click="handleMore"
-                        >
-                          查看更多>>
-                        </button>
+                        <button class="btn-primary" @click="handleMore">查看更多>></button>
                       </div>
                     </div>
                   </div>
@@ -439,13 +431,11 @@
               <!-- 资讯中心 -->
               <div class="swiper-slide">
                 <div class="flex flex-col justify-start items-center px-4 lg:pt-[72px] h-full bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
-                  <h3 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                  <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">资讯中心</span>
-                    <span
-                      class="relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-[#4eb0b3] after:-translate-x-1/2 after:-translate-y-1/2"
-                    ></span>
-                    <span class="text-xs text-[#d8d8d8] pt-1">Information center</span>
-                  </h3>
+                    <span class="divider-primary"></span>
+                    <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Information center</span>
+                  </h2>
 
                   <div class="flex flex-col sm:flex-row w-full">
                     <div class="shadow-sm bg-white sm:flex sm:flex-col sm:mr-2 sm:flex-grow-0 lg:mr-4">
@@ -479,24 +469,18 @@
                     </template>
                   </div>
                   <div class="text-center py-4 lg:py-8">
-                    <button
-                      type="button"
-                      class="text-sm text-[#4EB0B3] lg:inline-block lg:py-2 lg:px-5 lg:text-base lg:rounded lg:text-center lg:outline-none lg:bg-[#4EB0B3] lg:text-white"
-                      @click="handleMore"
-                    >
-                      更多咨讯>>
-                    </button>
+                    <button type="button" class="btn-primary" @click="handleMore">更多咨讯>></button>
                   </div>
                 </div>
               </div>
               <!-- 联系我们 -->
               <div class="swiper-slide">
                 <section class="flex flex-col items-center px-4 lg:pt-[72px] h-full bg-[url('./images/index-contact-bg.webp')] bg-[length:100%_100%] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
-                  <h3 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                  <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-white pb-2">联系我们</span>
-                    <span class="relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-white after:-translate-x-1/2 after:-translate-y-1/2"></span>
-                    <span class="text-xs text-[#d8d8d8] pt-1">Contact us</span>
-                  </h3>
+                    <span class="divider-primary"></span>
+                    <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Contact us</span>
+                  </h2>
                   <div class="w-full lg:flex">
                     <div
                       x-data="{componies: [
@@ -531,37 +515,108 @@
                     fax: '010-67874677',
                     email: 'yangc@powerail.com.cn',
                     address: '西安市高新区锦业路69号',
-                    addressEN: '69 Jinye Road, High tech Zone, Xi\'an City' }
+                    addressEN: '69 Jinye Road, High tech Zone, Xi\'an City'
+                   },
+                   {
+                      name: '上海总部',
+                      mobile: '13916848403',
+                      fax: '010-67874677',
+                      email: 'daidm@powerail.com.cn',
+                      address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
+                      addressEN: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai',
+                    },
                   ]}"
                       class="basis-1/2 lg:border-r lg:border-r-[hsla(0,0%,100%,.5)]"
                     >
                       <template x-for="item in componies" :key="item.name">
-                        <ul class="mb-3">
-                          <li class="text-lg font-semibold pb-1 text-white" x-text="item.name"></li>
-                          <li class="text-white pb-2 text-xs">
+                        <ul class="mb-3 space-y-1">
+                          <li class="text-lg font-semibold text-white" x-text="item.name"></li>
+                          <li class="text-white text-xs">
                             <div class="gap-2">
-                              <span>
-                                <i class="el-icon-mobile-phone"></i>
-                                <span class="pl-1" x-text="item.mobile"></span>
+                              <span class="inline-flex">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile w-4 h-4"
+                                >
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                  <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" />
+                                  <path d="M11 4h2" />
+                                  <path d="M12 17v.01" />
+                                </svg>
+                                <span x-text="item.mobile"></span>
                               </span>
-                              <span>
-                                <i class="el-icon-phone"></i>
-                                <span class="pl-1" x-text="item.fax"></span>
+                              <span class="inline-flex">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-4 h-4"
+                                >
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                  <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+                                </svg>
+                                <span x-text="item.fax"></span>
                               </span>
                               <template x-if="item.email">
-                                <span>
-                                  <i class="el-icon-message"></i>
-                                  <span class="pl-1" x-text="item.email"></span>
+                                <span class="inline-flex">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-mail w-4 h-4"
+                                  >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+                                    <path d="M3 7l9 6l9 -6" />
+                                  </svg>
+                                  <span x-text="item.email"></span>
                                 </span>
                               </template>
                             </div>
                           </li>
-                          <li class="text-white pb-2 text-xs">
-                            <i class="el-icon-location"></i>
-                            <span class="pl-1" x-text="item.address"></span>
+                          <li class="text-white text-xs">
+                            <span class="inline-flex">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin w-4 h-4"
+                              >
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                                <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+                              </svg>
+                              <span x-text="item.address"></span>
+                            </span>
                           </li>
                           <li class="text-white text-xs">
-                            <span class="pl-5" x-text="item.addressEN"></span>
+                            <span class="pl-4" x-text="item.addressEN"></span>
                           </li>
                         </ul>
                       </template>
@@ -598,21 +653,14 @@
                         </div>
                       </div>
                       <div class="flex justify-center items-center mt-2">
-                        <button
-                          type="button"
-                          class="inline-block w-20 h-8 py-2 px-5 text-sm rounded text-center outline-none bg-[#4EB0B3] sm:w-32"
-                          :class="form.phone || form.email ? '' : 'text-white cursor-not-allowed !bg-[#a7d8d9]'"
-                          @click="handleSumbit"
-                        >
-                          发送
-                        </button>
+                        <button type="button" class="btn-primary" :class="form.phone || form.email ? '' : 'text-white cursor-not-allowed !bg-[#a7d8d9]'" @click="handleSumbit">发送</button>
                       </div>
                     </form>
                   </div>
                 </section>
               </div>
             </div>
-            <div class="swiper-pagination" x-ref="outerPagination"></div>
+            <div class="swiper-pagination swiper-pagination-outer" x-ref="outerPagination"></div>
           </div>
         </template>
 

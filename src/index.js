@@ -12,6 +12,7 @@ window.Alpine = Alpine;
 Alpine.data('data', () => ({
   isLink: 'index',
   isMobile: false,
+  swiperIndex: 0, // 当前最外部 swiper 的索引，方便切换 header 样式
 
   parentIndustries: [],
   childIndustry: [],
@@ -44,7 +45,7 @@ Alpine.data('data', () => ({
         .find((it) => it),
     }));
     this.$nextTick(() => {
-      new Swiper(this.$refs.outerSwiper, {
+      const outerSwiper = new Swiper(this.$refs.outerSwiper, {
         modules: [Pagination, Mousewheel],
         direction: 'vertical',
         slidesPerView: 1,
@@ -55,13 +56,19 @@ Alpine.data('data', () => ({
           el: this.$refs.outerPagination,
           clickable: true,
         },
+        on: {
+          slideChange: () => {
+            this.swiperIndex = outerSwiper.realIndex;
+            console.log('this.swiperIndex :>> ', this.swiperIndex);
+          },
+        },
       });
       new Swiper(this.$refs.innerSwiper, {
         modules: [Autoplay, Pagination],
         loop: true,
         lazy: true,
         autoplay: {
-          delay: 5000,
+          delay: 50000,
           disableOnInteraction: false,
         },
         pagination: {
