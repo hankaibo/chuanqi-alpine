@@ -26,6 +26,7 @@ Alpine.data('data', () => ({
   industryCase: {}, // 工程案例，以 行业id 作为 key
   about: {}, // 关于我们数据
   news: [], // 新闻资讯数据
+  newsFirst: {}, // 第1条新闻资讯
   form: {}, // 留言信息
 
   /**
@@ -144,14 +145,14 @@ Alpine.data('data', () => ({
    * 获取资讯中心数据。
    */
   async getNews() {
-    const res = await fetch(`/api/v1/news?count=4&page=1`);
+    const res = await fetch(`/api/v1/news?currentPage=1&pageSize=4`);
     const data = await res.json();
     this.news = data?.data.map((item) => {
-      const {coverImage} = item;
+      const {cover} = item;
       let thumbnailUrl;
-      if (coverImage) {
-        const separator = coverImage.path.includes('files/') ? 'files/' : coverImage.path?.includes('files\\') ? 'files\\' : '';
-        const [http, name] = coverImage.path.split(separator);
+      if (cover) {
+        const separator = cover.path.includes('files/') ? 'files/' : cover.path?.includes('files\\') ? 'files\\' : '';
+        const [http, name] = cover.path.split(separator);
         thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
       }
       return {
@@ -159,6 +160,7 @@ Alpine.data('data', () => ({
         imageUrl: thumbnailUrl,
       };
     });
+    this.newsFirst = this.news.shift();
   },
 
   handleDetail(product) {

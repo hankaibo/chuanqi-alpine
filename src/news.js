@@ -10,15 +10,27 @@ Alpine.data('data', () => ({
   newsList: [],
   total: 0,
   queryParams: {
-    count: 10,
-    page: 1,
+    currentPage: 1,
+    pageSize: 10,
   },
   async getList() {
     this.loading = true;
-    const res = await fetch(`/api/v1/news?count=${this.queryParams.count}&page=${this.queryParams.page}`);
+    const res = await fetch(`/api/v1/news?pageSize=${this.queryParams.pageSize}&currentPage=${this.queryParams.currentPage}`);
     const data = await res.json();
     this.loading = false;
-    this.newsList = data.data;
+    this.newsList = data?.data.map((item) => {
+      const {cover} = item;
+      let thumbnailUrl;
+      if (cover) {
+        const separator = cover.path.includes('files/') ? 'files/' : cover.path?.includes('files\\') ? 'files\\' : '';
+        const [http, name] = cover.path.split(separator);
+        thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+      }
+      return {
+        ...item,
+        imageUrl: thumbnailUrl,
+      };
+    });
     this.total = data.total;
   },
   handleDetail(item) {

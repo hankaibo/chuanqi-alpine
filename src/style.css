@@ -16,6 +16,19 @@
   }
 }
 
+.gradient-box {
+  background-position: bottom;
+  background: linear-gradient(
+    to bottom,
+    rgba(78, 176, 179, 0) 0%,
+    rgba(78, 176, 179, 0.2) 20%,
+    rgba(78, 176, 179, 0.4) 40%,
+    rgba(78, 176, 179, 0.6) 60%,
+    rgba(78, 176, 179, 0.8) 80%,
+    rgba(78, 176, 179, 1) 100%
+  );
+}
+
 .swiper-pagination.swiper-pagination-inner .swiper-pagination-bullet,
 .swiper-pagination.swiper-pagination-outer .swiper-pagination-bullet {
   width: 15px;

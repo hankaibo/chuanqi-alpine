@@ -17,9 +17,9 @@ Alpine.data('data', () => ({
     const id = searchParams.get('id');
     const res = await fetch(`/api/v1/news/${id}`);
     const data = await res.json();
-    const {name, updatedAt, views, summary, content} = data;
+    const {name, publishedAt, views, summary, content} = data;
     this.name = name;
-    this.publishDate = updatedAt;
+    this.publishDate = publishedAt;
     this.views = views;
     this.summary = summary;
 

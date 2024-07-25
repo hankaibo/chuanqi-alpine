@@ -20,7 +20,7 @@
       <header class="fixed top-0 left-0 right-0 flex justify-center h-18 z-[9999]" :class="swiperIndex ?'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
         <div class="flex items-center">
           <a href="/">
-            <img src="/images/login/logo.png" class="w-[100px]" />
+            <img src="/images/login/logo.webp" class="w-[100px]" />
           </a>
         </div>
 
@@ -256,11 +256,10 @@
               <!-- 产品分类 -->
               <template x-for="category in categories" :key="category.id">
                 <div class="swiper-slide">
-                  <section class="flex flex-col lg:flex-row lg:h-full items-start lg:items-stretch bg-[url(./images/index-product-bg.png)] bg-no-repeat bg-right-bottom lg:pt-[72px]">
+                  <section class="flex flex-col lg:flex-row lg:h-full items-start lg:items-stretch bg-[url(./images/index-product-bg.webp)] bg-no-repeat bg-right-bottom lg:pt-[72px]">
                     <div class="relative lg:basis-2/3">
                       <img :src="category.indexFile?.path" class="w-full h-full object-cover" loading="lazy" />
-                      <img src="./images/index-product-box.png" class="absolute bottom-0" loading="lazy" />
-                      <div class="absolute left-4 bottom-4 xl:left-9 xl:bottom-9">
+                      <div class="absolute left-0 bottom-0 right-0 p-4 xl:p-9 gradient-box">
                         <div class="flex flex-col gap-1.5 mb-3 after:w-5 after:h-0.5 after:bg-[#4eb0b3] lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-5">
                           <span class="text-lg lg:text-4xl text-white" x-text="category.name"></span>
                         </div>
@@ -393,7 +392,7 @@
 
                                     <span class="text-[#bbb] text-[10px]">
                                       <i class="el-icon-time"></i>
-                                      <span class="pl-1">发布时间： <span x-text="tabContent.updatedAt"></span></span>
+                                      <span class="pl-1">发布时间： <span x-text="tabContent.publishedAt"></span></span>
                                     </span>
                                   </div>
                                 </div>
@@ -430,26 +429,28 @@
               </div>
               <!-- 资讯中心 -->
               <div class="swiper-slide">
-                <div class="flex flex-col justify-start items-center px-4 lg:pt-[72px] h-full bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
+                <section class="flex flex-col justify-start items-center px-4 lg:pt-[72px] h-full bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
                   <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">资讯中心</span>
                     <span class="divider-primary"></span>
                     <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Information center</span>
                   </h2>
 
-                  <div class="flex flex-col sm:flex-row w-full">
+                  <div class="flex-1 flex flex-col sm:flex-row w-full">
                     <div class="shadow-sm bg-white sm:flex sm:flex-col sm:mr-2 sm:flex-grow-0 lg:mr-4">
-                      <img :src="news[0]?.imageUrl" class="lg:min-h-[270px] object-contain" />
+                      <div class="flex-1">
+                        <img :src="newsFirst?.imageUrl" class="lg:min-h-[270px] object-cover w-full h-full" />
+                      </div>
                       <div class="flex">
                         <div class="flex flex-col items-center justify-center bg-[#4eb0b3] shadow-sm px-2 py-1">
-                          <span class="text-white text-4xl xl:text-5xl" x-text="news[0]?.updatedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
-                          <span class="text-white text-sm" x-text="news[0]?.updatedAt?.substring(0,7)"></span>
+                          <span class="text-white text-4xl xl:text-5xl" x-text="newsFirst?.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
+                          <span class="text-white text-sm" x-text="newsFirst?.publishedAt?.substring(0,7)"></span>
                         </div>
-                        <div
+                        <h3
                           class="flex justify-center items-center text-sm xl:text-xl font-medium text-[#333333] cursor-pointer p-2 text-ellipsis line-clamp-3 lg:p-4"
-                          x-text="news[0]?.name"
-                          @click="handleDetail(news[0])"
-                        ></div>
+                          x-text="newsFirst?.name"
+                          @click="handleDetail(newsFirst)"
+                        ></h3>
                       </div>
                     </div>
                     <template x-for="(item, index) in news" :key="item.id">
@@ -459,26 +460,41 @@
                         @click="handleDetail(item)"
                       >
                         <div class="flex flex-col flex-nowrap justify-center text-[#A8A9AD] items-start shadow-sm">
-                          <span class="text-3xl lg:text-4xl xl:text-5xl sm:text-[#4eb0b3] sm:group-hover:text-white" x-text="item.updatedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
-                          <span class="sm:text-[#4eb0b3] sm:group-hover:text-white" x-text="item.updatedAt?.substring(0,7)"></span>
+                          <span class="text-3xl lg:text-4xl xl:text-5xl sm:text-[#4eb0b3] sm:group-hover:text-white" x-text="item.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
+                          <span class="sm:text-[#4eb0b3] sm:group-hover:text-white" x-text="item.publishedAt?.substring(0,7)"></span>
                         </div>
-                        <div class="text-[#333333] text-xs lg:text-lg xl:text-xl text-ellipsis line-clamp-2 cursor-pointer sm:pt-3 sm:group-hover:text-white" x-text="item.name"></div>
+                        <h3 class="text-[#333333] text-xs lg:text-lg xl:text-xl text-ellipsis line-clamp-2 cursor-pointer sm:pt-3 sm:group-hover:text-white" x-text="item.name"></h3>
                         <div class="hidden text-ellipsis lg:line-clamp-5 lg:text-[#888888] lg:text-sm xl:text-base lg:group-hover:text-white lg:mt-3" x-text="item.summary"></div>
-                        <i class="el-icon-right hidden sm:block sm:text-2xl sm:absolute sm:left-2 sm:bottom-4 sm:text-[#bbbbbb] sm:group-hover:text-white lg:text-4xl"></i>
+                        <svg
+                          class="hidden sm:block sm:text-2xl sm:absolute sm:left-2 sm:bottom-4 sm:text-[#bbbbbb] sm:group-hover:text-white lg:text-4xl"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-arrow-right"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
                       </div>
                     </template>
                   </div>
                   <div class="text-center py-4 lg:py-8">
                     <button type="button" class="btn-primary" @click="handleMore">更多咨讯>></button>
                   </div>
-                </div>
+                </section>
               </div>
               <!-- 联系我们 -->
               <div class="swiper-slide">
                 <section class="flex flex-col items-center px-4 lg:pt-[72px] h-full bg-[url('./images/index-contact-bg.webp')] bg-[length:100%_100%] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
                   <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
                     <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-white pb-2">联系我们</span>
-                    <span class="divider-primary"></span>
+                    <span class="divider-primary after:bg-white"></span>
                     <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Contact us</span>
                   </h2>
                   <div class="w-full lg:flex">
@@ -649,11 +665,11 @@
                       <div class="flex flex-col sm:flex-row sm:items-center">
                         <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">留言</label>
                         <div class="relative text-sm flex-1">
-                          <textarea x-model="form.message" rows="5" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-4"></textarea>
+                          <textarea x-model="form.message" rows="10" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-4"></textarea>
                         </div>
                       </div>
                       <div class="flex justify-center items-center mt-2">
-                        <button type="button" class="btn-primary" :class="form.phone || form.email ? '' : 'text-white cursor-not-allowed !bg-[#a7d8d9]'" @click="handleSumbit">发送</button>
+                        <button type="button" class="btn-primary w-40" :class="form.phone || form.email ? '' : 'text-white cursor-not-allowed !bg-[#a7d8d9]'" @click="handleSumbit">发送</button>
                       </div>
                     </form>
                   </div>
