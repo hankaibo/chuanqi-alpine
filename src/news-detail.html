@@ -174,17 +174,48 @@
         <div class="flex flex-col bg-white p-4 sm:p-8 lg:p-16 my-4 lg:my-8">
           <div class="text-xl lg:text-4xl lg:text-center lg:mb-5 xl:text-4xl text-[#333]" x-text="name"></div>
           <div class="flex justify-center gap-4">
-            <span class="text-[#bbb] text-[10px] lg:text-base">
-              <i class="el-icon-time"></i>
-              <span class="pl-1">发布时间： <span x-text="publishDate"></span></span>
-            </span>
-            <span class="text-[#bbb] text-[10px] lg:text-base">
-              <i class="el-icon-view"></i>
-              <span class="pl-1">浏览量： <span x-text="views"></span> </span>
+            <span class="text-[#bbb] text-[10px] lg:text-base inline-flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-clock"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span class="pl-1">发布时间：</span>
+              <span class="pr-2" x-text="publishDate"></span>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye"
+              >
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <span class="pl-1">浏览量：</span>
+              <span x-text="views"></span>
             </span>
           </div>
           <div class="p-2.5 text-xs text-[#333] bg-[#f6f7f8] lg:mt-8 lg:text-base">
-            <span class="text-3xl text-[#888]" x-text="summary"></span>
+            <span x-text="summary"></span>
           </div>
 
           <div id="editor-container" class="t-mx-2.5 text-xs lg:text-base text-[#333]" style="min-height: 500px"></div>
