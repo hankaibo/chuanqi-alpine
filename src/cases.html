@@ -227,7 +227,22 @@
                         <div class="text-xs text-[#888] cursor-pointer text-ellipsis line-clamp-4" x-text="tabContent.summary"></div>
 
                         <span class="text-[#bbb] text-[10px]">
-                          <i class="el-icon-time"></i>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-2 h-2"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-clock"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
                           <span class="pl-1">发布时间： <span x-text="tabContent.publishedAt"></span></span>
                         </span>
                       </div>

@@ -175,11 +175,41 @@
           <div class="text-xl lg:text-4xl lg:text-center lg:mb-5 xl:text-4xl text-[#333]" x-text="name"></div>
           <div class="flex justify-center gap-4">
             <span class="text-[#bbb] text-[10px] lg:text-base">
-              <i class="el-icon-time"></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-2 h-2"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-clock"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
               <span class="pl-1">发布时间： <span x-text="publishDate"></span></span>
             </span>
             <span class="text-[#bbb] text-[10px] lg:text-base">
-              <i class="el-icon-view"></i>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-3 h-3 pr-1"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye"
+              >
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
               <span class="pl-1">浏览量： <span x-text="views"></span> </span>
             </span>
           </div>

@@ -3,11 +3,24 @@ import './style.css';
 
 import {createEditor} from '@wangeditor/editor';
 import Swiper from 'swiper';
-import {Autoplay, Pagination, Mousewheel} from 'swiper/modules';
+import {Autoplay, Pagination, Navigation, Mousewheel} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 window.Alpine = Alpine;
+
+function buildQueryString(obj, prefix) {
+  const str = [];
+  for (const p in obj) {
+    if (obj.hasOwnProperty(p)) {
+      const k = prefix ? `${prefix}[${p}]` : p;
+      const v = obj[p];
+      str.push(v !== null && typeof v === 'object' ? buildQueryString(v, k) : `${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+    }
+  }
+  return str.join('&');
+}
 
 Alpine.data('data', () => ({
   isLink: 'index',
@@ -37,14 +50,106 @@ Alpine.data('data', () => ({
     const data = await res.json();
     this.products = data?.map((item) => ({
       ...item,
+      // 使用缩略图，加快加载
       imageUrl: item.cover
         .map((it) => {
-          const separator = it.path.includes('files/') ? 'files/' : it.path?.includes('files\\') ? 'files\\' : '';
-          const [http, name] = it.path.split(separator);
-          return `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+          return this.handleThumbnail(it.path);
         })
         .find((it) => it),
     }));
+    this.$nextTick(() => {
+      new Swiper(this.$refs.innerSwiper, {
+        modules: [Autoplay, Pagination],
+        loop: true,
+        lazy: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: '.swiper-pagination-inner',
+          clickable: true,
+        },
+      });
+    });
+  },
+
+  /**
+   * 获取行业数据
+   */
+  async getIndusties() {
+    // 缓存行业
+    const INDUSTRY_KEY = '__industry__';
+    const cachedIndustryData = sessionStorage.getItem(INDUSTRY_KEY);
+    if (cachedIndustryData && cachedIndustryData !== '{}') {
+      const data = JSON.parse(cachedIndustryData);
+      this.handleSetIndustry(data);
+    } else {
+      fetch('/api/v1/industries/index')
+        .then((res) => res.json())
+        .then((data) => {
+          this.handleSetIndustry(data);
+          sessionStorage.setItem(INDUSTRY_KEY, JSON.stringify(data));
+        });
+    }
+  },
+  handleSetIndustry(data) {
+    // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
+    this.industries = data.map((item) => {
+      if (!item.indexFile) {
+        return item;
+      }
+      const thumbnailUrl = this.handleThumbnail(item.indexFile.path);
+      return {
+        ...item,
+        imageUrl: thumbnailUrl,
+      };
+    });
+
+    // swiper 主要展示工程案例的数据，默认加载第1个行业的数据
+    this.getCases(this.industries[0]?.id);
+
+    // 导航栏使用数据
+    this.parentIndustries = data;
+    this.childIndustry = this.parentIndustries[0] || [];
+  },
+
+  /**
+   * 获取产品的分类
+   */
+  async getCategories() {
+    // 缓存产品分类
+    const CATEGORY_KEY = '__categroy__';
+    const cachedData = sessionStorage.getItem(CATEGORY_KEY);
+    if (cachedData && cachedData !== '{}') {
+      const data = JSON.parse(cachedData);
+      this.handleSetCategory(data);
+    } else {
+      fetch('/api/v1/categories/index')
+        .then((res) => res.json())
+        .then((data) => {
+          this.handleSetCategory(data);
+          sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
+        });
+    }
+  },
+  handleSetCategory(data) {
+    // swiper
+    this.categories = data.map((item) => {
+      if (!item.indexFile) {
+        return item;
+      }
+      const thumbnailUrl = this.handleThumbnail(item.indexFile.path);
+      return {
+        ...item,
+        imageUrl: thumbnailUrl,
+      };
+    });
+    // 导航栏
+    this.parentCategories = data;
+    this.childCategory = this.parentCategories[0];
+    this.grandsonCategory = this.childCategory?.children || [];
+    //
     this.$nextTick(() => {
       const outerSwiper = new Swiper(this.$refs.outerSwiper, {
         modules: [Pagination, Mousewheel],
@@ -60,59 +165,54 @@ Alpine.data('data', () => ({
         on: {
           slideChange: () => {
             this.swiperIndex = outerSwiper.realIndex;
-            console.log('this.swiperIndex :>> ', this.swiperIndex);
           },
-        },
-      });
-      new Swiper(this.$refs.innerSwiper, {
-        modules: [Autoplay, Pagination],
-        loop: true,
-        lazy: true,
-        autoplay: {
-          delay: 50000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: '.swiper-pagination-inner',
-          clickable: true,
         },
       });
     });
   },
-  /**
-   * 获取行业数据
-   */
-  async getIndusties() {
-    // 此处直接复用导航栏中的数据。
-  },
-  /**
-   * 获取产品的分类，此处的产品分类与导航栏的“行业应用”中的数据一致。这是“行业应用”中的数据在分类下有产品信息，而此处不需要。
-   */
-  async getCategories() {
-    // 此处直接复用导航栏中的数据。
-  },
+
   /**
    * 根据行业 id 获取案例。
    * @param {*} id 行业 id
    * @returns
    */
   async getCases(id) {
-    if (this.industryCase[id]) {
-      return this.industryCase[id];
-    }
+    // if (this.industryCase[id]) {
+    //   return this.industryCase[id];
+    // }
     // 获取所有行业数据
-    const res = await fetch(`/api/v1/cases/industry/${id}`);
+    const params = {
+      filters: {
+        industryId: id,
+      },
+    };
+
+    const queryString = buildQueryString(params);
+
+    const res = await fetch(`/api/v1/cases/index?${queryString}`);
     const data = await res.json();
-    this.industryCase[id] = data;
+    this.industryCase[id] = data.data?.map((item) => {
+      return {
+        ...item,
+        publishedAt: item.publishedAt.substring(0, 19).replace('T', ' '),
+        imageUrl: this.handleThumbnail(item.cover.path),
+      };
+    });
 
     this.$nextTick(() => {
-      new Swiper(this.$refs.tabSwiper, {
+      new Swiper(`#${id}`, {
+        modules: [Navigation, Pagination],
         lazy: true,
         slidesPerView: 3,
         spaceBetween: 30,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
       });
     });
   },
+
   /**
    * 获取关于我们数据。
    */
@@ -123,24 +223,25 @@ Alpine.data('data', () => ({
     let thumbnailUrl;
     if (Array.isArray(indexFile) && indexFile.length) {
       const [file] = indexFile;
-      const separator = file.path.includes('files/') ? 'files/' : file.path?.includes('files\\') ? 'files\\' : '';
-      const [http, name] = file.path.split(separator);
-      thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+      thumbnailUrl = this.handleThumbnail(file.path);
     }
     this.about = {
       ...data,
       imageUrl: thumbnailUrl,
     };
     // 创建富文本
-    createEditor({
-      selector: '#editor-container',
-      html: data.indexContent,
-      mode: 'simple',
-      config: {
-        readOnly: true,
-      },
+    this.$nextTick(() => {
+      createEditor({
+        selector: '#editor-container',
+        html: data.indexContent,
+        mode: 'simple',
+        config: {
+          readOnly: true,
+        },
+      });
     });
   },
+
   /**
    * 获取资讯中心数据。
    */
@@ -151,9 +252,7 @@ Alpine.data('data', () => ({
       const {cover} = item;
       let thumbnailUrl;
       if (cover) {
-        const separator = cover.path.includes('files/') ? 'files/' : cover.path?.includes('files\\') ? 'files\\' : '';
-        const [http, name] = cover.path.split(separator);
-        thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
+        thumbnailUrl = this.handleThumbnail(cover.path);
       }
       return {
         ...item,
@@ -173,80 +272,22 @@ Alpine.data('data', () => ({
     this.$router.push({name: 'ChuanQiIndustry', query: {chineseName, englishName, tabs}});
   },
 
-  handleSetIndustry(data) {
-    // 轮播图使用数据
-    this.industries = data.map((item) => {
-      if (!item.indexFile) {
-        return item;
-      }
-      const separator = item.indexFile.path.includes('files/') ? 'files/' : item.indexFile.path?.includes('files\\') ? 'files\\' : '';
-      const [http, name] = item.indexFile.path.split(separator);
-      const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
-      return {
-        ...item,
-        imageUrl: thumbnailUrl,
-      };
-    });
-    // 导航栏使用数据
-    this.parentIndustries = data;
-    this.childIndustry = this.parentIndustries[0] || [];
-  },
-
-  handleSetCategory(data) {
-    // swiper
-    this.categories = data.map((item) => {
-      if (!item.indexFile) {
-        return item;
-      }
-      const separator = item.indexFile.path.includes('files/') ? 'files/' : item.indexFile.path?.includes('files\\') ? 'files\\' : '';
-      const [http, name] = item.indexFile.path.split(separator);
-      const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
-      return {
-        ...item,
-        imageUrl: thumbnailUrl,
-      };
-    });
-    // 导航栏
-    this.parentCategories = data;
-    this.childCategory = this.parentCategories[0];
-    this.grandsonCategory = this.childCategory?.children || [];
+  // 计算缩略图的地址
+  handleThumbnail(path) {
+    if (!path) {
+      return '';
+    }
+    const separator = path.includes('files/') ? 'files/' : path?.includes('files\\') ? 'files\\' : '';
+    const [http, name] = path.split(separator);
+    return `${http}files/thumbnail_${name.split('.')[0]}.webp`;
   },
 
   init() {
     this.getProducts();
     this.getIndusties();
+    this.getCategories();
     this.getAbout();
     this.getNews();
-
-    // 缓存行业
-    const INDUSTRY_KEY = '__industry__';
-    const cachedIndustryData = sessionStorage.getItem(INDUSTRY_KEY);
-    if (cachedIndustryData && cachedIndustryData !== '{}') {
-      const data = JSON.parse(cachedIndustryData);
-      this.handleSetIndustry(data);
-    } else {
-      fetch('/api/v1/industries/index')
-        .then((res) => res.json())
-        .then((data) => {
-          this.handleSetIndustry(data);
-          sessionStorage.setItem(INDUSTRY_KEY, JSON.stringify(data));
-        });
-    }
-
-    // 缓存产品分类
-    const CATEGORY_KEY = '__categroy__';
-    const cachedData = sessionStorage.getItem(CATEGORY_KEY);
-    if (cachedData && cachedData !== '{}') {
-      const data = JSON.parse(cachedData);
-      this.handleSetCategory(data);
-    } else {
-      fetch('/api/v1/categories/index')
-        .then((res) => res.json())
-        .then((data) => {
-          this.handleSetCategory(data);
-          sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
-        });
-    }
   },
 }));
 
