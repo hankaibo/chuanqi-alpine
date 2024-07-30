@@ -1,12 +1,18 @@
 import Alpine from 'alpinejs';
+import {getIndusties, getCategories} from './header';
+import {getThumbnailUrl, buildQueryString} from './untils';
 import './style.css';
 
 Alpine.data('data', () => ({
-  header: '',
-  footer: '',
+  // 导航栏数据
   isLink: 'cases',
-  loading: false,
-  // 行业数据
+  parentIndustries: [],
+  childIndustry: [],
+  parentCategories: [],
+  childCategory: [],
+  grandsonCategory: [],
+
+  // 页面数据
   tabs: [],
   tabsData: {
     tabSelected: 1,
@@ -18,7 +24,6 @@ Alpine.data('data', () => ({
     },
     tabRepositionMarker(tabButton) {
       this.$refs.tabMarker.style.width = tabButton.offsetWidth + 'px';
-      this.$refs.tabMarker.style.height = tabButton.offsetHeight + 'px';
       this.$refs.tabMarker.style.left = tabButton.offsetLeft + 'px';
     },
     tabContentActive(tabContent) {
@@ -28,35 +33,31 @@ Alpine.data('data', () => ({
       const tabId = tabContent.id.split('-')?.[1];
       return this.tabSelected == tabId;
     },
-    init() {
-      this.tabRepositionMarker(this.$refs.tabButtons.firstElementChild);
-    },
   },
-  tabContents: {},
-
-  async getList() {
-    this.loading = true;
-    // 获取所有行业数据
-    const res = await fetch('/api/v1/industries/roots');
-    const data = await res.json();
-    this.loading = false;
-    this.tabs = data;
-    // 默认查询第1个行业的所有案例
-    if (Array.isArray(data) && data.length) {
-      this.getCases(data[0].id);
-    }
-  },
+  tabContents: {}, // 缓存
 
   async getCases(id) {
     if (this.tabContents[id]) {
       return this.tabContents[id];
     }
-    this.loading = true;
+
+    const params = {
+      filters: {
+        industryId: id,
+      },
+    };
+
+    const queryString = buildQueryString(params);
     // 获取所有行业数据
-    const res = await fetch(`/api/v1/cases/industry/${id}`);
+    const res = await fetch(`/api/v1/cases/index?${queryString}`);
     const data = await res.json();
-    this.loading = false;
-    this.tabContents[id] = data;
+    this.tabContents[id] = data.data?.map((item) => {
+      return {
+        ...item,
+        publishedAt: item.publishedAt.substring(0, 19).replace('T', ' '),
+        imageUrl: getThumbnailUrl(item.cover.path),
+      };
+    });
   },
 
   handleDetail(item) {
@@ -64,49 +65,24 @@ Alpine.data('data', () => ({
     window.location.href = `cases-detail.html?id=${id}`;
   },
 
-  handleSetIndustry(data) {
-    // 导航栏使用数据
-    this.parentIndustries = data;
-    this.childIndustry = this.parentIndustries[0] || [];
-  },
-
-  handleSetCategory(data) {
-    // 导航栏
-    this.parentCategories = data;
-    this.childCategory = this.parentCategories[0];
-    this.grandsonCategory = this.childCategory?.children || [];
-  },
-
   init() {
-    // 缓存行业
-    const INDUSTRY_KEY = '__industry__';
-    const cachedIndustryData = sessionStorage.getItem(INDUSTRY_KEY);
-    if (cachedIndustryData && cachedIndustryData !== '{}') {
-      const data = JSON.parse(cachedIndustryData);
-      this.handleSetIndustry(data);
-    } else {
-      fetch('/api/v1/industries')
-        .then((res) => res.json())
-        .then((data) => {
-          this.handleSetIndustry(data);
-          sessionStorage.setItem(INDUSTRY_KEY, JSON.stringify(data));
-        });
-    }
+    getIndusties((data) => {
+      // 导航栏使用数据
+      this.parentIndustries = data;
+      this.childIndustry = this.parentIndustries[0] || [];
+      //
+      this.tabs = data;
+      if (Array.isArray(data) && data.length) {
+        this.getCases(data[0].id);
+      }
+    });
 
-    // 缓存产品分类
-    const CATEGORY_KEY = '__categroy__';
-    const cachedData = sessionStorage.getItem(CATEGORY_KEY);
-    if (cachedData && cachedData !== '{}') {
-      const data = JSON.parse(cachedData);
-      this.handleSetCategory(data);
-    } else {
-      fetch('/api/v1/categories')
-        .then((res) => res.json())
-        .then((data) => {
-          this.handleSetCategory(data);
-          sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
-        });
-    }
+    getCategories((data) => {
+      // 导航栏
+      this.parentCategories = data;
+      this.childCategory = this.parentCategories[0];
+      this.grandsonCategory = this.childCategory?.children || [];
+    });
   },
 }));
 
