@@ -48,4 +48,21 @@ function handleSetCategory(data, cb) {
   }
 }
 
+function handleTop() {
+  const el = document.querySelector('.top');
+  el.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+function handleLink(path) {
+  if (typeof path === 'string') {
+    this.$router.push({path});
+  } else {
+    const {chineseName, englishName, parentName} = path;
+    const tabs = JSON.stringify(path.children.map((it) => ({id: it.id, name: it.name})));
+    this.$router.push({
+      name: parentName,
+      query: {chineseName, englishName, tabs},
+    });
+  }
+}
+
 export {getIndusties, getCategories};

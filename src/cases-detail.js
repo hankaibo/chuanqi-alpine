@@ -26,7 +26,8 @@ Alpine.data('data', () => ({
     const data = await res.json();
     const {name, publishedAt, views, summary, content} = data;
     this.name = name;
-    (this.publishDate = publishedAt.substring(0, 19).replace('T', ' ')), (this.views = views);
+    this.publishDate = publishedAt.substring(0, 19).replace('T', ' ');
+    this.views = views;
     this.summary = summary;
 
     this.initEditor(content);
