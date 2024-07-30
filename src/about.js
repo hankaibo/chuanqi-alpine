@@ -17,8 +17,6 @@ Alpine.data('data', () => ({
   parentCategories: [],
   childCategory: [],
   grandsonCategory: [],
-  //
-  footerHTML: '',
 
   aboutData: {},
   mapList: [
@@ -134,10 +132,6 @@ Alpine.data('data', () => ({
       this.childCategory = this.parentCategories[0];
       this.grandsonCategory = this.childCategory?.children || [];
     });
-
-    fetch('./footer.html')
-      .then((res) => res.text())
-      .then((text) => (this.footerHTML = text));
   },
 }));
 
