@@ -1,3 +1,4 @@
+import {nanoid} from 'nanoid';
 import Alpine from 'alpinejs';
 import './style.css';
 
@@ -178,6 +179,12 @@ Alpine.data('data', () => ({
    */
   async getCases(id) {
     // if (this.industryCase[id]) {
+    //   const swiper = this.industryCase[`id${id}`];
+    //   if (swiper) {
+    //     setTimeout(() => {
+    //       swiper.update();
+    //     }, 300)
+    //   }
     //   return this.industryCase[id];
     // }
     // 获取所有行业数据
@@ -200,7 +207,7 @@ Alpine.data('data', () => ({
     });
 
     this.$nextTick(() => {
-      new Swiper(`#${id}`, {
+      this.industryCase[`id${id}`] = new Swiper(`#id${id}`, {
         modules: [Navigation, Pagination],
         lazy: true,
         slidesPerView: 3,
@@ -260,6 +267,42 @@ Alpine.data('data', () => ({
       };
     });
     this.newsFirst = this.news.shift();
+  },
+
+  /**
+   * 新增留言信息
+   */
+  async handleSumbit() {
+    Object.keys(this.form).forEach((key) => {
+      if (this.form[key] === '' || this.form[key] == null) {
+        alert(`请输入${key}`);
+      }
+    });
+
+    try {
+      const res = await fetch('/api/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.form),
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.form = {
+        id: undefined,
+        name: undefined,
+        phone: undefined,
+        email: undefined,
+        department: undefined,
+        message: undefined,
+        content: undefined,
+      };
+    }
+  },
+  handleSubmitTest() {
+    this.form.message = nanoid();
   },
 
   handleDetail(product) {

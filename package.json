@@ -19,7 +19,8 @@
   "dependencies": {
     "@wangeditor/editor": "^5.1.23",
     "alpinejs": "^3.14.1",
-    "swiper": "^11.1.4"
+    "nanoid": "^5.0.7",
+    "swiper": "^11.1.8"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

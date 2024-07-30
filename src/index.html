@@ -346,7 +346,6 @@
                       },
                       tabRepositionMarker(tabButton){
                           this.$refs.tabMarker.style.width=tabButton.offsetWidth + 'px';
-                          this.$refs.tabMarker.style.height=tabButton.offsetHeight + 'px';
                           this.$refs.tabMarker.style.left=tabButton.offsetLeft + 'px';
                       },
                       tabContentActive(tabContent){
@@ -359,26 +358,28 @@
                     }"
                     class="relative w-full"
                   >
-                    <div x-ref="tabButtons" class="relative flex items-center w-full h-10 p-1 px-20 text-gray-500 bg-white border border-gray-100 rounded-lg select-none">
-                      <template x-for="tab in industries" :key="tab.id">
-                        <button
-                          :id="$id(tabId)"
-                          @click="tabButtonClicked($el, tab);"
-                          type="button"
-                          :class="{ 'bg-gray-100 text-primary' : tabButtonActive($el) }"
-                          class="relative z-20 inline-flex items-center justify-center h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap"
-                          x-text="tab.name"
-                        ></button>
-                      </template>
-                      <div x-ref="tabMarker" class="absolute left-0 z-10 w-1/2 h-full duration-300 ease-out" x-cloak>
-                        <div class="w-full h-full bg-gray-100 rounded-md shadow-sm"></div>
+                    <div x-ref="tabButtons" class="relative px-20">
+                      <div class="relative flex items-center text-gray-500 bg-white select-none py-2">
+                        <template x-for="tab in industries" :key="tab.id">
+                          <button
+                            :id="$id(tabId)"
+                            @click="tabButtonClicked($el, tab);"
+                            type="button"
+                            :class="{ 'text-primary' : tabButtonActive($el) }"
+                            class="z-20 inline-flex items-center justify-center h-8 px-3 text-sm font-medium transition-all cursor-pointer whitespace-nowrap"
+                            x-text="tab.name"
+                          ></button>
+                        </template>
+                      </div>
+                      <div class="relative z-10 w-full h-0.5 bg-white" x-cloak>
+                        <div x-ref="tabMarker" class="absolute w-20 h-full bg-primary duration-300 ease-out"></div>
                       </div>
                     </div>
 
-                    <div class="relative flex items-center justify-center w-full py-5 mt-2 text-xs text-gray-400 content">
+                    <div class="relative px-20 flex items-center justify-center w-full py-5 mt-2 text-xs text-gray-400 content">
                       <template x-for="tab in industries" :key="tab.id">
-                        <div class="w-full f-ull px-20" :id="$id(tabId + '-content')" x-show="tabContentActive($el)">
-                          <div class="swiper swiper-tab w-full h-full" :id="tab.id">
+                        <div class="w-full f-ull" :id="$id(tabId + '-content')" x-show="tabContentActive($el)">
+                          <div class="swiper swiper-tab w-full h-full" :id="'id'+tab.id">
                             <div class="swiper-wrapper">
                               <template x-for="tabContent in industryCase[tab.id]" :key="tabContent.id">
                                 <div class="swiper-slide" @click="handleDetail(tabContent)">
@@ -658,7 +659,7 @@
                       <div class="flex flex-col sm:flex-row sm:items-center">
                         <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">姓名</label>
                         <div class="relative text-sm flex-1">
-                          <input x-model="form.name" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
+                          <input x-model="form.name" @click="handleSubmitTest" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
                         </div>
                       </div>
                       <div class="flex flex-col sm:flex-row sm:items-center">
@@ -676,13 +677,13 @@
                       <div class="flex flex-col sm:flex-row sm:items-center">
                         <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">单位名称</label>
                         <div class="relative text-sm flex-1">
-                          <input x-model="form.dept" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
+                          <input x-model="form.department" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
                         </div>
                       </div>
                       <div class="flex flex-col sm:flex-row sm:items-center">
                         <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">留言</label>
                         <div class="relative text-sm flex-1">
-                          <textarea x-model="form.message" rows="10" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-4"></textarea>
+                          <textarea x-model="form.content" rows="10" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-4"></textarea>
                         </div>
                       </div>
                       <div class="flex justify-center items-center mt-2">
