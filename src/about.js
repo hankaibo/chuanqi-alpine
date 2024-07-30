@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs';
 import {getIndusties, getCategories} from './header';
+import {getThumbnailUrl} from './untils';
 import './style.css';
 
 import {createEditor} from '@wangeditor/editor';
@@ -16,6 +17,8 @@ Alpine.data('data', () => ({
   parentCategories: [],
   childCategory: [],
   grandsonCategory: [],
+  //
+  footerHTML: '',
 
   aboutData: {},
   mapList: [
@@ -78,12 +81,9 @@ Alpine.data('data', () => ({
     this.aboutData = {
       ...data,
       files: data.files.map(({id, path}) => {
-        const separator = path.includes('files/') ? 'files/' : path?.includes('files\\') ? 'files\\' : '';
-        const [http, name] = path.split(separator);
-        const thumbnailUrl = `${http}files/thumbnail_${name.split('.')[0]}.webp`;
         return {
           id,
-          path: thumbnailUrl,
+          path: getThumbnailUrl(path),
           originalPath: path,
         };
       }),
@@ -134,6 +134,10 @@ Alpine.data('data', () => ({
       this.childCategory = this.parentCategories[0];
       this.grandsonCategory = this.childCategory?.children || [];
     });
+
+    fetch('./footer.html')
+      .then((res) => res.text())
+      .then((text) => (this.footerHTML = text));
   },
 }));
 
