@@ -17,160 +17,289 @@
 
   <body>
     <div x-data="data">
-      <header class="fixed top-0 left-0 right-0 flex justify-center h-18 z-[9999]" :class="swiperIndex ?'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
-        <div class="flex items-center">
-          <a href="/">
-            <img src="/images/login/logo.webp" class="w-[100px]" />
-          </a>
-        </div>
+      <header class="fixed top-0 left-0 right-0 h-18 z-50 px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64" :class="swiperIndex ?'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
+        <div class="flex justify-between relative">
+          <div class="flex items-center">
+            <a href="/">
+              <img src="/images/login/logo.webp" class="w-[100px]" />
+            </a>
+          </div>
 
-        <nav
-          x-data="{
-              navigationMenuOpen: false,
-              navigationMenu: '',
-              navigationMenuCloseDelay: 200,
-              navigationMenuCloseTimeout: null,
-              navigationMenuLeave() {
-                  let that = this;
-                  this.navigationMenuCloseTimeout = setTimeout(() => {
-                      that.navigationMenuClose();
-                  }, this.navigationMenuCloseDelay);
-              },
-              navigationMenuReposition(navElement) {
-                  console.log(navElement.getBoundingClientRect())
-                  this.navigationMenuClearCloseTimeout();
-                  this.$refs.navigationDropdown.style.left = 0;
-                  this.$refs.navigationDropdown.style.marginLeft = (navElement.offsetWidth/2) + 'px';
-              },
-              navigationMenuClearCloseTimeout(){
-                  clearTimeout(this.navigationMenuCloseTimeout);
-              },
-              navigationMenuClose(){
-                  this.navigationMenuOpen = false;
-                  this.navigationMenu = '';
-              },
-              menus: [
-                {id:'cases', name: '工程案例', href:'./cases.html'},
-                {id:'news', name: '资讯中心', href:'./news.html'},
-                {id:'jobs', name: '诚邀才俊', href:'./jobs.html'},
-                {id:'about', name: '关于我们', href:'./about.html'},
-              ]
-          }"
-          class="relative"
-        >
-          <div class="relative">
-            <ul class="flex justify-center space-x-1 group">
-              <li
-                class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-                :class="isLink==='index' ? 'text-primary after:w-full': ''"
-              >
-                <a href="/" class="py-6" target="_blank">首页</a>
-              </li>
-              <li
-                class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full focus:after:w-full"
-                :class="{ 'after:w-full' : navigationMenu=='products', 'hover:after:w-full' : navigationMenu!='products' }"
-              >
-                <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='products'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
-                  <span>产品中心</span>
-                  <svg
-                    :class="{ '-rotate-180' : navigationMenuOpen==true && navigationMenu == 'products' }"
-                    class="relative top-[1px] ml-1 h-3 w-3 ease-out duration-300"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-              </li>
-              <template x-for="item in menus">
+          <nav
+            x-data="{
+                navigationMenuOpen: false,
+                navigationMenu: '',
+                navigationMenuCloseDelay: 200,
+                navigationMenuCloseTimeout: null,
+                navigationMenuLeave() {
+                    let that = this;
+                    this.navigationMenuCloseTimeout = setTimeout(() => {
+                        that.navigationMenuClose();
+                    }, this.navigationMenuCloseDelay);
+                },
+                navigationMenuReposition(navElement) {
+                    this.navigationMenuClearCloseTimeout();
+                },
+                navigationMenuClearCloseTimeout(){
+                    clearTimeout(this.navigationMenuCloseTimeout);
+                },
+                navigationMenuClose(){
+                    this.navigationMenuOpen = false;
+                    this.navigationMenu = '';
+                },
+                menus: [
+                  {id:'cases', name: '工程案例', href:'./cases.html'},
+                  {id:'news', name: '资讯中心', href:'./news.html'},
+                  {id:'jobs', name: '诚邀才俊', href:'./jobs.html'},
+                  {id:'about', name: '关于我们', href:'./about.html'},
+                ]
+            }"
+          >
+            <div class="relative">
+              <ul class="flex justify-center space-x-1 group">
                 <li
                   class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-                  :class="isLink===item.id ? 'text-primary after:w-full': ''"
+                  :class="isLink==='index' ? 'text-primary after:w-full': ''"
                 >
-                  <a :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
+                  <a href="/" class="py-6" target="_blank">首页</a>
                 </li>
-              </template>
-            </ul>
-          </div>
-          <div
-            x-ref="navigationDropdown"
-            x-show="navigationMenuOpen"
-            x-transition:enter="transition ease-out duration-100"
-            x-transition:enter-start="opacity-0 scale-90"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-100"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-90"
-            @mouseover="navigationMenuClearCloseTimeout()"
-            @mouseleave="navigationMenuLeave()"
-            class="absolute top-0 pt-3 text-gray-700 duration-200 ease-out -translate-x-1/2 translate-y-18"
-            x-cloak
-          >
-            <div class="flex justify-center w-auto h-auto overflow-hidden bg-white border rounded-md shadow-sm border-neutral-200/70">
-              <div x-show="navigationMenu == 'products'" class="flex items-stretch justify-center w-full p-6">
-                <div class="py-2.5 border-r border-r-[#f5f5f5]">
-                  <ul class="w-60">
-                    <template x-for="item in parentCategories">
-                      <li>
-                        <div
-                          class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
-                          :class="item.id ===childCategory.id ?'text-primary bg-primary/10':''"
-                          @mouseover="childCategory=item"
-                        >
-                          <span class="flex items-center">
-                            <img src="" class="w-4 h-4" />
+                <li
+                  class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full focus:after:w-full"
+                  :class="{ 'after:w-full' : navigationMenu=='industries', 'hover:after:w-full' : navigationMenu!='industries' }"
+                >
+                  <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='industries'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
+                    <span>行业应用</span>
+                    <svg
+                      :class="{ '-rotate-180' : navigationMenuOpen==true && navigationMenu == 'industries' }"
+                      class="relative top-[1px] ml-1 h-3 w-3 ease-out duration-300"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                </li>
+                <li
+                  class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full focus:after:w-full"
+                  :class="{ 'after:w-full' : navigationMenu=='products', 'hover:after:w-full' : navigationMenu!='products' }"
+                >
+                  <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='products'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
+                    <span>产品中心</span>
+                    <svg
+                      :class="{ '-rotate-180' : navigationMenuOpen==true && navigationMenu == 'products' }"
+                      class="relative top-[1px] ml-1 h-3 w-3 ease-out duration-300"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                </li>
+                <template x-for="item in menus">
+                  <li
+                    class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                    :class="isLink===item.id ? 'text-primary after:w-full': ''"
+                  >
+                    <a :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div
+              x-ref="navigationDropdown"
+              x-show="navigationMenuOpen"
+              x-transition:enter="transition ease-out duration-100"
+              x-transition:enter-start="opacity-0 scale-90"
+              x-transition:enter-end="opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-100"
+              x-transition:leave-start="opacity-100 scale-100"
+              x-transition:leave-end="opacity-0 scale-90"
+              @mouseover="navigationMenuClearCloseTimeout()"
+              @mouseleave="navigationMenuLeave()"
+              class="absolute top-0 left-0 right-0 pt-3 text-gray-700 duration-200 ease-out translate-y-18"
+              x-cloak
+            >
+              <div class="flex justify-start w-auto h-auto overflow-hidden bg-white border rounded-md shadow-sm border-neutral-200/70">
+                <div x-show="navigationMenu == 'industries'" class="flex justify-start w-full p-6">
+                  <div class="border-r border-r-[#f5f5f5]">
+                    <ul class="w-60">
+                      <template x-for="item in parentIndustries">
+                        <li>
+                          <div
+                            class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                            :class="item.id ===childIndustry.id ?'text-primary bg-primary/10':''"
+                            @mouseover="childIndustry=item"
+                          >
+                            <span class="flex items-center">
+                              <img src="./images/logo.webp" class="w-4 h-4" />
+                              <span class="pl-2 text-black" x-text="item.name"></span>
+                            </span>
+                            <svg
+                              class="text-gray-200 w-4 h-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-chevron-down"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                  <div class="border-r border-r-[#f5f5f5]">
+                    <ul class="w-60">
+                      <template x-for="item in childIndustry.children">
+                        <li>
+                          <div
+                            class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                            :class="item.id ===grandsonIndustry.id ?'text-primary bg-primary/10':''"
+                            @mouseover="grandsonIndustry=item"
+                          >
                             <span class="pl-2 text-black" x-text="item.name"></span>
-                          </span>
-                          <i class="el-icon-caret-bottom collapse"></i>
+                            <svg
+                              class="text-gray-200 w-4 h-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-chevron-down"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                  <div class="py-2.5 w-96">
+                    <div class="flex flex-wrap">
+                      <template x-for="item in grandsonIndustry.children">
+                        <div class="sm:w-full xl:w-1/2 2xl:w-1/3 mb-4">
+                          <div class="pl-8 text-[#4EB0B3] mb-2.5" x-text="item.name"></div>
+                          <div class="flex items-center pl-8 cursor-pointer hover:text-primary">
+                            <template x-for="it in item.children">
+                              <img style="width: 40px; height: 40px" :src="pp.fileUrl" fit="fit" />
+                              <span class="pl-2 text-black" x-text="it.name"></span>
+                            </template>
+                          </div>
                         </div>
-                      </li>
-                    </template>
-                  </ul>
+                      </template>
+                    </div>
+                  </div>
                 </div>
-                <div class="py-2.5 border-r border-r-[#f5f5f5]">
-                  <ul class="w-60">
-                    <template x-for="item in childCategory.children">
-                      <li>
-                        <div
-                          class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
-                          :class="item.id ===grandsonCategory.id ?'text-primary bg-primary/10':''"
-                          @mouseover="grandsonCategory=item"
-                        >
-                          <span class="pl-2 text-black" x-text="item.name"></span>
-                          <i class="el-icon-caret-bottom collapse"></i>
+
+                <div x-show="navigationMenu == 'products'" class="flex justify-start w-full p-6">
+                  <div class="border-r border-r-[#f5f5f5]">
+                    <ul class="w-60">
+                      <template x-for="item in parentCategories">
+                        <li>
+                          <div
+                            class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                            :class="item.id ===childCategory.id ?'text-primary bg-primary/10':''"
+                            @mouseover="childCategory=item"
+                          >
+                            <span class="flex items-center">
+                              <img src="./images/logo.webp" class="w-4 h-4" />
+                              <span class="pl-2 text-black" x-text="item.name"></span>
+                            </span>
+                            <svg
+                              class="text-gray-200 w-4 h-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-chevron-down"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                  <div class="border-r border-r-[#f5f5f5]">
+                    <ul class="w-60">
+                      <template x-for="item in childCategory.children">
+                        <li>
+                          <div
+                            class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                            :class="item.id ===grandsonCategory.id ?'text-primary bg-primary/10':''"
+                            @mouseover="grandsonCategory=item"
+                          >
+                            <span class="pl-2 text-black" x-text="item.name"></span>
+                            <svg
+                              class="text-gray-200 w-4 h-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-chevron-down"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          </div>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex flex-wrap">
+                      <template x-for="item in grandsonCategory.children">
+                        <div class="sm:w-full xl:w-1/2 2xl:w-1/3 mb-4">
+                          <div class="pl-8 text-primary mb-2.5" x-text="item.name"></div>
+                          <div class="flex items-center pl-8 cursor-pointer hover:text-primary">
+                            <template x-for="it in item.children">
+                              <img style="width: 40px; height: 40px" :src="pp.fileUrl" fit="fit" />
+                              <span class="pl-2 text-black" x-text="it.name"></span>
+                            </template>
+                          </div>
                         </div>
-                      </li>
-                    </template>
-                  </ul>
-                </div>
-                <div class="py-2.5 w-96">
-                  <div class="flex flex-wrap">
-                    <template x-for="item in grandsonCategory.children">
-                      <div class="sm:w-full xl:w-1/2 2xl:w-1/3 mb-4">
-                        <div class="pl-8 text-[#4EB0B3] mb-2.5" x-text="item.name"></div>
-                        <div class="flex items-center pl-8 cursor-pointer hover:text-[#4eb0b3]">
-                          <template x-for="it in item.children">
-                            <img style="width: 40px; height: 40px" :src="pp.fileUrl" fit="fit" />
-                            <span class="pl-2 text-black" x-text="it.name"></span>
-                          </template>
-                        </div>
-                      </div>
-                    </template>
+                      </template>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </nav>
+          </nav>
 
-        <div class="flex items-center">
-          <input type="search" placeholder="请输入内容" class="w-60 bg-[#f5f5f5] h-9 p-2 bg-no-repeat bg-right-2" style="background-image: url(/svg/search.svg)" />
+          <div class="inline-flex items-center">
+            <input type="search" placeholder="请输入内容" class="w-60 bg-[#f5f5f5] h-9 p-2 bg-no-repeat bg-right-2" style="background-image: url(/svg/search.svg)" />
+          </div>
         </div>
       </header>
 
@@ -189,7 +318,7 @@
                           <img :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" loading="lazy" />
                           <div class="absolute top-1/3 left-[260px] flex flex-col text-white">
                             <span class="text-5xl mb-7" x-text="product.name"></span>
-                            <button class="btn-primary w-40" @click="handleDetail(product.id)">查看详情</button>
+                            <button class="btn-primary w-40" @click="handleProductDetail(product.id)">查看详情</button>
                           </div>
                         </div>
                       </div>
@@ -227,7 +356,7 @@
                           class="absolute inset-0 flex flex-col justify-center items-center"
                         >
                           <div
-                            class="relative bg-[rgba(78,176,179,0.35)] backdrop-blur-[10px] w-full h-full p-12 before:absolute before:top-0 before:w-1.5 before:h-full before:bg-white after:absolute after:top-0 after:w-1.5 after:h-full after:bg-[#4eb0b3]"
+                            class="relative bg-[rgba(78,176,179,0.35)] backdrop-blur-[10px] w-full h-full p-12 before:absolute before:top-0 before:w-1.5 before:h-full before:bg-white after:absolute after:top-0 after:w-1.5 after:h-full after:bg-primary"
                             :class="{
                           'before:-right-1.5': index < 2,
                           'after:-right-3': index < 2,
@@ -260,7 +389,7 @@
                     <div class="relative lg:basis-2/3">
                       <img :src="category.indexFile?.path" class="w-full h-full object-cover" loading="lazy" />
                       <div class="absolute left-0 bottom-0 right-0 p-4 xl:p-9 gradient-box">
-                        <div class="flex flex-col gap-1.5 mb-3 after:w-5 after:h-0.5 after:bg-[#4eb0b3] lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-5">
+                        <div class="flex flex-col gap-1.5 mb-3 after:w-5 after:h-0.5 after:bg-primary lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-5">
                           <span class="text-lg lg:text-4xl text-white" x-text="category.name"></span>
                         </div>
                         <div class="text-sm text-white leading-normal" x-text="category.description"></div>
@@ -305,13 +434,13 @@
                           </g>
                         </g>
                       </svg>
-                      <div class="flex flex-col gap-1.5 my-2 after:w-5 after:h-0.5 after:bg-[#4eb0b3] lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-10">
+                      <div class="flex flex-col gap-1.5 my-2 after:w-5 after:h-0.5 after:bg-primary lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-10">
                         <h3 class="text-lg lg:text-2xl 3xl:text-4xl text-slate-900" x-text="category.name"></h3>
                       </div>
                       <ul class="mb-6">
                         <template x-for="product in category.children" :key="product.id">
                           <li
-                            class="flex justify-between items-center py-2 text-xs lg:text-base xl:text-lg text-[#333] border-b border-b-[#d8d8d8] cursor-pointer hover:text-[#4eb0b3]"
+                            class="flex justify-between items-center py-2 text-xs lg:text-base xl:text-lg text-[#333] border-b border-b-[#d8d8d8] cursor-pointer hover:text-primary"
                             @click="handleClick(product, category, index)"
                           >
                             <span x-text="product.name"></span>
@@ -460,7 +589,7 @@
                         <img :src="newsFirst?.imageUrl" class="lg:min-h-[270px] object-cover w-full h-full" />
                       </div>
                       <div class="flex">
-                        <div class="flex flex-col items-center justify-center bg-[#4eb0b3] shadow-sm px-2 py-1">
+                        <div class="flex flex-col items-center justify-center bg-primary shadow-sm px-2 py-1">
                           <span class="text-white text-4xl xl:text-5xl" x-text="newsFirst?.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
                           <span class="text-white text-sm" x-text="newsFirst?.publishedAt?.substring(0,7)"></span>
                         </div>
@@ -473,13 +602,13 @@
                     </div>
                     <template x-for="(item, index) in news" :key="item.id">
                       <div
-                        class="relative mt-3 pb-1 border-b border-b-[#bbbbbb] sm:mt-0 sm:p-2 sm:border sm:border-[#d8d8d8] cursor-pointer sm:transition sm:hover:bg-[#eb0b3] sm:hover:-translate-y-4 sm:basis-1/3 3xl:basis-1/5 group sm:hover:bg-[#4eb0b3] lg:px-4 lg:py-8 xl:px-8 xl:py-12"
+                        class="relative mt-3 pb-1 border-b border-b-[#bbbbbb] sm:mt-0 sm:p-2 sm:border sm:border-[#d8d8d8] cursor-pointer sm:transition sm:hover:bg-[#eb0b3] sm:hover:-translate-y-4 sm:basis-1/3 3xl:basis-1/5 group sm:hover:bg-primary lg:px-4 lg:py-8 xl:px-8 xl:py-12"
                         :class="index > 0 ? '!border-l-0' : ''"
                         @click="handleDetail(item)"
                       >
                         <div class="flex flex-col flex-nowrap justify-center text-[#A8A9AD] items-start shadow-sm">
-                          <span class="text-3xl lg:text-4xl xl:text-5xl sm:text-[#4eb0b3] sm:group-hover:text-white" x-text="item.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
-                          <span class="sm:text-[#4eb0b3] sm:group-hover:text-white" x-text="item.publishedAt?.substring(0,7)"></span>
+                          <span class="text-3xl lg:text-4xl xl:text-5xl sm:text-primary sm:group-hover:text-white" x-text="item.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
+                          <span class="sm:text-primary sm:group-hover:text-white" x-text="item.publishedAt?.substring(0,7)"></span>
                         </div>
                         <h3 class="text-[#333333] text-xs lg:text-lg xl:text-xl text-ellipsis line-clamp-2 cursor-pointer sm:pt-3 sm:group-hover:text-white" x-text="item.name"></h3>
                         <div class="hidden text-ellipsis lg:line-clamp-5 lg:text-[#888888] lg:text-sm xl:text-base lg:group-hover:text-white lg:mt-3" x-text="item.summary"></div>
@@ -698,28 +827,28 @@
           </div>
         </template>
 
-        <div x-show="isMobile" class="absolute right-3 bottom-3 flex flex-col py-5 px-2 bg-[#4eb0b3] z-[1001] box-border shadow-md">
+        <div x-show="isMobile" class="absolute right-3 bottom-3 flex flex-col py-5 px-2 bg-primary z-[1001] box-border shadow-md">
           <el-popover placement="left" trigger="hover">
             <ul class="py-1 px-2">
               <li>
                 <span class="block pb-1.5 text-sm text-[#333333]">客服电话</span>
-                <span class="text-xs text-[#4eb0b3]">010-67874677</span>
+                <span class="text-xs text-primary">010-67874677</span>
               </li>
               <li class="mt-5">
                 <span class="block pb-1.5 text-sm text-[#333333]">北京总部</span>
-                <span class="text-xs text-[#4eb0b3]">张经理：13810060503</span>
+                <span class="text-xs text-primary">张经理：13810060503</span>
               </li>
               <li class="mt-5">
                 <span class="block pb-1.5 text-sm text-[#333333]">株洲办事处</span>
-                <span class="text-xs text-[#4eb0b3]">唐经理：13810062921</span>
+                <span class="text-xs text-primary">唐经理：13810062921</span>
               </li>
               <li class="mt-5">
                 <span class="block pb-1.5 text-sm text-[#333333]">南京办事处</span>
-                <span class="text-xs text-[#4eb0b3]">蔡经理：18915956527</span>
+                <span class="text-xs text-primary">蔡经理：18915956527</span>
               </li>
               <li class="mt-5">
                 <span class="block pb-1.5 text-sm text-[#333333]">西安办事处</span>
-                <span class="text-xs text-[#4eb0b3]">杨经理：13220186200</span>
+                <span class="text-xs text-primary">杨经理：13220186200</span>
               </li>
             </ul>
             <span slot="reference" class="p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">
@@ -731,7 +860,7 @@
             <ul class="py-1 px-2">
               <li>
                 <span class="block pb-1.5 text-sm text-[#333333]">QQ客服</span>
-                <span class="text-xs text-[#4eb0b3]">2244212405</span>
+                <span class="text-xs text-primary">2244212405</span>
               </li>
             </ul>
             <span slot="reference" class="block w-8 p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">
@@ -743,7 +872,7 @@
             <ul class="py-1 px-2">
               <li>
                 <span class="block pb-1.5 text-sm text-[#333333]">微信二维码</span>
-                <span class="text-xs text-[#4eb0b3]"><el-image style="width: 94px; height: 95px" src="weixin"></el-image></span>
+                <span class="text-xs text-primary"><el-image style="width: 94px; height: 95px" src="weixin"></el-image></span>
               </li>
             </ul>
             <span slot="reference" class="block w-8 p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">

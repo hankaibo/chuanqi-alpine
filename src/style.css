@@ -12,7 +12,7 @@
   }
 
   .divider-primary {
-    @apply relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-[#4eb0b3] after:-translate-x-1/2 after:-translate-y-1/2 lg:w-64 lg:after:w-8 lg:after:h-1.5;
+    @apply relative w-32 h-0.5 bg-[#d8d8d8] after:absolute after:left-1/2 after:top-1/2 after:w-4 after:h-1 after:bg-primary after:-translate-x-1/2 after:-translate-y-1/2 lg:w-64 lg:after:w-8 lg:after:h-1.5;
   }
 }
 

@@ -209,10 +209,10 @@ Alpine.data('data', () => ({
     this.form.message = nanoid();
   },
 
-  handleDetail(product) {
-    const {id} = product;
-    this.$router.push({name: 'ChuanQiProductDetail', params: {id}});
+  handleProductDetail(productId) {
+    window.location.href = `product-detail.html?id=${productId}`;
   },
+
   handleMore(industry) {
     const {chineseName, englishName} = industry;
     const tabs = JSON.stringify(industry.children.map((it) => ({id: it.id, name: it.name})));
@@ -224,6 +224,7 @@ Alpine.data('data', () => ({
       // 导航栏使用数据
       this.parentIndustries = data;
       this.childIndustry = this.parentIndustries[0] || [];
+      this.grandsonIndustry = this.childIndustry?.children || [];
 
       // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
       this.industries = data.map((item) => {

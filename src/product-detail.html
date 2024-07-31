@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>产品详情 - 传麒科技</title>
+    <base href="/temp/" />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+
+  <body x-data="data">
+    <header class="fixed top-0 left-0 right-0 flex justify-center h-18 z-[9999] text-white bg-[rgba(0,0,0,0.6)]">
+      <div class="flex items-center">
+        <a href="/">
+          <img src="/images/login/logo.webp" class="w-[100px]" />
+        </a>
+      </div>
+
+      <nav
+        x-data="{
+  navigationMenuOpen: false,
+  navigationMenu: '',
+  navigationMenuCloseDelay: 200,
+  navigationMenuCloseTimeout: null,
+  navigationMenuLeave() {
+      let that = this;
+      this.navigationMenuCloseTimeout = setTimeout(() => {
+          that.navigationMenuClose();
+      }, this.navigationMenuCloseDelay);
+  },
+  navigationMenuReposition(navElement) {
+      console.log(navElement.getBoundingClientRect())
+      this.navigationMenuClearCloseTimeout();
+      this.$refs.navigationDropdown.style.left = 0;
+      this.$refs.navigationDropdown.style.marginLeft = (navElement.offsetWidth/2) + 'px';
+  },
+  navigationMenuClearCloseTimeout(){
+      clearTimeout(this.navigationMenuCloseTimeout);
+  },
+  navigationMenuClose(){
+      this.navigationMenuOpen = false;
+      this.navigationMenu = '';
+  },
+  menus: [
+    {id:'cases', name: '工程案例', href:'./cases.html'},
+    {id:'news', name: '资讯中心', href:'./news.html'},
+    {id:'jobs', name: '诚邀才俊', href:'./jobs.html'},
+    {id:'about', name: '关于我们', href:'./about.html'},
+  ]
+}"
+        class="relative"
+      >
+        <div class="relative">
+          <ul class="flex justify-center space-x-1 group">
+            <li
+              class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+              :class="isLink==='index' ? 'text-primary after:w-full': ''"
+            >
+              <a href="/" class="py-6" target="_blank">首页</a>
+            </li>
+            <li
+              class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full focus:after:w-full"
+              :class="{ 'after:w-full' : navigationMenu=='products', 'hover:after:w-full' : navigationMenu!='products' }"
+            >
+              <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='products'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
+                <span>产品中心</span>
+                <svg
+                  :class="{ '-rotate-180' : navigationMenuOpen==true && navigationMenu == 'products' }"
+                  class="relative top-[1px] ml-1 h-3 w-3 ease-out duration-300"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+            </li>
+            <template x-for="item in menus">
+              <li
+                class="flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                :class="isLink===item.id ? 'text-primary after:w-full': ''"
+              >
+                <a :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
+              </li>
+            </template>
+          </ul>
+        </div>
+        <div
+          x-ref="navigationDropdown"
+          x-show="navigationMenuOpen"
+          x-transition:enter="transition ease-out duration-100"
+          x-transition:enter-start="opacity-0 scale-90"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-100"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-90"
+          @mouseover="navigationMenuClearCloseTimeout()"
+          @mouseleave="navigationMenuLeave()"
+          class="absolute top-0 pt-3 text-gray-700 duration-200 ease-out -translate-x-1/2 translate-y-18"
+          x-cloak
+        >
+          <div class="flex justify-center w-auto h-auto overflow-hidden bg-white border rounded-md shadow-sm border-neutral-200/70">
+            <div x-show="navigationMenu == 'products'" class="flex items-stretch justify-center w-full p-6">
+              <div class="py-2.5 border-r border-r-[#f5f5f5]">
+                <ul class="w-60">
+                  <template x-for="item in parentCategories">
+                    <li>
+                      <div
+                        class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                        :class="item.id ===childCategory.id ?'text-primary bg-primary/10':''"
+                        @mouseover="childCategory=item"
+                      >
+                        <span class="flex items-center">
+                          <img src="" class="w-4 h-4" />
+                          <span class="pl-2 text-black" x-text="item.name"></span>
+                        </span>
+                        <i class="el-icon-caret-bottom collapse"></i>
+                      </div>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+              <div class="py-2.5 border-r border-r-[#f5f5f5]">
+                <ul class="w-60">
+                  <template x-for="item in childCategory.children">
+                    <li>
+                      <div
+                        class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                        :class="item.id ===grandsonCategory.id ?'text-primary bg-primary/10':''"
+                        @mouseover="grandsonCategory=item"
+                      >
+                        <span class="pl-2 text-black" x-text="item.name"></span>
+                        <i class="el-icon-caret-bottom collapse"></i>
+                      </div>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+              <div class="py-2.5 w-96">
+                <div class="flex flex-wrap">
+                  <template x-for="item in grandsonCategory.children">
+                    <div class="sm:w-full xl:w-1/2 2xl:w-1/3 mb-4">
+                      <div class="pl-8 text-[#4EB0B3] mb-2.5" x-text="item.name"></div>
+                      <div class="flex items-center pl-8 cursor-pointer hover:text-primary">
+                        <template x-for="it in item.children">
+                          <img style="width: 40px; height: 40px" :src="pp.fileUrl" fit="fit" />
+                          <span class="pl-2 text-black" x-text="it.name"></span>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="flex items-center">
+        <input type="search" placeholder="请输入内容" class="w-60 bg-[#f5f5f5] h-9 p-2 bg-no-repeat bg-right-2" style="background-image: url(/svg/search.svg)" />
+      </div>
+    </header>
+
+    <main x-init="getDetail()" class="flex flex-col justify-between">
+      <div class="bg-[#f6f7f8] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 top">
+        <div class="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-32 2xl:-mx-64">
+          <img src="./images/product.webp" class="bg-no-repeat bg-[length:100%_auto]" alt="banner" />
+          <div class="absolute top-1/2 left-4 sm:left-8 lg:left-16 xl:left-32 2xl:left-64 text-white -translate-y-1/3">
+            <div class="break-words text-3xl xl:text-5xl font-semibold whitespace-nowrap" x-text="cnTitle"></div>
+            <div class="mt-4 break-words text-3xl xl:text-4xl font-thin whitespace-nowrap capitalize" x-text="enTitle"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-col bg-white p-4 lg:p-16">
+          <div class="mb-4">
+            <div class="pb-2 text-lg lg:text-2xl 2x:text-4xl font-semibold text-[#333] text-center" x-text="name"></div>
+            <div class="text-xs text-[#bbb] text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye"
+              >
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <span class="pl-1">浏览量：</span>
+              <span x-text="views"></span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4 lg:gap-6 lg:flex-row">
+            <div class="basis-full sm:basis-full lg:basis-1/2">
+              <div class="flex justify-between bg-[#f5f5f5] overflow-hidden h-full max-w-full">
+                <ul class="hidden lg:block">
+                  <template x-for="(item,index) in images" :key="item.id">
+                    <li
+                      class="flex justify-center items-center w-24 h-14 p-2 bg-white cursor-pointer overflow-hidden mb12"
+                      :class="{ 'border border-[#4eb0b8]': imgActive === index }"
+                      @click="imgActive = index"
+                    >
+                      <img :src="item.imageUrl" class="w-full h-full object-cover" />
+                    </li>
+                  </template>
+                </ul>
+                <div class="w-full h-[398px] flex items-center">
+                  <img :src="images[imgActive]?.imageUrl" />
+                </div>
+              </div>
+            </div>
+            <div class="basis-full sm:basis-full lg:basis-1/2 lg:h-[398px]">
+              <div class="flex flex-col items-start justify-between text-sm gap-4">
+                <div>
+                  <strong class="text-black">产品类别：</strong>
+                  <span class="text-[#333]" x-text="categoryName"></span>
+                </div>
+                <div class="flex-1 leading-6">
+                  <strong class="text-black">应用领域：</strong>
+                  <span class="text-[#333]" x-text="summary"></span>
+                </div>
+                <!-- <div v-if="fileDocument">
+                <el-link type="primary" @click="handleExport">
+                  <i class="el-icon-document"></i>
+                  <span>{{ fileDocument.fileName }}</span>
+                </el-link>
+              </div> -->
+                <div>
+                  <button type="button" class="btn-primary inline-flex justify-center items-center gap-2" @click="openChat">
+                    <svg
+                      class="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-message-circle-more"
+                    >
+                      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                      <path d="M8 12h.01" />
+                      <path d="M12 12h.01" />
+                      <path d="M16 12h.01" />
+                    </svg>
+                    在线客服
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h3>
+              <i class="el-icon-caret-right text-primary"></i>
+              <span class="pl-1 text-base 2xl:text-4xl font-semibold text-[#333] text-center mb-5">产品描述</span>
+            </h3>
+            <div id="editor-container" class="t-mx-2.5 text-xs lg:text-base text-[#333]" style="min-height: 500px"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="p-16 pb-5 bg-[#171c2f] lg:px-16 xl:px-32 2xl:px-64 divide-y divide-[#353948]">
+      <div class="pb-5 flex justify-between">
+        <ul
+          x-data="{
+      products:[
+      'DEWE产品系列', 'CPSS定制化电源系统', '功率分析仪及电流信号采集仪', '电力仿真系统', '检测装备及集成系统'
+      ]
+    }"
+        >
+          <li class="text-base font-medium text-[#d8d8d8] pb-2.5">产品中心</li>
+          <template x-for="product in products">
+            <li class="text-sm font-normal text-[#888888] pb-2" x-text="product"></li>
+          </template>
+        </ul>
+        <ul
+          x-data="{
+      solutions:[
+      '新能源检测', '轨道交通', '传统电力系统', '其他能源测试'
+      ]
+    }"
+        >
+          <li class="text-base font-medium text-[#d8d8d8] pb-2.5">解决方案</li>
+          <template x-for="solution in solutions">
+            <li class="text-sm font-normal text-[#888888] pb-2" x-text="solution"></li>
+          </template>
+        </ul>
+        <ul
+          x-data="{
+      cases:[
+      '新能源应用', '轨道交通', '电力系统应用'
+      ]
+    }"
+        >
+          <li class="text-base font-medium text-[#d8d8d8] pb-2.5">案例展示</li>
+          <template x-for="c in cases">
+            <li class="text-sm font-normal text-[#888888] pb-2" x-text="c"></li>
+          </template>
+        </ul>
+        <ul
+          x-data="{
+      news:[
+      '公司新闻', '行业新闻'
+      ]
+    }"
+        >
+          <li class="text-base font-medium text-[#d8d8d8] pb-2.5">新闻中心</li>
+          <template x-for="n in news">
+            <li class="text-sm font-normal text-[#888888] pb-2" x-text="n"></li>
+          </template>
+        </ul>
+        <ul
+          x-data="{
+      abouts:[
+      '公司简介', '资质荣誉', '晋升空间', '组织架构'
+      ]
+    }"
+        >
+          <li class="text-base font-medium text-[#d8d8d8] pb-2.5">关于我们</li>
+          <template x-for="about in abouts">
+            <li class="text-sm font-normal text-[#888888] pb-2" x-text="about"></li>
+          </template>
+        </ul>
+        <ul>
+          <li class="text-base font-medium text-[#d8d8d8] pb-2.5">微信二维码</li>
+          <li>
+            <img class="w-24 h-24" src="/images/weixin.webp" />
+          </li>
+        </ul>
+      </div>
+
+      <div
+        x-data="{
+      companies:[
+        {
+          title: '北京总部',
+          address: '北京市经济技术开发区北工大软件园26-2号楼三层',
+          phone: '13810060503',
+          tel: '010-67874677',
+          email: 'sales@powerail.com.cn',
+          addressEnglish: '3 / F, Building 26-2, BeIGU Software Park, Beijing Economic and Technological Development Zone'
+        },
+        {
+          title: '南京办事处',
+          address: '南京市鼓楼区软件园路2号',
+          phone: '13810060503',
+          tel: '010-67874677',
+          email: 'sales@powerail.com.cn',
+          addressEnglish: '2nd Floor, No. 2, Software Park Road, Xihu District, Nanjing, Jiangsu Province, China'
+        },
+        {
+          title: '杭州办事处',
+          address: '株洲市石峰区联城路79号轨道交通创新创业园',
+          phone: '13810060503',
+          tel: '010-67874677',
+          email: 'tangz@powerail.com.cn',
+          addressEnglish: 'Rail transit innovation and entrepreneurship Park, No.79 Liancheng Road, Shifeng District, Zhuzhou City'
+        },
+        {
+          title:'西安办事处',
+          address:'西安市高新区锦业路69号',
+          phone: '13220186200',
+          tel: '010-67874677',
+          email: 'yangc@powerail.com.cn',
+          addressEnglish: '69 Jinye Road, High tech Zone, Xi\'an City'
+        },
+        {
+          title:'上海总部',
+          address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
+          phone: '13916848403',
+          tel: '010-67874677',
+          email: 'daidm@powerail.com.cn',
+          addressEnglish: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai'
+        }
+      ]
+    }"
+        class="py-5 flex justify-between gap-2 lg:gap-4 divide-x divide-[#353948]"
+      >
+        <template x-for="(contact,index) in companies" :key="index">
+          <ul class="flex-shrink-0 flex-1 space-y-2" :class="index===0?'border-none':'pl-4'">
+            <li class="text-sm font-medium text-[#d8d8d8] pb-2.5" x-text="contact.title"></li>
+            <li class="flex items-center gap-2 text-[#999999]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile w-4 h-4"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" />
+                <path d="M11 4h2" />
+                <path d="M12 17v.01" />
+              </svg>
+              <span class="text-sm" x-text="contact.phone"></span>
+            </li>
+            <li class="flex items-center gap-2 text-[#999999]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-4 h-4"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+              </svg>
+              <span class="text-sm" x-text="contact.tel"></span>
+            </li>
+            <li class="flex items-center gap-2 text-[#999999]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-mail w-4 h-4"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+                <path d="M3 7l9 6l9 -6" />
+              </svg>
+              <span class="text-sm" x-text="contact.email"></span>
+            </li>
+            <li class="flex items-center gap-2 text-[#999999]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin w-4 h-4"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+              </svg>
+              <span class="text-sm" x-text="contact.address"></span>
+            </li>
+            <li class="text-[#999999]">
+              <span class="text-sm box-decoration-clone" x-text="contact.addressEnglish"></span>
+            </li>
+          </ul>
+        </template>
+      </div>
+
+      <div class="flex justify-center items-center pt-5">
+        <span class="text-sm font-normal text-[#999] space-x-2">
+          版权所有 © 传麒科技（北京）股份有限公司
+          <a target="_blank" rel="noopener noreferrer" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011502037999">京公网安备11011502037999号</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://beian.miit.gov.cn/">京ICP备18053877号-1</a>
+        </span>
+      </div>
+    </footer>
+
+    <script type="module" src="./product-detail.js"></script>
+  </body>
+</html>
