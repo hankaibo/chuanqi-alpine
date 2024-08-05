@@ -1,23 +1,10 @@
+import {cachedFetch} from './fetch-cache';
 /**
  * 获取行业数据
  */
 async function getIndusties(cb) {
   // 缓存行业
-  const INDUSTRY_KEY = '__industry__';
-  const cachedIndustryData = sessionStorage.getItem(INDUSTRY_KEY);
-  if (cachedIndustryData && cachedIndustryData !== '{}') {
-    const data = JSON.parse(cachedIndustryData);
-    handleSetIndustry(data, cb);
-  } else {
-    fetch('/api/v1/industries/index')
-      .then((res) => res.json())
-      .then((data) => {
-        handleSetIndustry(data, cb);
-        sessionStorage.setItem(INDUSTRY_KEY, JSON.stringify(data));
-      });
-  }
-}
-function handleSetIndustry(data, cb) {
+  const data = await cachedFetch('/api/v1/industries/index');
   if (typeof cb === 'function') {
     cb(data);
   }
@@ -28,23 +15,23 @@ function handleSetIndustry(data, cb) {
  */
 async function getCategories(cb) {
   // 缓存产品分类
-  const CATEGORY_KEY = '__categroy__';
-  const cachedData = sessionStorage.getItem(CATEGORY_KEY);
-  if (cachedData && cachedData !== '{}') {
-    const data = JSON.parse(cachedData);
-    handleSetCategory(data, cb);
-  } else {
-    fetch('/api/v1/categories/index')
-      .then((res) => res.json())
-      .then((data) => {
-        handleSetCategory(data, cb);
-        sessionStorage.setItem(CATEGORY_KEY, JSON.stringify(data));
-      });
-  }
-}
-function handleSetCategory(data, cb) {
+  const data = await cachedFetch('/api/v1/categories/index');
   if (typeof cb === 'function') {
     cb(data);
+  }
+}
+
+async function getCategoriesAndProducts(category, cb) {
+  const promises = category.children.map(async (item) => {
+    const {id} = item;
+    const data = await cachedFetch(`/api/v1/categories/${id}/products`);
+    return data;
+  });
+
+  const results = await Promise.all(promises);
+
+  if (typeof cb === 'function') {
+    cb(results);
   }
 }
 
@@ -65,4 +52,4 @@ function handleLink(path) {
   }
 }
 
-export {getIndusties, getCategories};
+export {getIndusties, getCategories, getCategoriesAndProducts};

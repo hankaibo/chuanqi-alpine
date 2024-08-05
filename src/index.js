@@ -21,9 +21,10 @@ Alpine.data('data', () => ({
 
   parentIndustries: [],
   childIndustry: [],
-  parentCategories: [],
-  childCategory: [],
-  grandsonCategory: [],
+  grandsonIndustry: [],
+  parentCategories: [], // 父产品分类
+  childCategory: [], // 子产品分类
+  grandsonCategory: [], // 孙产品分类及其下的产品
 
   products: [], // 产品轮播图片数据
   industries: [], // 行业数据
@@ -33,6 +34,7 @@ Alpine.data('data', () => ({
   news: [], // 新闻资讯数据
   newsFirst: {}, // 第1条新闻资讯
   form: {}, // 留言信息
+  outerSwiperRef: null,
 
   /**
    * 获取行业数据
@@ -209,16 +211,56 @@ Alpine.data('data', () => ({
     this.form.message = nanoid();
   },
 
-  handleProductDetail(productId) {
-    window.location.href = `product-detail.html?id=${productId}`;
+  handleInitSwiper() {
+    const outerSwiper = new Swiper('#outerSwiper', {
+      modules: [Pagination, Mousewheel],
+      direction: 'vertical',
+      slidesPerView: 1,
+      spaceBetween: 30,
+      mousewheel: true,
+      lazy: true,
+      pagination: {
+        el: this.$refs.outerPagination,
+        clickable: true,
+      },
+      on: {
+        slideChange: () => {
+          this.swiperIndex = outerSwiper.realIndex;
+        },
+      },
+    });
+    this.outerSwiperRef = outerSwiper;
   },
 
-  handleMore(industry) {
+  handle2(industry) {
     const {chineseName, englishName} = industry;
     const tabs = JSON.stringify(industry.children.map((it) => ({id: it.id, name: it.name})));
     this.$router.push({name: 'ChuanQiIndustry', query: {chineseName, englishName, tabs}});
   },
 
+  handleProductCategory(industry, childCategory, index) {},
+
+  handleProductDetail(productId) {
+    window.location.href = `product-detail.html?id=${productId}`;
+  },
+
+  handleCaseDetail({id}) {
+    window.location.href = `cases-detail.html?id=${id}`;
+  },
+
+  handleAbout() {
+    window.location.href = 'about.html';
+  },
+
+  handleNews() {
+    window.location.href = 'news.html';
+  },
+
+  handleNewsDetail({id}) {
+    window.location.href = `news-detail.html?id=${id}`;
+  },
+
+  //
   init() {
     getIndusties((data) => {
       // 导航栏使用数据
@@ -241,13 +283,14 @@ Alpine.data('data', () => ({
       // swiper 主要展示工程案例的数据，默认加载第1个行业的数据
       this.getCases(this.industries[0]?.id);
     });
+
+    //
     getCategories((data) => {
       // 导航栏
       this.parentCategories = data;
-      this.childCategory = this.parentCategories[0];
-      this.grandsonCategory = this.childCategory?.children || [];
+      this.childCategory = this.parentCategories[0]?.children || [];
+      this.grandsonCategory = this.childCategory[0]?.children || [];
 
-      // swiper
       this.categories = data.map((item) => {
         if (!item.indexFile) {
           return item;
@@ -260,24 +303,11 @@ Alpine.data('data', () => ({
       });
 
       this.$nextTick(() => {
-        const outerSwiper = new Swiper(this.$refs.outerSwiper, {
-          modules: [Pagination, Mousewheel],
-          direction: 'vertical',
-          slidesPerView: 1,
-          spaceBetween: 30,
-          mousewheel: true,
-          lazy: true,
-          pagination: {
-            el: this.$refs.outerPagination,
-            clickable: true,
-          },
-          on: {
-            slideChange: () => {
-              this.swiperIndex = outerSwiper.realIndex;
-            },
-          },
-        });
+        this.handleInitSwiper();
       });
+    });
+    this.$watch('childCategory', (newValue, oldValue) => {
+      this.grandsonCategory = newValue[0]?.children || [];
     });
 
     this.getProducts();
