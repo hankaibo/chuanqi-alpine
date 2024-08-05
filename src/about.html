@@ -13,11 +13,13 @@
 
   <body>
     <div x-data="data" x-init="getList()">
-      <header class="fixed top-0 left-0 right-0 flex justify-center h-18 z-[9999] text-white bg-[rgba(0,0,0,0.6)]">
-        <div class="flex items-center">
-          <a href="/">
-            <img src="/images/login/logo.png" class="w-[100px]" />
-          </a>
+      <header class="fixed top-0 left-0 right-0 h-18 z-50 px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 text-white bg-[rgba(0,0,0,0.6)]">
+        <div class="flex justify-between relative">
+          <div class="flex items-center">
+            <a href="/">
+              <img src="/images/login/logo.png" class="w-[100px]" />
+            </a>
+          </div>
         </div>
 
         <nav
@@ -165,7 +167,7 @@
           </div>
         </nav>
 
-        <div class="flex items-center">
+        <div class="inline-flex items-center">
           <input type="search" placeholder="请输入内容" class="w-60 bg-[#f5f5f5] h-9 p-2 bg-no-repeat bg-right-2" style="background-image: url(/svg/search.svg)" />
         </div>
       </header>

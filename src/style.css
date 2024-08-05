@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer components {
+  .nav-item--primary {
+    @apply flex flex-col items-center xl:min-w-[120px] after:block after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full;
+  }
+
   .btn-primary {
     @apply px-5 py-2.5 text-sm rounded text-white bg-primary hover:bg-[#71c0c2];
   }

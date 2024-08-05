@@ -26,6 +26,7 @@ Alpine.data('data', () => ({
   childCategory: [], // 子产品分类
   grandsonCategory: [], // 孙产品分类及其下的产品
 
+  outerSwiperRef: null,
   products: [], // 产品轮播图片数据
   industries: [], // 行业数据
   categories: [], // 产品的分类数据
@@ -34,7 +35,6 @@ Alpine.data('data', () => ({
   news: [], // 新闻资讯数据
   newsFirst: {}, // 第1条新闻资讯
   form: {}, // 留言信息
-  outerSwiperRef: null,
 
   /**
    * 获取行业数据
@@ -232,13 +232,11 @@ Alpine.data('data', () => ({
     this.outerSwiperRef = outerSwiper;
   },
 
-  handle2(industry) {
-    const {chineseName, englishName} = industry;
-    const tabs = JSON.stringify(industry.children.map((it) => ({id: it.id, name: it.name})));
-    this.$router.push({name: 'ChuanQiIndustry', query: {chineseName, englishName, tabs}});
-  },
+  handle2(industry) {},
 
-  handleProductCategory(industry, childCategory, index) {},
+  handleProductCategory(category, index = 0) {
+    window.location.href = `products.html?pId=${category.id}&index=${index + 1}`;
+  },
 
   handleProductDetail(productId) {
     window.location.href = `product-detail.html?id=${productId}`;
@@ -262,11 +260,15 @@ Alpine.data('data', () => ({
 
   //
   init() {
+    this.$nextTick(() => {
+      this.handleInitSwiper();
+    });
+
     getIndusties((data) => {
       // 导航栏使用数据
       this.parentIndustries = data;
-      this.childIndustry = this.parentIndustries[0] || [];
-      this.grandsonIndustry = this.childIndustry?.children || [];
+      this.childIndustry = this.parentIndustries[0]?.children || [];
+      this.grandsonIndustry = this.childIndustry[0]?.children || [];
 
       // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
       this.industries = data.map((item) => {
@@ -282,6 +284,9 @@ Alpine.data('data', () => ({
 
       // swiper 主要展示工程案例的数据，默认加载第1个行业的数据
       this.getCases(this.industries[0]?.id);
+    });
+    this.$watch('childCategory', (newValue) => {
+      this.grandsonIndustry = newValue[0]?.children || [];
     });
 
     //
@@ -303,10 +308,10 @@ Alpine.data('data', () => ({
       });
 
       this.$nextTick(() => {
-        this.handleInitSwiper();
+        this.outerSwiperRef?.update();
       });
     });
-    this.$watch('childCategory', (newValue, oldValue) => {
+    this.$watch('childCategory', (newValue) => {
       this.grandsonCategory = newValue[0]?.children || [];
     });
 
