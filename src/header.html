@@ -1,0 +1,279 @@
+<header x-data="headerData" class="fixed top-0 left-0 right-0 h-18 z-[1000] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 text-white bg-[rgba(0,0,0,0.6)]">
+  <div class="flex justify-between relative">
+    <div class="flex items-center">
+      <a href="/">
+        <img src="/images/login/logo.webp" class="w-[100px]" />
+      </a>
+    </div>
+
+    <nav
+      x-data="{
+          pIndex:0,
+          cIndex:0,
+          pId:'',
+          navigationMenuOpen: false,
+          navigationMenu: '',
+          navigationMenuCloseDelay: 200,
+          navigationMenuCloseTimeout: null,
+          navigationMenuLeave() {
+              let that = this;
+              this.navigationMenuCloseTimeout = setTimeout(() => {
+                  that.navigationMenuClose();
+              }, this.navigationMenuCloseDelay);
+          },
+          navigationMenuReposition(navElement) {
+              this.navigationMenuClearCloseTimeout();
+          },
+          navigationMenuClearCloseTimeout(){
+              clearTimeout(this.navigationMenuCloseTimeout);
+          },
+          navigationMenuClose(){
+              this.navigationMenuOpen = false;
+              this.navigationMenu = '';
+          },
+          menus: [
+            {id:'cases', name: '工程案例', href:'./cases.html'},
+            {id:'news', name: '资讯中心', href:'./news.html'},
+            {id:'jobs', name: '诚邀才俊', href:'./jobs.html'},
+            {id:'about', name: '关于我们', href:'./about.html'},
+          ]
+      }"
+    >
+      <div class="relative">
+        <ul class="flex justify-center space-x-1 group">
+          <li class="nav-item--primary" :class="isLink==='index' ? 'text-primary after:w-full': ''">
+            <a href="/" class="py-6" target="_blank">首页</a>
+          </li>
+          <li class="nav-item--primary focus:after:w-full" :class="{ 'after:w-full' : navigationMenu=='industries', 'hover:after:w-full' : navigationMenu!='industries' }">
+            <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='industries'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
+              <span>行业应用</span>
+              <svg
+                :class="{ '-rotate-180' : navigationMenuOpen==true && navigationMenu == 'industries' }"
+                class="relative top-[1px] ml-1 h-3 w-3 ease-out duration-300"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </li>
+          <li
+            class="nav-item--primary focus:after:w-full"
+            :class="{ 'text-primary after:w-full' : navigationMenu=='products' || isLink =='products', 'hover:after:w-full' : navigationMenu!='products' }"
+          >
+            <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='products'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
+              <span>产品中心</span>
+              <svg
+                :class="{ '-rotate-180' : navigationMenuOpen==true && navigationMenu == 'products' }"
+                class="relative top-[1px] ml-1 h-3 w-3 ease-out duration-300"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </li>
+          <template x-for="item in menus">
+            <li class="nav-item--primary" :class="isLink===item.id ? 'text-primary after:w-full': ''">
+              <a :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
+            </li>
+          </template>
+        </ul>
+      </div>
+      <div
+        x-ref="navigationDropdown"
+        x-show="navigationMenuOpen"
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="opacity-0 scale-90"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-90"
+        @mouseover="navigationMenuClearCloseTimeout()"
+        @mouseleave="navigationMenuLeave()"
+        class="absolute top-0 left-0 right-0 pt-3 text-gray-700 duration-200 ease-out translate-y-18"
+        x-cloak
+      >
+        <div class="flex justify-start w-auto h-auto overflow-hidden bg-white border rounded-md shadow-sm border-neutral-200/70">
+          <div x-show="navigationMenu == 'industries'" class="flex justify-start w-full p-6">
+            <div class="border-r border-r-[#f5f5f5]">
+              <ul class="w-60">
+                <template x-for="(item,index) in parentIndustries">
+                  <li @click="handleIndustry(item.id)">
+                    <div
+                      class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                      :class="index === pIndex?'text-primary bg-primary/10':''"
+                      @mouseover="pIndex=index, cIndex=0, pId=item.id, childIndustry=item.children"
+                    >
+                      <span class="flex items-center">
+                        <img src="./images/logo.webp" class="w-4 h-4" />
+                        <span class="pl-2 text-black" x-text="item.name"></span>
+                      </span>
+                      <svg
+                        class="text-gray-200 w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-down"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div class="border-r border-r-[#f5f5f5]">
+              <ul class="w-60">
+                <template x-for="(item,index) in childIndustry">
+                  <li @click="handleIndustry(pId, index)">
+                    <div
+                      class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                      :class="index === cIndex ?'text-primary bg-primary/10':''"
+                      @mouseover="cIndex=index, grandsonIndustry=item.children"
+                    >
+                      <span class="pl-2 text-black" x-text="item.name"></span>
+                      <svg
+                        class="text-gray-200 w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-down"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div class="flex-1">
+              <div class="flex flex-wrap">
+                <template x-for="item in grandsonIndustry">
+                  <div class="sm:w-full xl:w-1/2 2xl:w-1/3 mb-4">
+                    <div class="pl-8 text-[#4EB0B3] mb-2.5" x-text="item.name"></div>
+                    <template x-for="it in item.children">
+                      <div class="flex items-center pl-8 cursor-pointer" @click="handleSolutionDetail(it.id)">
+                        <img class="w-10 h-10 object-cover" :src="it.cover" />
+                        <span class="pl-2 text-black hover:text-primary" x-text="it.name"></span>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+
+          <div x-show="navigationMenu == 'products'" class="flex justify-start w-full p-6">
+            <div class="border-r border-r-[#f5f5f5]">
+              <ul class="w-60">
+                <template x-for="(item,index) in parentCategories">
+                  <li @click="handleProductCategory(item.id)">
+                    <div
+                      class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                      :class="index === pIndex?'text-primary bg-primary/10':''"
+                      @mouseover="pIndex=index, cIndex=0, pId=item.id, childCategory=item.children"
+                    >
+                      <span class="flex items-center">
+                        <img src="./images/logo.webp" class="w-4 h-4" />
+                        <span class="pl-2 text-black" x-text="item.name"></span>
+                      </span>
+                      <svg
+                        class="text-gray-200 w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-down"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div class="border-r border-r-[#f5f5f5]">
+              <ul class="w-60">
+                <template x-for="(item,index) in childCategory">
+                  <li @click="handleProductCategory(pId, index)">
+                    <div
+                      class="flex justify-between items-center h-10 py-7 cursor-pointer hover:text-primary hover:bg-primary/10"
+                      :class="index === cIndex ?'text-primary bg-primary/10':''"
+                      @mouseover="cIndex=index, grandsonCategory=item.children"
+                    >
+                      <span class="pl-2 text-black" x-text="item.name"></span>
+                      <svg
+                        class="text-gray-200 w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-down"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <div class="flex-1">
+              <div class="flex flex-wrap">
+                <template x-for="item in grandsonCategory">
+                  <div class="sm:w-full xl:w-1/2 2xl:w-1/3 mb-4">
+                    <div class="pl-8 text-primary mb-2.5" x-text="item.name"></div>
+                    <template x-for="it in item.productList">
+                      <div class="flex items-start mb-2 cursor-pointer" @click="handleProductDetail(it.id)">
+                        <img class="w-10 h-10 object-cover" :src="it.cover" />
+                        <span class="pl-2 text-black hover:text-primary" x-text="it.name"></span>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="inline-flex items-center">
+      <input type="search" placeholder="请输入内容" class="w-60 bg-[#f5f5f5] h-9 p-2 bg-no-repeat bg-right-2" style="background-image: url(/svg/search.svg)" />
+    </div>
+  </div>
+</header>

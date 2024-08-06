@@ -4,20 +4,94 @@ import {getThumbnailUrl} from './untils';
 import './style.css';
 
 import {createEditor} from '@wangeditor/editor';
-import {register} from 'swiper/element/bundle';
-register();
+import Swiper from 'swiper';
+import {Autoplay, Pagination, Navigation, Mousewheel} from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 window.Alpine = Alpine;
 
-Alpine.data('data', () => ({
+Alpine.data('headerData', () => ({
+  headerHtml: '',
   // 导航栏数据
   isLink: 'about',
+
   parentIndustries: [],
   childIndustry: [],
+  grandsonIndustry: [],
+
   parentCategories: [],
   childCategory: [],
   grandsonCategory: [],
 
+  //
+  handleIndustry(pId, index = 0) {
+    window.open(`industry.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+  },
+
+  handleSolutionDetail(solutionId) {
+    window.open(`solution-detail.html?id=${solutionId}`, '_blank', 'noopener,noreferrer');
+  },
+
+  // 产品分类页面
+  handleProductCategory(pId, index = 0) {
+    window.open(`products.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+  },
+
+  // 产品详情页面
+  handleProductDetail(productId) {
+    window.open(`product-detail.html?id=${productId}`, '_blank', 'noopener,noreferrer');
+  },
+
+  init() {
+    getIndusties((data) => {
+      // 导航栏使用数据
+      this.parentIndustries = data;
+      this.childIndustry = this.parentIndustries[0]?.children || [];
+      this.grandsonIndustry = this.childIndustry[0]?.children || [];
+    });
+    this.$watch('childIndustry', (newValue) => {
+      this.grandsonIndustry = newValue[0]?.children || [];
+    });
+
+    getCategories((data) => {
+      // 导航栏
+      this.parentCategories = data;
+      this.childCategory = this.parentCategories[0]?.children || [];
+      this.grandsonCategory = this.childCategory[0]?.children || [];
+    });
+    this.$watch('childCategory', (newValue) => {
+      this.grandsonCategory = newValue[0]?.children || [];
+    });
+
+    this.$nextTick(() => {
+      fetch('./header.html')
+        .then((response) => response.text())
+        .then((data) => {
+          this.headerHtml = data;
+        })
+        .catch((error) => console.error('Error loading header:', error));
+    });
+  },
+}));
+
+Alpine.data('footerData', () => ({
+  footerHtml: '',
+
+  init() {
+    this.$nextTick(() => {
+      fetch('./footer.html')
+        .then((response) => response.text())
+        .then((data) => {
+          this.footerHtml = data;
+        })
+        .catch((error) => console.error('Error loading footer:', error));
+    });
+  },
+}));
+
+Alpine.data('data', () => ({
   aboutData: {},
   mapList: [
     {
@@ -73,6 +147,7 @@ Alpine.data('data', () => ({
     },
   ],
   isMobile: false,
+
   async getList() {
     const res = await fetch('/api/v1/about/1');
     const data = await res.json();
@@ -86,10 +161,25 @@ Alpine.data('data', () => ({
         };
       }),
     };
+
     this.initEditor(this.aboutData.content);
-    const swiperEl = document.querySelector('swiper-container');
-    swiperEl.addEventListener('swiperslidechange', (event) => {
-      console.log('slide changed');
+
+    this.$nextTick(() => {
+      new Swiper(this.$refs.swiperRef, {
+        modules: [Navigation, Pagination],
+        loop: true,
+        lazy: true,
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+          el: '.swiper-pagination-inner',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      });
     });
   },
   initEditor(data) {
@@ -120,18 +210,21 @@ Alpine.data('data', () => ({
   },
 
   init() {
-    getIndusties((data) => {
-      // 导航栏使用数据
-      this.parentIndustries = data;
-      this.childIndustry = this.parentIndustries[0] || [];
-    });
+    const _this = this;
+    function onIntersect(entries, observer) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          _this.initMap();
 
-    getCategories((data) => {
-      // 导航栏
-      this.parentCategories = data;
-      this.childCategory = this.parentCategories[0];
-      this.grandsonCategory = this.childCategory?.children || [];
+          observer.unobserve(entry.target);
+        }
+      });
+    }
+    const observer = new IntersectionObserver(onIntersect, {
+      threshold: 0.1,
     });
+    const mapContainer = document.querySelector('#map');
+    observer.observe(mapContainer);
   },
 }));
 

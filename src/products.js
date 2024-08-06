@@ -6,6 +6,7 @@ import './style.css';
 window.Alpine = Alpine;
 
 Alpine.data('headerData', () => ({
+  headerHtml: '',
   // 导航栏数据
   isLink: 'products',
 
@@ -16,6 +17,32 @@ Alpine.data('headerData', () => ({
   parentCategories: [],
   childCategory: [],
   grandsonCategory: [],
+
+  //
+  handleIndustry(pId, index = 0) {
+    window.open(`industry.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+  },
+
+  handleSolutionDetail(solutionId) {
+    window.open(`solution-detail.html?id=${solutionId}`, '_blank', 'noopener,noreferrer');
+  },
+
+  // 产品分类页面
+  handleProductCategory(pId, index = 0) {
+    window.dispatchEvent(
+      new CustomEvent('refreshCategory', {
+        detail: {
+          pId,
+          index: index + 1,
+        },
+      }),
+    );
+  },
+
+  // 产品详情页面
+  handleProductDetail(productId) {
+    window.open(`product-detail.html?id=${productId}`, '_blank', 'noopener,noreferrer');
+  },
 
   init() {
     getIndusties((data) => {
@@ -36,6 +63,30 @@ Alpine.data('headerData', () => ({
     });
     this.$watch('childCategory', (newValue) => {
       this.grandsonCategory = newValue[0]?.children || [];
+    });
+
+    this.$nextTick(() => {
+      fetch('./header.html')
+        .then((response) => response.text())
+        .then((data) => {
+          this.headerHtml = data;
+        })
+        .catch((error) => console.error('Error loading header:', error));
+    });
+  },
+}));
+
+Alpine.data('footerData', () => ({
+  footerHtml: '',
+
+  init() {
+    this.$nextTick(() => {
+      fetch('./footer.html')
+        .then((response) => response.text())
+        .then((data) => {
+          this.footerHtml = data;
+        })
+        .catch((error) => console.error('Error loading footer:', error));
     });
   },
 }));
@@ -100,12 +151,20 @@ Alpine.data('data', () => ({
     window.location.href = `product-detail.html?id=${id}`;
   },
 
+  handleRefresh(evt) {
+    const {pId, index} = evt.detail;
+    this.getCategory(pId, index);
+  },
+
   init() {
     const searchParams = new URLSearchParams(location.search);
     const pId = searchParams.get('pId');
     const index = searchParams.get('index');
 
     this.getCategory(pId, index);
+
+    //
+    window.addEventListener('refreshCategory', this.handleRefresh.bind(this));
   },
 }));
 

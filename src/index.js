@@ -232,30 +232,28 @@ Alpine.data('data', () => ({
     this.outerSwiperRef = outerSwiper;
   },
 
-  handle2(industry) {},
-
   handleProductCategory(category, index = 0) {
-    window.location.href = `products.html?pId=${category.id}&index=${index + 1}`;
+    window.open(`products.html?pId=${category.id}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
   },
 
   handleProductDetail(productId) {
-    window.location.href = `product-detail.html?id=${productId}`;
+    window.open(`product-detail.html?id=${productId}`, '_blank', 'noopener,noreferrer');
   },
 
   handleCaseDetail({id}) {
-    window.location.href = `cases-detail.html?id=${id}`;
+    window.open(`cases-detail.html?id=${id}`, '_blank', 'noopener,noreferrer');
   },
 
   handleAbout() {
-    window.location.href = 'about.html';
+    window.open('about.html', '_blank', 'noopener,noreferrer');
   },
 
   handleNews() {
-    window.location.href = 'news.html';
+    window.open('news.html', '_blank', 'noopener,noreferrer');
   },
 
   handleNewsDetail({id}) {
-    window.location.href = `news-detail.html?id=${id}`;
+    window.open(`news-detail.html?id=${id}`, '_blank', 'noopener,noreferrer');
   },
 
   //

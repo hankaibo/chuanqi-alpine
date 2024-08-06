@@ -11,13 +11,18 @@ export default defineConfig({
     chunkSizeWarningLimit: 1024,
     rollupOptions: {
       input: {
+        header: resolve(__dirname, 'src/header.html'),
+        footer: resolve(__dirname, 'src/footer.html'),
         about: resolve(__dirname, 'src/about.html'),
         jobs: resolve(__dirname, 'src/jobs.html'),
         news: resolve(__dirname, 'src/news.html'),
         'news-detail': resolve(__dirname, 'src/news-detail.html'),
         cases: resolve(__dirname, 'src/cases.html'),
         'cases-detail': resolve(__dirname, 'src/cases-detail.html'),
+        products: resolve(__dirname, 'src/products.html'),
+        'product-detail': resolve(__dirname, 'src/product-detail.html'),
         industry: resolve(__dirname, 'src/industry.html'),
+        'solution-detail': resolve(__dirname, 'src/solution-detail.html'),
         index: resolve(__dirname, 'src/index.html'),
       },
     },

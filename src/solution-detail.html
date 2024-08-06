@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>产品详情 - 传麒科技</title>
+    <base href="/temp/" />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+
+  <body>
+    <div x-data="headerData" x-html="headerHtml"></div>
+
+    <main x-data="data" x-init="getDetail()" class="flex flex-col justify-between">
+      <div class="bg-[#f6f7f8] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64 top">
+        <div class="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-32 2xl:-mx-64">
+          <img src="./images/product.webp" class="bg-no-repeat bg-[length:100%_auto]" alt="banner" />
+          <div class="absolute top-1/2 left-4 sm:left-8 lg:left-16 xl:left-32 2xl:left-64 text-white -translate-y-1/3">
+            <div class="break-words text-3xl xl:text-5xl font-semibold whitespace-nowrap" x-text="cnTitle"></div>
+            <div class="mt-4 break-words text-3xl xl:text-4xl font-thin whitespace-nowrap capitalize" x-text="enTitle"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-col bg-white p-4 lg:p-16">
+          <div class="mb-4">
+            <div class="pb-2 text-lg lg:text-2xl 2x:text-4xl font-semibold text-[#333] text-center" x-text="name"></div>
+            <div class="text-xs text-[#bbb] flex justify-center items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye"
+              >
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <span class="pl-1">浏览量：</span>
+              <span x-text="views"></span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4 lg:gap-6 lg:flex-row">
+            <div class="basis-full sm:basis-full lg:basis-1/2">
+              <div class="flex justify-between bg-[#f5f5f5] overflow-hidden h-full max-w-full">
+                <ul class="hidden lg:block">
+                  <template x-for="(item,index) in images" :key="item.id">
+                    <li
+                      class="flex justify-center items-center w-24 h-14 p-2 bg-white cursor-pointer overflow-hidden mb12"
+                      :class="{ 'border border-[#4eb0b8]': imgActive === index }"
+                      @click="imgActive = index"
+                    >
+                      <img :src="item.imageUrl" class="w-full h-full object-cover" />
+                    </li>
+                  </template>
+                </ul>
+                <div class="w-full h-[398px] flex items-center">
+                  <img :src="images[imgActive]?.imageUrl" />
+                </div>
+              </div>
+            </div>
+            <div class="basis-full sm:basis-full lg:basis-1/2 lg:h-[398px]">
+              <div class="flex flex-col items-start justify-between text-sm gap-4">
+                <div>
+                  <strong class="text-black">产品类别：</strong>
+                  <span class="text-[#333]" x-text="categoryName"></span>
+                </div>
+                <div class="flex-1 leading-6">
+                  <strong class="text-black">应用领域：</strong>
+                  <span class="text-[#333]" x-text="summary"></span>
+                </div>
+                <!-- <div v-if="fileDocument">
+                <el-link type="primary" @click="handleExport">
+                  <i class="el-icon-document"></i>
+                  <span>{{ fileDocument.fileName }}</span>
+                </el-link>
+              </div> -->
+                <div>
+                  <button type="button" class="btn-primary inline-flex justify-center items-center gap-2" @click="openChat">
+                    <svg
+                      class="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-message-circle-more"
+                    >
+                      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                      <path d="M8 12h.01" />
+                      <path d="M12 12h.01" />
+                      <path d="M16 12h.01" />
+                    </svg>
+                    在线客服
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h3>
+              <i class="el-icon-caret-right text-primary"></i>
+              <span class="pl-1 text-base 2xl:text-4xl font-semibold text-[#333] text-center mb-5">产品描述</span>
+            </h3>
+            <div id="editor-container" class="t-mx-2.5 text-xs lg:text-base text-[#333]" style="min-height: 500px"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div x-data="footerData" x-html="footerHtml"></div>
+
+    <script type="module" src="./solution-detail.js"></script>
+  </body>
+</html>
