@@ -35,9 +35,4 @@ async function getCategoriesAndProducts(category, cb) {
   }
 }
 
-function handleTop() {
-  const el = document.querySelector('.top');
-  el.scrollIntoView({behavior: 'smooth', block: 'start'});
-}
-
 export {getIndusties, getCategories, getCategoriesAndProducts};

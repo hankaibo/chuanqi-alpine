@@ -16,6 +16,7 @@ Alpine.data('headerData', () => ({
   headerHtml: '',
   // 导航栏数据
   isLink: 'about',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
 
   parentIndustries: [],
   childIndustry: [],
@@ -78,6 +79,11 @@ Alpine.data('headerData', () => ({
 
 Alpine.data('footerData', () => ({
   footerHtml: '',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
+
+  handleTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  },
 
   init() {
     this.$nextTick(() => {
@@ -92,6 +98,7 @@ Alpine.data('footerData', () => ({
 }));
 
 Alpine.data('data', () => ({
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
   aboutData: {},
   mapList: [
     {
@@ -113,7 +120,7 @@ Alpine.data('data', () => ({
       email: 'caic@powerail.com.cn',
       address: '南京市江宁区智江路300号麒麟科创园',
       addressEN: 'Qilin Science Innovation Park, 300 Zhijiang Road, Jiangning District, Nanjing',
-      lnglat: [118.88283, 32.01528],
+      lnglat: [118.882265, 32.015001],
     },
     {
       id: 'zhuzhou',
@@ -123,7 +130,7 @@ Alpine.data('data', () => ({
       email: 'tangz@powerail.com.cn',
       address: '株洲市石峰区联城路79号轨道交通创新创业园',
       addressEN: 'Rail transit innovation and entrepreneurship Park, No.79 Liancheng Road, Shifeng District, Zhuzhou City',
-      lnglat: [113.12, 27.91],
+      lnglat: [113.12263, 27.86255],
     },
     {
       id: 'shanghai',
@@ -146,7 +153,6 @@ Alpine.data('data', () => ({
       lnglat: [108.8586, 34.196834],
     },
   ],
-  isMobile: false,
 
   async getList() {
     const res = await fetch('/api/v1/about/1');
@@ -169,7 +175,7 @@ Alpine.data('data', () => ({
         modules: [Navigation, Pagination],
         loop: true,
         lazy: true,
-        slidesPerView: 3,
+        slidesPerView: this.isMobile ? 1 : 3,
         spaceBetween: 30,
         pagination: {
           el: '.swiper-pagination-inner',
@@ -182,6 +188,7 @@ Alpine.data('data', () => ({
       });
     });
   },
+
   initEditor(data) {
     createEditor({
       selector: '#editor-container',
@@ -192,6 +199,7 @@ Alpine.data('data', () => ({
       },
     });
   },
+
   initMap() {
     this.mapList.forEach((item) => {
       const zoom = 16;
