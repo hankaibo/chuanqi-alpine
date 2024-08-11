@@ -19,6 +19,7 @@ pnpm dev
 #### 编译
 
 ```bash
+### 目前编译公共基础路径为 /temp/ ，如果想替换为其它值，请修改 .env.production 中的 VITE_BASE_PATH 。
 pnpm build
 ```
 

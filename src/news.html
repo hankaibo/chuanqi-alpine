@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>资讯中心 - 传麒科技</title>
-    <base href="/temp/" />
+    <base href="%BASE_URL%" />
     <link rel="icon" href="/favicon.ico" />
   </head>
 
@@ -12,7 +12,7 @@
     <div x-data="headerData" x-html="headerHtml"></div>
 
     <main x-data="data" x-init="getList" class="flex flex-col justify-between">
-      <div class="bg-[#f6f7f8] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
+      <div class="bg-[#f6f7f8] container-primary">
         <div class="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-32 2xl:-mx-64">
           <img src="./images/news.webp" class="bg-no-repeat bg-[length:100%_auto]" alt="banner" />
         </div>
@@ -90,8 +90,20 @@
 
         <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
           <div class="flex flex-1 justify-between sm:hidden">
-            <a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
-            <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+            <a
+              href="#"
+              class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              :class="queryParams.currentPage === 1 ? 'pointer-events-none cursor-not-allowed' :'hover:text-primary focus:z-20 focus:outline-offset-0'"
+              @click.prevent="handlePrevious"
+              >上一页</a
+            >
+            <a
+              href="#"
+              class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              :class="hasNextPage ? ' hover:text-primary focus:z-20 focus:outline-offset-0': 'pointer-events-none cursor-not-allowed'"
+              @click.prevent="handleNext"
+              >下一页</a
+            >
           </div>
           <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-end">
             <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">

@@ -1,14 +1,17 @@
 import Alpine from 'alpinejs';
+import collapse from '@alpinejs/collapse';
 import {getIndusties, getCategories} from './header';
 import {getThumbnailUrl} from './untils';
 import './style.css';
 
+Alpine.plugin(collapse);
 window.Alpine = Alpine;
 
 Alpine.data('headerData', () => ({
   headerHtml: '',
   // 导航栏数据
   isLink: 'products',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
 
   parentIndustries: [],
   childIndustry: [],
@@ -78,6 +81,11 @@ Alpine.data('headerData', () => ({
 
 Alpine.data('footerData', () => ({
   footerHtml: '',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
+
+  handleTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  },
 
   init() {
     this.$nextTick(() => {

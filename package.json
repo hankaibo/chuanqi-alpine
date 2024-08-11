@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@alpinejs/collapse": "^3.14.1",
     "@wangeditor/editor": "^5.1.23",
     "alpinejs": "^3.14.1",
     "nanoid": "^5.0.7",

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>传麒科技</title>
     <meta name="description" content="Put your description here." />
-    <base href="/temp/" />
+    <base href="%BASE_URL%" />
     <link rel="icon" href="/favicon.ico" />
     <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet" />
     <style>
@@ -17,7 +17,7 @@
 
   <body>
     <div x-data="data">
-      <header class="fixed top-0 left-0 right-0 h-18 z-50 px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64" :class="swiperIndex ?'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
+      <header class="fixed top-0 left-0 right-0 h-18 z-50 container-primary" :class="swiperIndex ?'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
         <div class="flex justify-between relative">
           <div class="flex items-center">
             <a href="/">

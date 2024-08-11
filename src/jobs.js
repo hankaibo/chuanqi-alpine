@@ -8,6 +8,7 @@ Alpine.data('headerData', () => ({
   headerHtml: '',
   // 导航栏数据
   isLink: 'jobs',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
 
   parentIndustries: [],
   childIndustry: [],
@@ -70,6 +71,11 @@ Alpine.data('headerData', () => ({
 
 Alpine.data('footerData', () => ({
   footerHtml: '',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
+
+  handleTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  },
 
   init() {
     this.$nextTick(() => {
@@ -85,7 +91,6 @@ Alpine.data('footerData', () => ({
 
 Alpine.data('data', () => ({
   jobs: [],
-  isMobile: false,
   async getList() {
     const res = await fetch('/api/v1/jobs');
     const data = await res.json();

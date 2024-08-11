@@ -16,7 +16,7 @@ window.Alpine = Alpine;
 
 Alpine.data('data', () => ({
   isLink: 'index',
-  isMobile: false,
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
   swiperIndex: 0, // 当前最外部 swiper 的索引，方便切换 header 样式
 
   parentIndustries: [],

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>资讯中心 - 传麒科技</title>
-    <base href="/temp/" />
+    <base href="%BASE_URL%" />
     <link rel="icon" href="/favicon.ico" />
   </head>
 
@@ -12,18 +12,18 @@
     <div x-data="headerData" x-html="headerHtml"></div>
 
     <main x-data="data" x-init="getDetail()" class="flex flex-col justify-between">
-      <div class="bg-[#f6f7f8] px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
+      <div class="bg-[#f6f7f8] container-primary">
         <div class="-mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-32 2xl:-mx-64">
           <img src="./images/news.webp" class="bg-no-repeat bg-[length:100%_auto]" alt="banner" />
         </div>
 
         <div class="flex flex-col bg-white p-4 sm:p-8 lg:p-16 my-4 lg:my-8">
           <div class="text-xl lg:text-4xl lg:text-center lg:mb-5 xl:text-4xl text-[#333]" x-text="name"></div>
-          <div class="flex justify-center gap-4">
-            <span class="text-[#bbb] text-[10px] lg:text-base inline-flex items-center">
+          <div class="flex justify-center gap-4 p-2">
+            <span class="text-[#bbb] text-xs lg:text-base inline-flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4"
+                class="w-3 h-3 lg:w-4 lg:h-4"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"

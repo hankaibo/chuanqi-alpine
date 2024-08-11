@@ -9,6 +9,7 @@ Alpine.data('headerData', () => ({
   headerHtml: '',
   // 导航栏数据
   isLink: 'cases',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
 
   parentIndustries: [],
   childIndustry: [],
@@ -71,6 +72,11 @@ Alpine.data('headerData', () => ({
 
 Alpine.data('footerData', () => ({
   footerHtml: '',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
+
+  handleTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  },
 
   init() {
     this.$nextTick(() => {
