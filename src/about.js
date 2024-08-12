@@ -28,7 +28,7 @@ Alpine.data('headerData', () => ({
 
   //
   handleIndustry(pId, index = 0) {
-    window.open(`industry.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`industry.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   handleSolutionDetail(solutionId) {
@@ -37,7 +37,7 @@ Alpine.data('headerData', () => ({
 
   // 产品分类页面
   handleProductCategory(pId, index = 0) {
-    window.open(`products.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`products.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   // 产品详情页面

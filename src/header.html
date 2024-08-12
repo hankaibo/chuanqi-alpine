@@ -173,7 +173,10 @@
             <li class="nav-item--primary" :class="isLink==='index' ? 'text-primary after:w-full': ''">
               <a href="./index.html" class="py-6" target="_blank">首页</a>
             </li>
-            <li class="nav-item--primary focus:after:w-full" :class="{ 'after:w-full' : navigationMenu=='industries', 'hover:after:w-full' : navigationMenu!='industries' }">
+            <li
+              class="nav-item--primary focus:after:w-full"
+              :class="{ 'text-primary after:w-full' : navigationMenu=='industries' || isLink==='industries', 'hover:after:w-full' : navigationMenu!='industries' }"
+            >
               <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='industries'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
                 <span>行业应用</span>
                 <svg
@@ -194,7 +197,7 @@
             </li>
             <li
               class="nav-item--primary focus:after:w-full"
-              :class="{ 'text-primary after:w-full' : navigationMenu=='products' || isLink =='products', 'hover:after:w-full' : navigationMenu!='products' }"
+              :class="{ 'text-primary after:w-full' : navigationMenu=='products' || isLink ==='products', 'hover:after:w-full' : navigationMenu!='products' }"
             >
               <button @mouseover="navigationMenuOpen=true; navigationMenuReposition($el); navigationMenu='products'" @mouseleave="navigationMenuLeave()" class="flex items-center py-6">
                 <span>产品中心</span>

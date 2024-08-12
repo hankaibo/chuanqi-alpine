@@ -233,11 +233,11 @@ Alpine.data('data', () => ({
   },
 
   handleIndustry(industry, index = 0) {
-    window.open(`industry.html?pId=${industry.id}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`industry.html?pId=${industry.id}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   handleProductCategory(category, index = 0) {
-    window.open(`products.html?pId=${category.id}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`products.html?pId=${category.id}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   handleProductDetail(productId) {

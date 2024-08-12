@@ -41,27 +41,23 @@
               <template x-for="tab in tabs" :key="tab.id">
                 <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="w-full">
                   <template x-for="tabContent in tabContents" :key="tabContent.id">
-                    <div x-data="{ id: $id('accordion') }" class="cursor-pointer">
-                      <div x-show="activeAccordion==id" x-collapse x-cloak>
-                        <div class="relative grid grid-cols-1 gap-4 py-4 lg:grid-cols-2 lg:gap-6 lg:pb-6 xl:grid-cols-3 xl:gap-8 xl:pb-8">
-                          <template x-for="product in tabContent.productList" :key="product.id">
-                            <div @click="handleDetail(product)" class="shadow-lg cursor-pointer hover:-translate-y-5 transition duration-300 group">
-                              <div class="w-full h-56">
-                                <img class="w-full h-full cursor-pointer object-cover" :src="product.imageUrl" />
-                              </div>
+                    <div class="relative grid grid-cols-1 gap-4 py-4 lg:grid-cols-2 lg:gap-6 lg:pb-6 xl:grid-cols-3 xl:gap-8 xl:pb-8">
+                      <template x-for="product in tabContent.productList" :key="product.id">
+                        <div @click="handleDetail(product)" class="shadow-lg cursor-pointer hover:-translate-y-5 transition duration-300 group">
+                          <div class="w-full h-56">
+                            <img class="w-full h-full cursor-pointer object-cover" :src="product.imageUrl" />
+                          </div>
 
-                              <div
-                                class="flex justify-start items-center h-16 py-2.5 px-5 relative overflow-hidden text-ellipsis line-clamp-2 z-[1] before:absolute before:bottom-0 before:left-0 before:w-0 group-hover:before:w-full before:h-full before:bg-[#4eb0b3] before:transition-all before:duration-300 before:-z-[1]"
-                              >
-                                <h3 class="group-hover:text-white text-xl text-[#333]" x-text="product.name"></h3>
-                              </div>
-                            </div>
-                          </template>
+                          <div
+                            class="flex justify-start items-center h-16 py-2.5 px-5 relative overflow-hidden text-ellipsis line-clamp-2 z-[1] before:absolute before:bottom-0 before:left-0 before:w-0 group-hover:before:w-full before:h-full before:bg-[#4eb0b3] before:transition-all before:duration-300 before:-z-[1]"
+                          >
+                            <h3 class="group-hover:text-white text-xl text-[#333]" x-text="product.name"></h3>
+                          </div>
                         </div>
-                      </div>
+                      </template>
                     </div>
                   </template>
-                  <template x-if="tabContent.productList?.length===0 || !tabContent.productList">
+                  <template x-if="tabContents.length===0">
                     <div class="flex justify-center items-center flex-col text-center py-10 h-80 w-full">
                       <svg viewBox="0 0 79 86" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <defs>

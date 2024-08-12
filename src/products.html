@@ -40,23 +40,29 @@
             <div class="relative flex items-center justify-start w-full py-5 mt-2 text-xs text-gray-400 content">
               <template x-for="tab in tabs" :key="tab.id">
                 <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="w-full">
-                  <template x-for="tabContent in tabContents" :key="tabContent.id">
+                  <template x-for="(tabContent,index) in tabContents" :key="tabContent.id">
                     <div
                       x-data="{
-                        activeAccordion: '',
-                        setActiveAccordion(id) {
-                            console.log('id :>> ', id);
-                            this.activeAccordion = (this.activeAccordion == id) ? '' : id
+                        activeAccordions: tabContents.map((item) => item.id), // 默认全部展开
+                        toggleAccordion(id) {
+                          if (this.activeAccordions.includes(id)) {
+                            this.activeAccordions = this.activeAccordions.filter(accId => accId !== id);
+                          } else {
+                            this.activeAccordions.push(id);
+                          }
+                        },
+                        isActiveAccordion(id) {
+                          return this.activeAccordions.includes(id);
                         }
                       }"
                       class="relative w-full mx-auto overflow-hidden text-sm font-normal"
                     >
-                      <div x-data="{ id: $id('accordion') }" class="cursor-pointer">
-                        <button @click="setActiveAccordion(id)" class="bg-white border border-gray-100 flex items-center justify-between w-full p-4 text-left select-none">
+                      <div class="cursor-pointer">
+                        <button @click="toggleAccordion(tabContent.id)" class="bg-white border border-gray-100 flex items-center justify-between w-full p-4 text-left select-none">
                           <span x-text="tabContent.name"></span>
                           <svg
                             class="w-4 h-4 duration-200 ease-out"
-                            :class="{ 'rotate-180': activeAccordion==id }"
+                            :class="{ 'rotate-180': isActiveAccordion(tabContent.id) }"
                             viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -68,7 +74,7 @@
                             <polyline points="6 9 12 15 18 9"></polyline>
                           </svg>
                         </button>
-                        <div x-show="activeAccordion==id" x-collapse x-cloak>
+                        <div x-show="isActiveAccordion(tabContent.id)" x-collapse x-cloak>
                           <div class="relative grid grid-cols-1 gap-4 py-4 lg:grid-cols-2 lg:gap-6 lg:pb-6 xl:grid-cols-3 xl:gap-8 xl:pb-8">
                             <template x-for="product in tabContent.productList" :key="product.id">
                               <div @click="handleDetail(product)" class="shadow-lg cursor-pointer hover:-translate-y-5 transition duration-300 group">

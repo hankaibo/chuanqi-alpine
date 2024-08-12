@@ -23,7 +23,7 @@ Alpine.data('headerData', () => ({
 
   //
   handleIndustry(pId, index = 0) {
-    window.open(`industry.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`industry.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   handleSolutionDetail(solutionId) {
@@ -36,7 +36,7 @@ Alpine.data('headerData', () => ({
       new CustomEvent('refreshCategory', {
         detail: {
           pId,
-          index: index + 1,
+          index: index,
         },
       }),
     );

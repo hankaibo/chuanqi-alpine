@@ -9,6 +9,7 @@ Alpine.data('headerData', () => ({
   headerHtml: '',
   // 导航栏数据
   isLink: 'industries',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
 
   parentIndustries: [],
   childIndustry: [],
@@ -20,7 +21,7 @@ Alpine.data('headerData', () => ({
 
   //
   handleIndustry(pId, index = 0) {
-    window.open(`industry.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`industry.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   handleSolutionDetail(solutionId) {
@@ -29,7 +30,7 @@ Alpine.data('headerData', () => ({
 
   // 产品分类页面
   handleProductCategory(pId, index = 0) {
-    window.open(`products.html?pId=${pId}&index=${index + 1}`, '_blank', 'noopener,noreferrer');
+    window.open(`products.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
   // 产品详情页面
@@ -71,6 +72,11 @@ Alpine.data('headerData', () => ({
 
 Alpine.data('footerData', () => ({
   footerHtml: '',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
+
+  handleTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  },
 
   init() {
     this.$nextTick(() => {
