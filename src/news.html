@@ -43,47 +43,45 @@
                 <h3 class="text-sm md:text-lg text-[#333333] mb-3 cursor-pointer" x-text="item.name"></h3>
                 <div class="text-xs md:text-base text-[#888] cursor-pointer text-ellipsis line-clamp-4" x-text="item.summary"></div>
               </div>
-              <el-space :size="20">
-                <span class="text-[#bbb] text-[10px] inline-flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-2 h-2"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-clock"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12 6 12 12 16 14" />
-                  </svg>
-                  <span class="pl-1">发布时间：</span>
-                  <span class="pr-2" x-text="item.publishedAt"></span>
+              <span class="text-[#bbb] text-[10px] inline-flex items-center gap-5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-2 h-2"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-clock"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span class="pl-1">发布时间：</span>
+                <span class="pr-2" x-text="item.publishedAt"></span>
 
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-3 h-3"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="lucide lucide-eye"
-                  >
-                    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                  <span class="pl-1">浏览量：</span>
-                  <span x-text="item.views"></span>
-                </span>
-              </el-space>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3 h-3"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-eye"
+                >
+                  <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <span class="pl-1">浏览量：</span>
+                <span x-text="item.views"></span>
+              </span>
             </div>
           </div>
         </template>

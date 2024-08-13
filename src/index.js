@@ -1,4 +1,5 @@
 import {nanoid} from 'nanoid';
+// import {createPopper} from '@popperjs/core';
 import Alpine from 'alpinejs';
 import './style.css';
 
@@ -14,7 +15,9 @@ import {getThumbnailUrl, buildQueryString} from './untils';
 
 window.Alpine = Alpine;
 
-Alpine.data('data', () => ({
+Alpine.data('headerData', () => ({
+  headerHtml: '',
+  // 导航栏数据
   isLink: 'index',
   isMobile: window.matchMedia('(max-width: 768px)').matches,
   swiperIndex: 0, // 当前最外部 swiper 的索引，方便切换 header 样式
@@ -22,9 +25,90 @@ Alpine.data('data', () => ({
   parentIndustries: [],
   childIndustry: [],
   grandsonIndustry: [],
-  parentCategories: [], // 父产品分类
-  childCategory: [], // 子产品分类
-  grandsonCategory: [], // 孙产品分类及其下的产品
+
+  parentCategories: [],
+  childCategory: [],
+  grandsonCategory: [],
+
+  //
+  handleIndustry(pId, index = 0) {
+    window.open(`industry.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
+  },
+
+  handleSolutionDetail(solutionId) {
+    window.open(`solution-detail.html?id=${solutionId}`, '_blank', 'noopener,noreferrer');
+  },
+
+  // 产品分类页面
+  handleProductCategory(pId, index = 0) {
+    window.open(`products.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
+  },
+
+  // 产品详情页面
+  handleProductDetail(productId) {
+    window.open(`product-detail.html?id=${productId}`, '_blank', 'noopener,noreferrer');
+  },
+
+  init() {
+    getIndusties((data) => {
+      // 导航栏使用数据
+      this.parentIndustries = data;
+      this.childIndustry = this.parentIndustries[0]?.children || [];
+      this.grandsonIndustry = this.childIndustry[0]?.children || [];
+    });
+    this.$watch('childIndustry', (newValue) => {
+      this.grandsonIndustry = newValue[0]?.children || [];
+    });
+
+    getCategories((data) => {
+      // 导航栏
+      this.parentCategories = data;
+      this.childCategory = this.parentCategories[0]?.children || [];
+      this.grandsonCategory = this.childCategory[0]?.children || [];
+    });
+    this.$watch('childCategory', (newValue) => {
+      this.grandsonCategory = newValue[0]?.children || [];
+    });
+
+    this.$nextTick(() => {
+      fetch('./header.html')
+        .then((response) => response.text())
+        .then((data) => {
+          this.headerHtml = data;
+        })
+        .catch((error) => console.error('Error loading header:', error));
+    });
+
+    window.addEventListener('set-swiper-index', (event) => {
+      this.swiperIndex = event.detail;
+    });
+  },
+}));
+
+Alpine.data('popoverData', () => ({
+  popoverHtml: '',
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
+
+  initializePopper() {
+    Popper.createPopper(document.querySelector('.lucide-phone'), document.querySelector('.lucide-phone-tooltip'), {
+      placement: 'left',
+    });
+  },
+
+  init() {
+    this.$nextTick(() => {
+      fetch('./popover.html')
+        .then((response) => response.text())
+        .then((data) => {
+          this.popoverHtml = data;
+        })
+        .catch((error) => console.error('Error loading popover:', error));
+    });
+  },
+}));
+
+Alpine.data('data', () => ({
+  isMobile: window.matchMedia('(max-width: 768px)').matches,
 
   outerSwiperRef: null,
   products: [], // 产品轮播图片数据
@@ -225,21 +309,27 @@ Alpine.data('data', () => ({
       },
       on: {
         slideChange: () => {
-          this.swiperIndex = outerSwiper.realIndex;
+          this.$dispatch('set-swiper-index', outerSwiper.realIndex);
         },
       },
     });
     this.outerSwiperRef = outerSwiper;
   },
 
-  handleIndustry(industry, index = 0) {
-    window.open(`industry.html?pId=${industry.id}&index=${index}`, '_blank', 'noopener,noreferrer');
+  handleIndustry(pId, index = 0) {
+    window.open(`industry.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
   },
 
-  handleProductCategory(category, index = 0) {
-    window.open(`products.html?pId=${category.id}&index=${index}`, '_blank', 'noopener,noreferrer');
+  handleSolutionDetail(solutionId) {
+    window.open(`solution-detail.html?id=${solutionId}`, '_blank', 'noopener,noreferrer');
   },
 
+  // 产品分类页面
+  handleProductCategory(pId, index = 0) {
+    window.open(`products.html?pId=${pId}&index=${index}`, '_blank', 'noopener,noreferrer');
+  },
+
+  // 产品详情页面
   handleProductDetail(productId) {
     window.open(`product-detail.html?id=${productId}`, '_blank', 'noopener,noreferrer');
   },
@@ -262,16 +352,13 @@ Alpine.data('data', () => ({
 
   //
   init() {
-    this.$nextTick(() => {
-      this.handleInitSwiper();
-    });
+    if (!this.isMobile) {
+      this.$nextTick(() => {
+        this.handleInitSwiper();
+      });
+    }
 
     getIndusties((data) => {
-      // 导航栏使用数据
-      this.parentIndustries = data;
-      this.childIndustry = this.parentIndustries[0]?.children || [];
-      this.grandsonIndustry = this.childIndustry[0]?.children || [];
-
       // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
       this.industries = data.map((item) => {
         if (!item.indexFile) {
@@ -287,17 +374,8 @@ Alpine.data('data', () => ({
       // swiper 主要展示工程案例的数据，默认加载第1个行业的数据
       this.getCases(this.industries[0]?.id);
     });
-    this.$watch('childCategory', (newValue) => {
-      this.grandsonIndustry = newValue[0]?.children || [];
-    });
-
     //
     getCategories((data) => {
-      // 导航栏
-      this.parentCategories = data;
-      this.childCategory = this.parentCategories[0]?.children || [];
-      this.grandsonCategory = this.childCategory[0]?.children || [];
-
       this.categories = data.map((item) => {
         if (!item.indexFile) {
           return item;
@@ -310,11 +388,10 @@ Alpine.data('data', () => ({
       });
 
       this.$nextTick(() => {
-        this.outerSwiperRef?.update();
+        setTimeout(() => {
+          this.outerSwiperRef?.update();
+        }, 1000);
       });
-    });
-    this.$watch('childCategory', (newValue) => {
-      this.grandsonCategory = newValue[0]?.children || [];
     });
 
     this.getProducts();

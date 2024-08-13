@@ -7,12 +7,14 @@
 #### 安装依赖
 
 ```bash
+# npm run install
 pnpm install
 ```
 
 #### 启动
 
 ```bash
+# npm run dev
 pnpm dev
 ```
 
@@ -20,6 +22,7 @@ pnpm dev
 
 ```bash
 ### 目前编译公共基础路径为 /temp/ ，如果想替换为其它值，请修改 .env.production 中的 VITE_BASE_PATH 。
+# npm run build
 pnpm build
 ```
 

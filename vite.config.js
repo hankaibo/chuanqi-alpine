@@ -16,6 +16,7 @@ export default defineConfig(({mode}) => {
         input: {
           header: resolve(__dirname, 'src/header.html'),
           footer: resolve(__dirname, 'src/footer.html'),
+          popover: resolve(__dirname, 'src/popover.html'),
           about: resolve(__dirname, 'src/about.html'),
           jobs: resolve(__dirname, 'src/jobs.html'),
           news: resolve(__dirname, 'src/news.html'),

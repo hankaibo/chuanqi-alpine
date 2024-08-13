@@ -1,0 +1,86 @@
+<span class="block p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]" @mouseenter="tooltipVisible = true; initializePopper()" @mouseleave="tooltipVisible = false">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="lucide lucide-phone text-white"
+  >
+    <path
+      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+    />
+  </svg>
+</span>
+<ul
+  class="min-w-[100px] py-1 px-2 space-y-5 lucide-phone-tooltip hidden"
+  x-transition
+  x-data="{
+      items: [
+        {title:'客服电话',content:'010-67874677'},
+        {title:'北京总部',content:'张经理：13810060503'},
+        {title:'株洲办事处',content:'唐经理：13810062921'},
+        {title:'南京办事处',content:'蔡经理：18915956527'},
+        {title:'西安办事处',content:'杨经理：13220186200'},
+        {title:'上海总部',content:'戴经理：13916848403'},
+      ],
+    }"
+  style="display: none"
+>
+  <template x-for="item in items">
+    <li>
+      <span class="block pb-1.5 text-sm text-[#333333]" x-text="item.title"></span>
+      <span class="text-xs text-primary" x-text="item.content"></span>
+    </li>
+  </template>
+</ul>
+<span class="block h-px my-4 mx-0 bg-gradient-to-r from-[hsla(0,0%,100%,0)] via-white to-[hsla(0,0%,100%,0)]"></span>
+
+<span class="block w-8 p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">
+  <svg-icon icon-class="qq" class-name="text-white" />
+</span>
+<ul class="min-w-[100px] hidden py-1 px-2">
+  <li>
+    <span class="block pb-1.5 text-sm text-[#333333]">QQ客服</span>
+    <span class="text-xs text-primary">2244212405</span>
+  </li>
+</ul>
+<span class="block h-px my-4 mx-0 bg-gradient-to-r from-[hsla(0,0%,100%,0)] via-white to-[hsla(0,0%,100%,0)]"></span>
+
+<span slot="reference" class="block w-8 p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">
+  <svg-icon icon-class="wechat" class-name="text-white" />
+</span>
+<ul class="min-w-[100px] hidden py-1 px-2">
+  <li>
+    <span class="block pb-1.5 text-sm text-[#333333]">微信二维码</span>
+    <span class="text-xs text-primary"><el-image style="width: 94px; height: 95px" src="weixin"></el-image></span>
+  </li>
+</ul>
+<span class="block h-px my-4 mx-0 bg-gradient-to-r from-[hsla(0,0%,100%,0)] via-white to-[hsla(0,0%,100%,0)]"></span>
+
+<span class="block p-2 cursor-pointer hover:bg-[rgba(255,255,255,0.2)]">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="lucide lucide-headset text-white"
+  >
+    <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z" />
+    <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+  </svg>
+</span>
+<ul class="min-w-[100px] py-1 px-2 hidden">
+  <li>
+    <span class="block pb-1.5 text-sm text-[#333333] pointer">在线客服</span>
+  </li>
+</ul>
