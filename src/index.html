@@ -12,6 +12,40 @@
       [x-cloak] {
         display: none !important;
       }
+
+      .arrow,
+      .arrow::before {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: inherit;
+      }
+
+      .arrow {
+        visibility: hidden;
+      }
+
+      .arrow::before {
+        visibility: visible;
+        content: '';
+        transform: rotate(45deg);
+      }
+
+      .tooltip[data-popper-placement^='top'] > .arrow {
+        bottom: -4px;
+      }
+
+      .tooltip[data-popper-placement^='bottom'] > .arrow {
+        top: -4px;
+      }
+
+      .tooltip[data-popper-placement^='left'] > .arrow {
+        right: -4px;
+      }
+
+      .tooltip[data-popper-placement^='right'] > .arrow {
+        left: -4px;
+      }
     </style>
   </head>
 
@@ -20,181 +54,180 @@
 
     <main x-data="data" class="h-screen">
       <!-- Swiper -->
-      <template>
-        <div class="swiper swiper-outer w-full h-full" id="outerSwiper">
-          <div class="swiper-wrapper">
-            <!-- 嵌套的产品轮播图  -->
-            <div class="swiper-slide">
-              <div class="swiper swiper-inner w-full h-full" x-ref="innerSwiper">
-                <div class="swiper-wrapper">
-                  <template x-for="product in products" :key="product.id">
-                    <div class="swiper-slide">
-                      <div class="w-full h-full relative">
-                        <img :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" loading="lazy" />
-                        <div class="absolute top-1/3 left-[260px] flex flex-col text-white">
-                          <span class="text-5xl mb-7" x-text="product.name"></span>
-                          <button class="btn-primary w-40" @click="handleProductDetail(product.id)">查看详情</button>
-                        </div>
+      <div class="swiper-outer w-full h-full" id="outerSwiper" :class="!isMobile && 'swiper'">
+        <div :class="!isMobile && 'swiper-wrapper'">
+          <!-- 嵌套的产品轮播图  -->
+          <div :class="!isMobile && 'swiper-slide'">
+            <div class="swiper swiper-inner w-full h-full" x-ref="innerSwiper">
+              <div class="swiper-wrapper">
+                <template x-for="product in products" :key="product.id">
+                  <div class="swiper-slide">
+                    <div class="w-full h-full relative">
+                      <img :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" loading="lazy" />
+                      <div class="absolute top-1/3 left-[260px] flex flex-col text-white">
+                        <span class="text-5xl mb-7" x-text="product.name"></span>
+                        <button class="btn-primary w-40" @click="handleProductDetail(product.id)">查看详情</button>
                       </div>
                     </div>
-                  </template>
-                </div>
-                <div class="swiper-pagination swiper-pagination-inner"></div>
+                  </div>
+                </template>
               </div>
+              <div class="swiper-pagination swiper-pagination-inner"></div>
             </div>
-            <!-- 行业应用 -->
-            <div class="swiper-slide">
-              <section class="flex flex-col justify-start items-center h-full lg:pt-[72px] bg-white top">
-                <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
-                  <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">行业应用</span>
-                  <span class="divider-primary"></span>
-                  <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Industry application</span>
-                </h2>
-                <div class="flex lg:gap-4 xl:gap-8 pb-4 lg:pb-8 xl:pb-16 h-full">
-                  <template x-for="(industry, index) in industries" :key="industry.id">
-                    <div x-data="{show: false}" class="relative flex-1" @mouseenter="show=true" @mouseleave="show=false">
-                      <div class="relative cursor-pointer flex flex-col justify-center h-full">
-                        <img :src="industry?.imageUrl" class="w-full h-full object-cover" loading="lazy" />
-                        <h3
-                          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:text-3xl xl:text-4xl font-medium text-white after:w-9 after:h-1 after:bg-white after:block after:my-3 after:mx-auto"
-                          x-text="industry.name"
-                        ></h3>
-                      </div>
+          </div>
+          <!-- 行业应用 -->
+          <div :class="!isMobile && 'swiper-slide'" class="swiper-slide-industry">
+            <section class="flex flex-col justify-start items-center h-full lg:pt-[72px] bg-white top">
+              <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">行业应用</span>
+                <span class="divider-primary"></span>
+                <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Industry application</span>
+              </h2>
+              <div class="flex lg:gap-4 xl:gap-8 pb-4 lg:pb-8 xl:pb-16 h-full">
+                <template x-for="(industry, index) in industries" :key="industry.id">
+                  <div x-data="{show: false}" class="relative flex-1" @mouseenter="show=true" @mouseleave="show=false">
+                    <div class="relative cursor-pointer flex flex-col justify-center h-full">
+                      <img :src="industry?.imageUrl" class="w-full h-full object-cover" loading="lazy" />
+                      <h3
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:text-3xl xl:text-4xl font-medium text-white after:w-9 after:h-1 after:bg-white after:block after:my-3 after:mx-auto"
+                        x-text="industry.name"
+                      ></h3>
+                    </div>
+                    <div
+                      x-show="show"
+                      x-transition:enter="transition ease-out duration-300 transform"
+                      x-transition:enter-start="translate-y-full opacity-0"
+                      x-transition:enter-end="translate-y-0 opacity-100"
+                      x-transition:leave="transition ease-in duration-300 transform"
+                      x-transition:leave-start="translate-y-0 opacity-100"
+                      x-transition:leave-end="translate-y-full opacity-0"
+                      class="absolute inset-0 flex flex-col justify-center items-center"
+                    >
                       <div
-                        x-show="show"
-                        x-transition:enter="transition ease-out duration-300 transform"
-                        x-transition:enter-start="translate-y-full opacity-0"
-                        x-transition:enter-end="translate-y-0 opacity-100"
-                        x-transition:leave="transition ease-in duration-300 transform"
-                        x-transition:leave-start="translate-y-0 opacity-100"
-                        x-transition:leave-end="translate-y-full opacity-0"
-                        class="absolute inset-0 flex flex-col justify-center items-center"
-                      >
-                        <div
-                          class="relative bg-[rgba(78,176,179,0.35)] backdrop-blur-[10px] w-full h-full p-12 before:absolute before:top-0 before:w-1.5 before:h-full before:bg-white after:absolute after:top-0 after:w-1.5 after:h-full after:bg-primary"
-                          :class="{
+                        class="relative bg-[rgba(78,176,179,0.35)] backdrop-blur-[10px] w-full h-full p-12 before:absolute before:top-0 before:w-1.5 before:h-full before:bg-white after:absolute after:top-0 after:w-1.5 after:h-full after:bg-primary"
+                        :class="{
                           'before:-right-1.5': index < 2,
                           'after:-right-3': index < 2,
                           'before:-left-1.5': index > 1,
                           'after:-left-3': index > 1,
                         }"
-                        >
-                          <h3 class="relative h-12 text-3xl font-medium text-white pb-5 after:absolute after:left-0 after:bottom-0 after:w-8 after:h-1 after:bg-white" x-text="industry.name"></h3>
-                          <ul class="mt-10">
-                            <template x-for="it in industry?.children" :key="it.id">
-                              <li
-                                class="flex justify-between items-center p-1 text-xl text-white border-b border-b-transparent cursor-pointer transition-all hover:font-semibold hover:transition-all hover:border-b hover:border-b-slate-50 group"
-                              >
-                                <span x-text="it.name"></span>
-                              </li>
-                            </template>
-                          </ul>
-                          <button class="absolute bottom-12 left-12 btn-second" @click="handleIndustry(industry)">查看更多>></button>
-                        </div>
+                      >
+                        <h3 class="relative h-12 text-3xl font-medium text-white pb-5 after:absolute after:left-0 after:bottom-0 after:w-8 after:h-1 after:bg-white" x-text="industry.name"></h3>
+                        <ul class="mt-10">
+                          <template x-for="it in industry?.children" :key="it.id">
+                            <li
+                              class="flex justify-between items-center p-1 text-xl text-white border-b border-b-transparent cursor-pointer transition-all hover:font-semibold hover:transition-all hover:border-b hover:border-b-slate-50 group"
+                            >
+                              <span x-text="it.name"></span>
+                            </li>
+                          </template>
+                        </ul>
+                        <button class="absolute bottom-12 left-12 btn-second" @click="handleIndustry(industry)">查看更多>></button>
                       </div>
-                    </div>
-                  </template>
-                </div>
-              </section>
-            </div>
-            <!-- 产品分类 -->
-            <template x-for="category in categories" :key="category.id">
-              <div class="swiper-slide">
-                <section class="flex flex-col lg:flex-row lg:h-full items-start lg:items-stretch bg-[url(./images/index-product-bg.webp)] bg-no-repeat bg-right-bottom lg:pt-[72px]">
-                  <div class="relative lg:basis-2/3">
-                    <img :src="category.indexFile?.path" class="w-full h-full object-cover" loading="lazy" />
-                    <div class="absolute left-0 bottom-0 right-0 p-4 xl:p-9 gradient-box">
-                      <div class="flex flex-col gap-1.5 mb-3 after:w-5 after:h-0.5 after:bg-primary lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-5">
-                        <span class="text-lg lg:text-4xl text-white" x-text="category.name"></span>
-                      </div>
-                      <div class="text-sm text-white leading-normal" x-text="category.description"></div>
                     </div>
                   </div>
-                  <div class="lg:basis-1/3 p-4 xl:px-8 xl:py-16 2xl:px-16 2xl:py-24 w-full">
-                    <svg
-                      class="fill-current overflow-hidden w-9 h-9 lg:w-12 lg:h-12 xl:w-20 xl:h-20"
-                      viewBox="0 0 20 20"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                    >
-                      <title>icon</title>
-                      <defs>
-                        <polygon id="path-1" points="0 0.144728033 12.7505376 0.144728033 12.7505376 10.5376344 0 10.5376344"></polygon>
-                      </defs>
-                      <g id="官网" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <g id="编组-66" transform="translate(-30.000000, -60.000000)">
-                          <g id="icon" transform="translate(30.000000, 60.000000)">
-                            <circle id="椭圆形备份-2" fill="#4EB0B3" cx="10" cy="10" r="10"></circle>
-                            <g id="编组" transform="translate(3.333333, 4.166667)">
+                </template>
+              </div>
+            </section>
+          </div>
+          <!-- 产品分类 -->
+          <template x-for="category in categories" :key="category.id">
+            <div :class="!isMobile && 'swiper-slide'">
+              <section class="flex flex-col lg:flex-row lg:h-full items-start lg:items-stretch bg-[url(./images/index-product-bg.webp)] bg-no-repeat bg-right-bottom lg:pt-[72px]">
+                <div class="relative lg:basis-2/3">
+                  <img :src="category.indexFile?.path" class="w-full h-full object-cover" loading="lazy" />
+                  <div class="absolute left-0 bottom-0 right-0 p-4 xl:p-9 gradient-box">
+                    <div class="flex flex-col gap-1.5 mb-3 after:w-5 after:h-0.5 after:bg-primary lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-5">
+                      <span class="text-lg lg:text-4xl text-white" x-text="category.name"></span>
+                    </div>
+                    <div class="text-sm text-white leading-normal" x-text="category.description"></div>
+                  </div>
+                </div>
+                <div class="lg:basis-1/3 p-4 xl:px-8 xl:py-16 2xl:px-16 2xl:py-24 w-full">
+                  <svg
+                    class="fill-current overflow-hidden w-9 h-9 lg:w-12 lg:h-12 xl:w-20 xl:h-20"
+                    viewBox="0 0 20 20"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                  >
+                    <title>icon</title>
+                    <defs>
+                      <polygon id="path-1" points="0 0.144728033 12.7505376 0.144728033 12.7505376 10.5376344 0 10.5376344"></polygon>
+                    </defs>
+                    <g id="官网" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <g id="编组-66" transform="translate(-30.000000, -60.000000)">
+                        <g id="icon" transform="translate(30.000000, 60.000000)">
+                          <circle id="椭圆形备份-2" fill="#4EB0B3" cx="10" cy="10" r="10"></circle>
+                          <g id="编组" transform="translate(3.333333, 4.166667)">
+                            <path
+                              d="M5.9193405,7.44318781 C5.9193405,6.73681505 5.3467957,6.16427025 4.64042294,6.16427025 C3.93440143,6.16427025 3.36185663,6.73681505 3.36185663,7.44318781 C3.36185663,8.02556774 3.75139785,8.51732401 4.28389964,8.67152473 C4.28389964,8.67152473 3.41524731,7.60968244 4.14796416,6.94510896 C4.14796416,6.94510896 4.91369892,6.31249964 5.9193405,7.44318781"
+                              id="Fill-1"
+                              fill="#FFFFFF"
+                            ></path>
+                            <g transform="translate(0.000000, 0.206573)">
+                              <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                              </mask>
+                              <g id="Clip-4"></g>
                               <path
-                                d="M5.9193405,7.44318781 C5.9193405,6.73681505 5.3467957,6.16427025 4.64042294,6.16427025 C3.93440143,6.16427025 3.36185663,6.73681505 3.36185663,7.44318781 C3.36185663,8.02556774 3.75139785,8.51732401 4.28389964,8.67152473 C4.28389964,8.67152473 3.41524731,7.60968244 4.14796416,6.94510896 C4.14796416,6.94510896 4.91369892,6.31249964 5.9193405,7.44318781"
-                                id="Fill-1"
+                                d="M12.4319498,10.5340867 C12.8162222,10.4701584 12.7596703,9.54987168 12.7277061,9.31663871 C12.7277061,9.31663871 12.2057419,6.02116918 9.16071685,5.83359928 C9.16071685,5.83359928 7.88812186,5.83359928 8.30541219,5.40331254 C8.30541219,5.40331254 9.25941935,4.83217276 9.57484588,3.97721935 C9.57484588,3.97721935 9.68232975,3.33055986 9.03567025,3.97721935 C9.03567025,3.97721935 8.78979211,4.83217276 7.15575627,5.12441649 C7.15575627,5.12441649 5.92531183,5.0826172 5.50942652,4.6235276 C5.50942652,4.6235276 5.30499642,4.28983584 4.36503943,4.26911183 C4.36503943,4.26911183 4.05593548,3.66425161 4.86663082,3.41380717 C4.86663082,3.41380717 5.74968459,3.41380717 5.89053763,2.74642366 C5.89053763,2.74642366 5.62955556,2.07904014 5.24809319,2.74642366 C5.24809319,2.74642366 4.30392115,3.10083943 4.36503943,2.12048817 C4.36503943,2.12048817 4.19046595,1.58342007 4.86663082,2.01897563 C5.06192832,2.14472803 5.16098208,2.23745591 5.42653047,2.2167319 C5.90248029,2.17985018 6.34822222,1.92378566 6.7226595,1.64348459 C6.91760573,1.49736272 7.10131183,1.33508315 7.26991398,1.15875341 C7.30363441,1.12362796 7.63978495,0.627305376 7.57691039,0.645921864 C7.51403584,0.664187097 7.46169892,0.696853763 7.40268817,0.727061649 C6.74724731,1.06040215 5.59724014,0.997176344 4.97376344,0.614660215 C4.78759857,0.500502509 4.57579211,0.466430824 4.36187814,0.449921864 C4.15674552,0.433764158 3.88417204,0.507176344 3.69870968,0.406717563 C3.63407885,0.371943369 3.58420072,0.315742652 3.52624373,0.271133333 C3.38258065,0.16189319 3.19114695,0.127118996 3.01270968,0.152760573 C2.82162724,0.180509677 2.62597849,0.270430824 2.48091039,0.397936201 C2.38782796,0.47942724 2.273319,0.791692473 2.19639427,0.82752043 C2.19639427,0.82752043 1.72536201,1.04600072 1.3133405,0.848244444 C1.07554122,0.734437993 0.534960573,0.776237276 0.433799283,1.06742724 C0.375139785,1.23743441 0.494566308,1.64067455 0.168602151,1.62030179 C-0.271519713,1.91219427 0.289082437,1.89147025 0.289082437,1.89147025 C0.866193548,1.87039498 1.5641362,1.93291828 1.5641362,1.93291828 C2.35235125,2.39165663 1.05200717,2.39165663 1.05200717,2.39165663 C0.264494624,2.53777849 0.550064516,2.80894695 0.550064516,2.80894695 C0.929419355,3.22623728 1.31298925,2.91326953 1.31298925,2.91326953 C1.66248746,2.64210108 1.94524731,2.64210108 1.94559857,2.64210108 C2.09312545,2.64210108 2.4893405,2.58379283 2.54905376,2.79033047 C2.66777778,3.20340573 1.71939068,3.30281075 1.97756272,3.75241649 C2.03341219,3.85006523 2.56661649,4.15319785 2.67339785,4.06046667 C2.01444444,4.63301147 1.24414337,5.25508315 1.20129032,6.18661004 C1.14614337,7.39597921 1.81949821,8.52350609 2.70676703,9.3043448 C3.06329032,9.61801505 3.53713262,9.89199355 3.99200717,9.75640932 C4.1044086,9.72268889 4.22734767,9.63171398 4.20416487,9.51650251 C4.19116846,9.45222294 4.13602151,9.4062086 4.08473835,9.36581434 C3.41946237,8.84209391 2.81670968,8.29343441 2.81670968,7.379119 C2.81670968,6.21400789 3.76088172,5.26948459 4.92599283,5.26948459 C4.92599283,5.26948459 5.65063082,5.28599355 6.01136918,5.81814409 C6.06335484,5.89542007 6.10796416,5.98323369 6.14168459,6.08369247 C6.14168459,6.08369247 6.99136918,8.27376416 9.09819355,8.35736272 C9.45155556,8.32926237 9.81967025,8.32996487 10.1702222,8.38511183 C11.2682437,8.5589828 11.2917778,10.2232265 12.2861792,10.5214416 C12.3402724,10.5379505 12.3890968,10.5414631 12.4319498,10.5340867"
+                                id="Fill-3"
                                 fill="#FFFFFF"
+                                mask="url(#mask-2)"
                               ></path>
-                              <g transform="translate(0.000000, 0.206573)">
-                                <mask id="mask-2" fill="white">
-                                  <use xlink:href="#path-1"></use>
-                                </mask>
-                                <g id="Clip-4"></g>
-                                <path
-                                  d="M12.4319498,10.5340867 C12.8162222,10.4701584 12.7596703,9.54987168 12.7277061,9.31663871 C12.7277061,9.31663871 12.2057419,6.02116918 9.16071685,5.83359928 C9.16071685,5.83359928 7.88812186,5.83359928 8.30541219,5.40331254 C8.30541219,5.40331254 9.25941935,4.83217276 9.57484588,3.97721935 C9.57484588,3.97721935 9.68232975,3.33055986 9.03567025,3.97721935 C9.03567025,3.97721935 8.78979211,4.83217276 7.15575627,5.12441649 C7.15575627,5.12441649 5.92531183,5.0826172 5.50942652,4.6235276 C5.50942652,4.6235276 5.30499642,4.28983584 4.36503943,4.26911183 C4.36503943,4.26911183 4.05593548,3.66425161 4.86663082,3.41380717 C4.86663082,3.41380717 5.74968459,3.41380717 5.89053763,2.74642366 C5.89053763,2.74642366 5.62955556,2.07904014 5.24809319,2.74642366 C5.24809319,2.74642366 4.30392115,3.10083943 4.36503943,2.12048817 C4.36503943,2.12048817 4.19046595,1.58342007 4.86663082,2.01897563 C5.06192832,2.14472803 5.16098208,2.23745591 5.42653047,2.2167319 C5.90248029,2.17985018 6.34822222,1.92378566 6.7226595,1.64348459 C6.91760573,1.49736272 7.10131183,1.33508315 7.26991398,1.15875341 C7.30363441,1.12362796 7.63978495,0.627305376 7.57691039,0.645921864 C7.51403584,0.664187097 7.46169892,0.696853763 7.40268817,0.727061649 C6.74724731,1.06040215 5.59724014,0.997176344 4.97376344,0.614660215 C4.78759857,0.500502509 4.57579211,0.466430824 4.36187814,0.449921864 C4.15674552,0.433764158 3.88417204,0.507176344 3.69870968,0.406717563 C3.63407885,0.371943369 3.58420072,0.315742652 3.52624373,0.271133333 C3.38258065,0.16189319 3.19114695,0.127118996 3.01270968,0.152760573 C2.82162724,0.180509677 2.62597849,0.270430824 2.48091039,0.397936201 C2.38782796,0.47942724 2.273319,0.791692473 2.19639427,0.82752043 C2.19639427,0.82752043 1.72536201,1.04600072 1.3133405,0.848244444 C1.07554122,0.734437993 0.534960573,0.776237276 0.433799283,1.06742724 C0.375139785,1.23743441 0.494566308,1.64067455 0.168602151,1.62030179 C-0.271519713,1.91219427 0.289082437,1.89147025 0.289082437,1.89147025 C0.866193548,1.87039498 1.5641362,1.93291828 1.5641362,1.93291828 C2.35235125,2.39165663 1.05200717,2.39165663 1.05200717,2.39165663 C0.264494624,2.53777849 0.550064516,2.80894695 0.550064516,2.80894695 C0.929419355,3.22623728 1.31298925,2.91326953 1.31298925,2.91326953 C1.66248746,2.64210108 1.94524731,2.64210108 1.94559857,2.64210108 C2.09312545,2.64210108 2.4893405,2.58379283 2.54905376,2.79033047 C2.66777778,3.20340573 1.71939068,3.30281075 1.97756272,3.75241649 C2.03341219,3.85006523 2.56661649,4.15319785 2.67339785,4.06046667 C2.01444444,4.63301147 1.24414337,5.25508315 1.20129032,6.18661004 C1.14614337,7.39597921 1.81949821,8.52350609 2.70676703,9.3043448 C3.06329032,9.61801505 3.53713262,9.89199355 3.99200717,9.75640932 C4.1044086,9.72268889 4.22734767,9.63171398 4.20416487,9.51650251 C4.19116846,9.45222294 4.13602151,9.4062086 4.08473835,9.36581434 C3.41946237,8.84209391 2.81670968,8.29343441 2.81670968,7.379119 C2.81670968,6.21400789 3.76088172,5.26948459 4.92599283,5.26948459 C4.92599283,5.26948459 5.65063082,5.28599355 6.01136918,5.81814409 C6.06335484,5.89542007 6.10796416,5.98323369 6.14168459,6.08369247 C6.14168459,6.08369247 6.99136918,8.27376416 9.09819355,8.35736272 C9.45155556,8.32926237 9.81967025,8.32996487 10.1702222,8.38511183 C11.2682437,8.5589828 11.2917778,10.2232265 12.2861792,10.5214416 C12.3402724,10.5379505 12.3890968,10.5414631 12.4319498,10.5340867"
-                                  id="Fill-3"
-                                  fill="#FFFFFF"
-                                  mask="url(#mask-2)"
-                                ></path>
-                              </g>
                             </g>
                           </g>
                         </g>
                       </g>
-                    </svg>
-                    <div class="flex flex-col gap-1.5 my-2 after:w-5 after:h-0.5 after:bg-primary lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-10">
-                      <h3 class="text-lg lg:text-2xl 3xl:text-4xl text-slate-900" x-text="category.name"></h3>
-                    </div>
-                    <ul class="mb-6">
-                      <template x-for="(item,index) in category.children" :key="item.id">
-                        <li
-                          class="flex justify-between items-center py-2 text-xs lg:text-base xl:text-lg text-[#333] border-b border-b-[#d8d8d8] cursor-pointer hover:text-primary"
-                          @click="handleProductCategory(category, index)"
-                        >
-                          <span x-text="item.name"></span>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-arrow-right"
-                          >
-                            <path d="M5 12h14" />
-                            <path d="m12 5 7 7-7 7" />
-                          </svg>
-                        </li>
-                      </template>
-                    </ul>
-                    <div class="flex justify-start items-center py-4 sm:py-8">
-                      <button class="btn-primary" @click="handleProductCategory(category)">查看更多>></button>
-                    </div>
+                    </g>
+                  </svg>
+                  <div class="flex flex-col gap-1.5 my-2 after:w-5 after:h-0.5 after:bg-primary lg:gap-4 lg:after:w-8 lg:after:h-1.5 lg:mb-10">
+                    <h3 class="text-lg lg:text-2xl 3xl:text-4xl text-slate-900" x-text="category.name"></h3>
                   </div>
-                </section>
-              </div>
-            </template>
-            <!-- 工程案例 -->
-            <div class="swiper-slide">
-              <section class="flex flex-col justify-start items-center px-4 h-full lg:pt-[72px] bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-44">
-                <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
-                  <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">工程案例</span>
-                  <span class="divider-primary"></span>
-                  <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Application case</span>
-                </h2>
+                  <ul class="mb-6">
+                    <template x-for="(item,index) in category.children" :key="item.id">
+                      <li
+                        class="flex justify-between items-center py-2 text-xs lg:text-base xl:text-lg text-[#333] border-b border-b-[#d8d8d8] cursor-pointer hover:text-primary"
+                        @click="handleProductCategory(category, index)"
+                      >
+                        <span x-text="item.name"></span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-arrow-right"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
+                        </svg>
+                      </li>
+                    </template>
+                  </ul>
+                  <div class="flex justify-start items-center py-4 sm:py-8">
+                    <button class="btn-primary" @click="handleProductCategory(category)">查看更多>></button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </template>
+          <!-- 工程案例 -->
+          <div :class="!isMobile && 'swiper-slide'" class="swiper-slide-cases">
+            <section class="flex flex-col justify-start items-center px-4 h-full lg:pt-[72px] bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-44">
+              <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">工程案例</span>
+                <span class="divider-primary"></span>
+                <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Application case</span>
+              </h2>
 
-                <div
-                  x-data="{
+              <div
+                x-data="{
                       tabSelected: 1,
                       tabId: $id('tabs'),
                       tabButtonClicked(tabButton, tab){
@@ -214,168 +247,168 @@
                           return this.tabSelected == tabId;
                       }
                     }"
-                  class="relative w-full"
-                >
-                  <div x-ref="tabButtons" class="relative px-20">
-                    <div class="relative flex items-center text-gray-500 bg-white select-none py-2">
-                      <template x-for="tab in industries" :key="tab.id">
-                        <button
-                          :id="$id(tabId)"
-                          @click="tabButtonClicked($el, tab);"
-                          type="button"
-                          :class="{ 'text-primary' : tabButtonActive($el) }"
-                          class="text-lg font-semibold px-12 z-20 inline-flex items-center justify-center h-8 transition-all cursor-pointer whitespace-nowrap"
-                          x-text="tab.name"
-                        ></button>
-                      </template>
-                    </div>
-                    <div class="relative z-10 w-full h-0.5 bg-white" x-cloak>
-                      <div x-ref="tabMarker" class="absolute w-40 h-full bg-primary duration-300 ease-out"></div>
-                    </div>
-                  </div>
-
-                  <div class="relative px-20 flex items-center justify-center w-full py-5 mt-2 text-xs text-gray-400 content">
+                class="relative w-full"
+              >
+                <div x-ref="tabButtons" class="relative px-20">
+                  <div class="relative flex items-center text-gray-500 bg-white select-none py-2">
                     <template x-for="tab in industries" :key="tab.id">
-                      <div class="w-full f-ull" :id="$id(tabId + '-content')" x-show="tabContentActive($el)">
-                        <div class="swiper swiper-tab w-full h-full" :id="'id'+tab.id">
-                          <div class="swiper-wrapper">
-                            <template x-for="tabContent in industryCase[tab.id]" :key="tabContent.id">
-                              <div class="swiper-slide" @click="handleCaseDetail(tabContent)">
-                                <div class="h-60 cursor-pointer">
-                                  <img class="w-full h-full cursor-pointer object-cover" :src="tabContent.imageUrl" />
-                                </div>
-
-                                <div class="flex flex-col justify-start p-3 h-48 bg-white">
-                                  <h3 class="text-sm text-[#333333] mb-3 cursor-pointer" x-text="tabContent.name"></h3>
-                                  <div class="text-xs text-[#888] cursor-pointer text-ellipsis line-clamp-4" x-text="tabContent.summary"></div>
-
-                                  <span class="text-[#bbb] text-[10px] mt-auto inline-flex items-center">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      class="w-2 h-2"
-                                      width="24"
-                                      height="24"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="2"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      class="lucide lucide-clock"
-                                    >
-                                      <circle cx="12" cy="12" r="10" />
-                                      <polyline points="12 6 12 12 16 14" />
-                                    </svg>
-                                    <span class="pl-1">发布时间： <span x-text="tabContent.publishedAt"></span></span>
-                                  </span>
-                                </div>
-                              </div>
-                            </template>
-                          </div>
-                        </div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                      </div>
+                      <button
+                        :id="$id(tabId)"
+                        @click="tabButtonClicked($el, tab);"
+                        type="button"
+                        :class="{ 'text-primary' : tabButtonActive($el) }"
+                        class="text-lg font-semibold px-12 z-20 inline-flex items-center justify-center h-8 transition-all cursor-pointer whitespace-nowrap"
+                        x-text="tab.name"
+                      ></button>
                     </template>
                   </div>
-                </div>
-              </section>
-            </div>
-            <!-- 关于我们 -->
-            <div class="swiper-slide">
-              <section class="flex flex-col justify-start items-center px-4 h-full lg:pt-[72px] bg-white sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
-                <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
-                  <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">关于我们</span>
-                  <span class="divider-primary"></span>
-                  <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">About US</span>
-                </h2>
-
-                <div class="flex flex-col lg:flex-row gap-4 lg:gap-9 mb-4 lg:mb-16">
-                  <div class="hidden lg:block lg:basis-2/5">
-                    <img :src="about.imageUrl" class="lg:rounded-se-[80px] lg:rounded-es-[80px] h-full w-full object-contain" loading="lazy" />
-                  </div>
-                  <div class="lg:basis-3/5">
-                    <div id="editor-container" class="-mx-2.5 text-xs sm:text-sm lg:text-base" style="min-height: 300px"></div>
-                    <div class="pt-4 lg:pt-8">
-                      <button class="btn-primary" @click="handleAbout">查看更多>></button>
-                    </div>
+                  <div class="relative z-10 w-full h-0.5 bg-white" x-cloak>
+                    <div x-ref="tabMarker" class="absolute w-40 h-full bg-primary duration-300 ease-out"></div>
                   </div>
                 </div>
-              </section>
-            </div>
-            <!-- 资讯中心 -->
-            <div class="swiper-slide">
-              <section class="flex flex-col justify-start items-center px-4 lg:pt-[72px] h-full bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
-                <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
-                  <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">资讯中心</span>
-                  <span class="divider-primary"></span>
-                  <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Information center</span>
-                </h2>
 
-                <div class="flex-1 flex flex-col sm:flex-row w-full">
-                  <div class="shadow-sm bg-white sm:flex sm:flex-col sm:mr-2 sm:flex-grow-0 lg:mr-4">
-                    <div class="flex-1">
-                      <img :src="newsFirst?.imageUrl" class="lg:min-h-[270px] object-cover w-full h-full" />
-                    </div>
-                    <div class="flex">
-                      <div class="flex flex-col items-center justify-center bg-primary shadow-sm px-2 py-1">
-                        <span class="text-white text-4xl xl:text-5xl" x-text="newsFirst?.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
-                        <span class="text-white text-sm" x-text="newsFirst?.publishedAt?.substring(0,7)"></span>
+                <div class="relative px-20 flex items-center justify-center w-full py-5 mt-2 text-xs text-gray-400 content">
+                  <template x-for="tab in industries" :key="tab.id">
+                    <div class="w-full f-ull" :id="$id(tabId + '-content')" x-show="tabContentActive($el)">
+                      <div class="swiper swiper-tab w-full h-full" :id="'id'+tab.id">
+                        <div class="swiper-wrapper">
+                          <template x-for="tabContent in industryCase[tab.id]" :key="tabContent.id">
+                            <div class="swiper-slide" @click="handleCaseDetail(tabContent)">
+                              <div class="h-60 cursor-pointer">
+                                <img class="w-full h-full cursor-pointer object-cover" :src="tabContent.imageUrl" />
+                              </div>
+
+                              <div class="flex flex-col justify-start p-3 h-48 bg-white">
+                                <h3 class="text-sm text-[#333333] mb-3 cursor-pointer" x-text="tabContent.name"></h3>
+                                <div class="text-xs text-[#888] cursor-pointer text-ellipsis line-clamp-4" x-text="tabContent.summary"></div>
+
+                                <span class="text-[#bbb] text-[10px] mt-auto inline-flex items-center">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-2 h-2"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-clock"
+                                  >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                  </svg>
+                                  <span class="pl-1">发布时间： <span x-text="tabContent.publishedAt"></span></span>
+                                </span>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
                       </div>
-                      <h3
-                        class="flex justify-center items-center text-sm xl:text-xl font-medium text-[#333333] cursor-pointer p-2 text-ellipsis line-clamp-3 lg:p-4"
-                        x-text="newsFirst?.name"
-                        @click="handleNewsDetail(newsFirst)"
-                      ></h3>
-                    </div>
-                  </div>
-                  <template x-for="(item, index) in news" :key="item.id">
-                    <div
-                      class="relative mt-3 pb-1 border-b border-b-[#bbbbbb] sm:mt-0 sm:p-2 sm:border sm:border-[#d8d8d8] cursor-pointer sm:transition sm:hover:bg-[#eb0b3] sm:hover:-translate-y-4 sm:basis-1/3 3xl:basis-1/5 group sm:hover:bg-primary lg:px-4 lg:py-8 xl:px-8 xl:py-12"
-                      :class="index > 0 ? '!border-l-0' : ''"
-                      @click="handleNewsDetail(item)"
-                    >
-                      <div class="flex flex-col flex-nowrap justify-center text-[#A8A9AD] items-start shadow-sm">
-                        <span class="text-3xl lg:text-4xl xl:text-5xl sm:text-primary sm:group-hover:text-white" x-text="item.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
-                        <span class="sm:text-primary sm:group-hover:text-white" x-text="item.publishedAt?.substring(0,7)"></span>
-                      </div>
-                      <h3 class="text-[#333333] text-xs lg:text-lg xl:text-xl text-ellipsis line-clamp-2 cursor-pointer sm:pt-3 sm:group-hover:text-white" x-text="item.name"></h3>
-                      <div class="hidden text-ellipsis lg:line-clamp-5 lg:text-[#888888] lg:text-sm xl:text-base lg:group-hover:text-white lg:mt-3" x-text="item.summary"></div>
-                      <svg
-                        class="hidden sm:block sm:text-2xl sm:absolute sm:left-2 sm:bottom-4 sm:text-[#bbbbbb] sm:group-hover:text-white lg:text-4xl"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-arrow-right"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                      </svg>
+                      <div class="swiper-button-next"></div>
+                      <div class="swiper-button-prev"></div>
                     </div>
                   </template>
                 </div>
-                <div class="text-center py-4 lg:py-8">
-                  <button type="button" class="btn-primary" @click="handleNews">更多咨讯>></button>
+              </div>
+            </section>
+          </div>
+          <!-- 关于我们 -->
+          <div :class="!isMobile && 'swiper-slide'" class="swiper-slide-about">
+            <section class="flex flex-col justify-start items-center px-4 h-full lg:pt-[72px] bg-white sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
+              <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">关于我们</span>
+                <span class="divider-primary"></span>
+                <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">About US</span>
+              </h2>
+
+              <div class="flex flex-col lg:flex-row gap-4 lg:gap-9 mb-4 lg:mb-16">
+                <div class="hidden lg:block lg:basis-2/5">
+                  <img :src="about.imageUrl" class="lg:rounded-se-[80px] lg:rounded-es-[80px] h-full w-full object-contain" loading="lazy" />
                 </div>
-              </section>
-            </div>
-            <!-- 联系我们 -->
-            <div class="swiper-slide">
-              <section class="flex flex-col items-center px-4 lg:pt-[72px] h-full bg-[url('./images/index-contact-bg.webp')] bg-[length:100%_100%] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
-                <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
-                  <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-white pb-2">联系我们</span>
-                  <span class="divider-primary after:bg-white"></span>
-                  <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Contact us</span>
-                </h2>
-                <div class="w-full lg:flex">
+                <div class="lg:basis-3/5">
+                  <div id="editor-container" class="-mx-2.5 text-xs sm:text-sm lg:text-base" style="min-height: 300px"></div>
+                  <div class="pt-4 lg:pt-8">
+                    <button class="btn-primary" @click="handleAbout">查看更多>></button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <!-- 资讯中心 -->
+          <div :class="!isMobile && 'swiper-slide'">
+            <section class="flex flex-col justify-start items-center px-4 lg:pt-[72px] h-full bg-[#f9f9f9] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
+              <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-black pb-2">资讯中心</span>
+                <span class="divider-primary"></span>
+                <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Information center</span>
+              </h2>
+
+              <div class="flex-1 flex flex-col sm:flex-row w-full">
+                <div class="shadow-sm bg-white sm:flex sm:flex-col sm:mr-2 sm:flex-grow-0 lg:mr-4">
+                  <div class="flex-1">
+                    <img :src="newsFirst?.imageUrl" class="lg:min-h-[270px] object-cover w-full h-full" />
+                  </div>
+                  <div class="flex">
+                    <div class="flex flex-col items-center justify-center bg-primary shadow-sm px-2 py-1">
+                      <span class="text-white text-4xl xl:text-5xl" x-text="newsFirst?.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
+                      <span class="text-white text-sm" x-text="newsFirst?.publishedAt?.substring(0,7)"></span>
+                    </div>
+                    <h3
+                      class="flex justify-center items-center text-sm xl:text-xl font-medium text-[#333333] cursor-pointer p-2 text-ellipsis line-clamp-3 lg:p-4"
+                      x-text="newsFirst?.name"
+                      @click="handleNewsDetail(newsFirst)"
+                    ></h3>
+                  </div>
+                </div>
+                <template x-for="(item, index) in news" :key="item.id">
                   <div
-                    x-data="{componies: [
+                    class="relative mt-3 pb-1 border-b border-b-[#bbbbbb] sm:mt-0 sm:p-2 sm:border sm:border-[#d8d8d8] cursor-pointer sm:transition sm:hover:bg-[#eb0b3] sm:hover:-translate-y-4 sm:basis-1/3 3xl:basis-1/5 group sm:hover:bg-primary lg:px-4 lg:py-8 xl:px-8 xl:py-12"
+                    :class="index > 0 ? '!border-l-0' : ''"
+                    @click="handleNewsDetail(item)"
+                  >
+                    <div class="flex flex-col flex-nowrap justify-center text-[#A8A9AD] items-start shadow-sm">
+                      <span class="text-3xl lg:text-4xl xl:text-5xl sm:text-primary sm:group-hover:text-white" x-text="item.publishedAt?.match(/\d{4}-\d{2}-(\d{2})/)[1]"></span>
+                      <span class="sm:text-primary sm:group-hover:text-white" x-text="item.publishedAt?.substring(0,7)"></span>
+                    </div>
+                    <h3 class="text-[#333333] text-xs lg:text-lg xl:text-xl text-ellipsis line-clamp-2 cursor-pointer sm:pt-3 sm:group-hover:text-white" x-text="item.name"></h3>
+                    <div class="hidden text-ellipsis lg:line-clamp-5 lg:text-[#888888] lg:text-sm xl:text-base lg:group-hover:text-white lg:mt-3" x-text="item.summary"></div>
+                    <svg
+                      class="hidden sm:block sm:text-2xl sm:absolute sm:left-2 sm:bottom-4 sm:text-[#bbbbbb] sm:group-hover:text-white lg:text-4xl"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-arrow-right"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </div>
+                </template>
+              </div>
+              <div class="text-center py-4 lg:py-8">
+                <button type="button" class="btn-primary" @click="handleNews">更多咨讯>></button>
+              </div>
+            </section>
+          </div>
+          <!-- 联系我们 -->
+          <div :class="!isMobile && 'swiper-slide'">
+            <section class="flex flex-col items-center px-4 lg:pt-[72px] h-full bg-[url('./images/index-contact-bg.webp')] bg-[length:100%_100%] sm:px-8 lg:px-16 xl:px-32 2xl:px-64">
+              <h2 class="flex flex-col justify-center items-center py-4 lg:py-8 xl:py-16">
+                <span class="text-xl lg:text-2xl 3xl:text-4xl font-medium text-white pb-2">联系我们</span>
+                <span class="divider-primary after:bg-white"></span>
+                <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Contact us</span>
+              </h2>
+              <div class="w-full lg:flex">
+                <div
+                  x-data="{componies: [
                       {
                         name: '北京总部',
                         mobile: '13810060503',
@@ -418,75 +451,13 @@
                           addressEN: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai',
                         },
                       ]}"
-                    class="basis-1/2 lg:border-r lg:border-r-[hsla(0,0%,100%,.5)]"
-                  >
-                    <template x-for="item in componies" :key="item.name">
-                      <ul class="mb-3 space-y-1">
-                        <li class="text-lg font-semibold text-white" x-text="item.name"></li>
-                        <li class="text-white text-xs">
-                          <div class="gap-2">
-                            <span class="inline-flex">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile w-4 h-4"
-                              >
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" />
-                                <path d="M11 4h2" />
-                                <path d="M12 17v.01" />
-                              </svg>
-                              <span x-text="item.mobile"></span>
-                            </span>
-                            <span class="inline-flex">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-4 h-4"
-                              >
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                              </svg>
-                              <span x-text="item.fax"></span>
-                            </span>
-                            <template x-if="item.email">
-                              <span class="inline-flex">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="icon icon-tabler icons-tabler-outline icon-tabler-mail w-4 h-4"
-                                >
-                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                                  <path d="M3 7l9 6l9 -6" />
-                                </svg>
-                                <span x-text="item.email"></span>
-                              </span>
-                            </template>
-                          </div>
-                        </li>
-                        <li class="text-white text-xs">
+                  class="basis-1/2 lg:border-r lg:border-r-[hsla(0,0%,100%,.5)]"
+                >
+                  <template x-for="item in componies" :key="item.name">
+                    <ul class="mb-3 space-y-1">
+                      <li class="text-lg font-semibold text-white" x-text="item.name"></li>
+                      <li class="text-white text-xs">
+                        <div class="gap-2">
                           <span class="inline-flex">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -498,63 +469,124 @@
                               stroke-width="2"
                               stroke-linecap="round"
                               stroke-linejoin="round"
-                              class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin w-4 h-4"
+                              class="icon icon-tabler icons-tabler-outline icon-tabler-device-mobile w-4 h-4"
                             >
                               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                              <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+                              <path d="M6 5a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2v-14z" />
+                              <path d="M11 4h2" />
+                              <path d="M12 17v.01" />
                             </svg>
-                            <span x-text="item.address"></span>
+                            <span x-text="item.mobile"></span>
                           </span>
-                        </li>
-                        <li class="text-white text-xs">
-                          <span class="pl-4" x-text="item.addressEN"></span>
-                        </li>
-                      </ul>
-                    </template>
-                  </div>
-                  <form class="w-full mb-4 lg:basis-1/2 space-y-3 lg:space-y-7">
-                    <div class="flex flex-col sm:flex-row sm:items-center">
-                      <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">姓名</label>
-                      <div class="relative text-sm flex-1">
-                        <input x-model="form.name" @click="handleSubmitTest" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
-                      </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:items-center">
-                      <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">手机</label>
-                      <div class="relative text-sm flex-1">
-                        <input x-model="form.phone" required class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
-                      </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:items-center">
-                      <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">邮箱</label>
-                      <div class="relative text-sm flex-1">
-                        <input x-model="form.email" type="email" required class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
-                      </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:items-center">
-                      <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">单位名称</label>
-                      <div class="relative text-sm flex-1">
-                        <input x-model="form.department" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
-                      </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:items-center">
-                      <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">留言</label>
-                      <div class="relative text-sm flex-1">
-                        <textarea x-model="form.content" rows="10" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-4"></textarea>
-                      </div>
-                    </div>
-                    <div class="flex justify-center items-center mt-2">
-                      <button type="button" class="btn-primary w-40" :class="form.phone || form.email ? '' : 'text-white cursor-not-allowed !bg-[#a7d8d9]'" @click="handleSumbit">发送</button>
-                    </div>
-                  </form>
+                          <span class="inline-flex">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="icon icon-tabler icons-tabler-outline icon-tabler-phone w-4 h-4"
+                            >
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+                            </svg>
+                            <span x-text="item.fax"></span>
+                          </span>
+                          <template x-if="item.email">
+                            <span class="inline-flex">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-mail w-4 h-4"
+                              >
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+                                <path d="M3 7l9 6l9 -6" />
+                              </svg>
+                              <span x-text="item.email"></span>
+                            </span>
+                          </template>
+                        </div>
+                      </li>
+                      <li class="text-white text-xs">
+                        <span class="inline-flex">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin w-4 h-4"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                            <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+                          </svg>
+                          <span x-text="item.address"></span>
+                        </span>
+                      </li>
+                      <li class="text-white text-xs">
+                        <span class="pl-4" x-text="item.addressEN"></span>
+                      </li>
+                    </ul>
+                  </template>
                 </div>
-              </section>
-            </div>
+                <form class="w-full mb-4 lg:basis-1/2 space-y-3 lg:space-y-7">
+                  <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">姓名</label>
+                    <div class="relative text-sm flex-1">
+                      <input x-model="form.name" @click="handleSubmitTest" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
+                    </div>
+                  </div>
+                  <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">手机</label>
+                    <div class="relative text-sm flex-1">
+                      <input x-model="form.phone" required class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
+                    </div>
+                  </div>
+                  <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">邮箱</label>
+                    <div class="relative text-sm flex-1">
+                      <input x-model="form.email" type="email" required class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
+                    </div>
+                  </div>
+                  <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">单位名称</label>
+                    <div class="relative text-sm flex-1">
+                      <input x-model="form.department" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-3 py-2" />
+                    </div>
+                  </div>
+                  <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label class="pb-1.5 text-sm text-white sm:w-20 sm:text-right sm:pb-0 sm:pr-2">留言</label>
+                    <div class="relative text-sm flex-1">
+                      <textarea x-model="form.content" rows="10" class="w-full bg-[hsla(0,0%,100%,0.4)] border-none rounded text-[#606266] px-4"></textarea>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center mt-2">
+                    <button type="button" class="btn-primary w-40" :class="form.phone || form.email ? '' : 'text-white cursor-not-allowed !bg-[#a7d8d9]'" @click="handleSumbit">发送</button>
+                  </div>
+                </form>
+              </div>
+            </section>
           </div>
-          <div class="swiper-pagination swiper-pagination-outer" x-ref="outerPagination"></div>
         </div>
-      </template>
+        <div class="swiper-pagination swiper-pagination-outer" x-ref="outerPagination"></div>
+      </div>
     </main>
 
     <div x-data="popoverData" x-html="popoverHtml" x-show="!isMobile" class="absolute right-3 bottom-3 flex flex-col py-5 px-2 bg-primary z-[1001] box-border shadow-md"></div>

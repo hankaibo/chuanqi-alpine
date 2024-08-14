@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-// import {createPopper} from '@popperjs/core';
+import {createPopper} from '@popperjs/core';
 import Alpine from 'alpinejs';
 import './style.css';
 
@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl, buildQueryString} from './untils';
+import {getThumbnailUrl, buildQueryString, observeOnce} from './untils';
 
 window.Alpine = Alpine;
 
@@ -88,11 +88,39 @@ Alpine.data('headerData', () => ({
 Alpine.data('popoverData', () => ({
   popoverHtml: '',
   isMobile: window.matchMedia('(max-width: 768px)').matches,
+  popperInstance: null,
 
-  initializePopper() {
-    Popper.createPopper(document.querySelector('.lucide-phone'), document.querySelector('.lucide-phone-tooltip'), {
+  show(tooltip) {
+    tooltip.classList.remove('hidden');
+
+    this.popperInstance = createPopper(this.$el, tooltip, {
       placement: 'left',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 8],
+          },
+        },
+        {
+          name: 'arrow',
+          options: {
+            element: tooltip.querySelector('.arrow'),
+          },
+        },
+      ],
     });
+
+    this.popperInstance.update();
+  },
+
+  hide(tooltip) {
+    tooltip.classList.add('hidden');
+
+    this.popperInstance.setOptions((options) => ({
+      ...options,
+      modifiers: [...options.modifiers, {name: 'eventListeners', enabled: false}],
+    }));
   },
 
   init() {
@@ -230,7 +258,7 @@ Alpine.data('data', () => ({
     this.$nextTick(() => {
       createEditor({
         selector: '#editor-container',
-        html: data.indexContent,
+        html: indexContent,
         mode: 'simple',
         config: {
           readOnly: true,
@@ -370,9 +398,6 @@ Alpine.data('data', () => ({
           imageUrl: thumbnailUrl,
         };
       });
-
-      // swiper 主要展示工程案例的数据，默认加载第1个行业的数据
-      this.getCases(this.industries[0]?.id);
     });
     //
     getCategories((data) => {
@@ -395,8 +420,19 @@ Alpine.data('data', () => ({
     });
 
     this.getProducts();
-    this.getAbout();
-    this.getNews();
+
+    // 异步加载
+    observeOnce(document.querySelector('.swiper-slide-industry'), () => {
+      // 在这里执行你的逻辑，比如加载图片、动画等
+      // swiper 主要展示工程案例的数据，默认加载第1个行业的数据
+      this.getCases(this.industries[0]?.id);
+    });
+    observeOnce(document.querySelector('.swiper-slide-cases'), () => {
+      this.getAbout();
+    });
+    observeOnce(document.querySelector('.swiper-slide-about'), () => {
+      this.getNews();
+    });
   },
 }));
 

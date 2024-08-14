@@ -20,4 +20,19 @@ function getThumbnailUrl(path) {
   return `${http}files/thumbnail_${name.split('.')[0]}.webp`;
 }
 
-export {buildQueryString, getThumbnailUrl};
+function observeOnce(element, callback, options) {
+  const observer = new IntersectionObserver((entries, observerInstance) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        callback(entry);
+
+        //
+        observerInstance.unobserve(element);
+      }
+    });
+  }, options);
+
+  observer.observe(element);
+}
+
+export {buildQueryString, getThumbnailUrl, observeOnce};
