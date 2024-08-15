@@ -1,7 +1,7 @@
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
 import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl} from './untils';
+import {getThumbnailUrl} from './utils';
 import './style.css';
 
 Alpine.plugin(collapse);

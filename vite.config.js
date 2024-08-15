@@ -36,8 +36,8 @@ export default defineConfig(({mode}) => {
     server: {
       proxy: {
         '/api': {
-          // target: 'http://localhost:3000', // 代理目标地址
-          target: 'https://www.powerail.com.cn', // 代理目标地址
+          target: 'http://localhost:3000', // 代理目标地址
+          // target: 'https://www.powerail.com.cn', // 代理目标地址
           changeOrigin: true, // 是否改变请求头中的 Origin 为目标 URL，默认为 true
           // secure: false, // 如果代理目标是 HTTPS，且证书自签名，需要设置为 false，默认为 true
         },

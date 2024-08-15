@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
 import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl, buildQueryString} from './untils';
+import {getThumbnailUrl, buildQueryString} from './utils';
 import './style.css';
 
 window.Alpine = Alpine;

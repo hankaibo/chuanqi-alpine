@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl, buildQueryString, observeOnce} from './untils';
+import {getThumbnailUrl, buildQueryString, observeOnce} from './utils';
 
 window.Alpine = Alpine;
 
@@ -310,7 +310,6 @@ Alpine.data('data', () => ({
       console.error(e);
     } finally {
       this.form = {
-        id: undefined,
         name: undefined,
         phone: undefined,
         email: undefined,

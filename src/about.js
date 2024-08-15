@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs';
 import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl} from './untils';
+import {getThumbnailUrl} from './utils';
 import './style.css';
 
 import {createEditor} from '@wangeditor/editor';
