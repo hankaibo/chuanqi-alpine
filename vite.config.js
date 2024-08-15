@@ -7,15 +7,17 @@ export default defineConfig(({mode}) => {
 
   return {
     root: resolve(__dirname, 'src'),
+    base: env.VITE_BASE_PATH || '/',
     publicDir: resolve(__dirname, './public'),
-    base: env.VITE_BASE_PATH || '/a/',
     build: {
       outDir: resolve(__dirname, 'dist'),
       chunkSizeWarningLimit: 1024,
       rollupOptions: {
         input: {
           header: resolve(__dirname, 'src/header.html'),
+          'header-mobile': resolve(__dirname, 'src/header-mobile.html'),
           footer: resolve(__dirname, 'src/footer.html'),
+          'footer-mobile': resolve(__dirname, 'src/footer-mobile.html'),
           popover: resolve(__dirname, 'src/popover.html'),
           about: resolve(__dirname, 'src/about.html'),
           jobs: resolve(__dirname, 'src/jobs.html'),

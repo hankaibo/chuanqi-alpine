@@ -61,8 +61,9 @@ Alpine.data('headerData', () => ({
       this.grandsonCategory = newValue[0]?.children || [];
     });
 
+    const localHtml = this.isMobile ? './header-mobile.html' : './header.html';
     this.$nextTick(() => {
-      fetch('./header.html')
+      fetch(localHtml)
         .then((response) => response.text())
         .then((data) => {
           this.headerHtml = data;
@@ -81,8 +82,9 @@ Alpine.data('footerData', () => ({
   },
 
   init() {
+    const localHtml = this.isMobile ? './footer-mobile.html' : './footer.html';
     this.$nextTick(() => {
-      fetch('./footer.html')
+      fetch(localHtml)
         .then((response) => response.text())
         .then((data) => {
           this.footerHtml = data;

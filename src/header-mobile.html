@@ -1,0 +1,125 @@
+<header
+  class="sticky top-0 left-0 right-0 z-[9999]"
+  x-data="{
+      open: false,
+      openIndustry: false,
+      openCategory: false,
+      menuList: [
+        { id: '4', name: '工程案例', href: './cases.html' },
+        { id: '5', name: '资讯中心', href: './news.html' },
+        { id: '6', name: '诚邀才俊', href: './jobs.html' },
+        { id: '7', name: '关于我们', href: './about.html' },
+      ],
+    }"
+>
+  <div class="flex justify-between items-center h-12 px-5 py-2 bg-white">
+    <img src="./images/logo.webp" class="w-24" />
+
+    <div class="flex justify-center items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-search stroke-[#bebfc2]"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <button type="button" class="flex items-center justify-center w-8 h-8 text-slate-500 hover:text-slate-600" @click="open = !open">
+        <span class="sr-only">导航</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-ellipsis-vertical"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="12" cy="5" r="1" />
+          <circle cx="12" cy="19" r="1" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div :class="!open && 'hidden'" @click="open=false" class="fixed inset-0 top-12 bg-black/20 backdrop-blur-sm" aria-hidden="true"></div>
+
+  <div :class="!open && 'hidden'" class="fixed top-12 left-0 right-0 bg-white">
+    <ul class="px-5">
+      <li class="border-t border-t-slate-200 cursor-pointer">
+        <a class="flex justify-center items-center h-14 text-slate-500 leading-[56px]" href="./index.html" class="py-6" target="_blank">首页</a>
+      </li>
+      <li class="border-t border-t-slate-200 cursor-pointer">
+        <div class="text-slate-500 leading-[56px]" @click="openIndustry=!openIndustry">
+          <div class="h-14 text-center ml-4">
+            <span>行业应用</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-down inline-block"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </div>
+          <ul x-show="openIndustry">
+            <template x-for="it in parentIndustries" :key="it.id">
+              <li>
+                <span class="flex justify-center items-center h-10 text-slate-500 leading-10" @click.stop="handleIndustry(it.id)" x-text="it.name"></span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </li>
+      <li class="border-t border-t-slate-200 cursor-pointer">
+        <div class="text-slate-500 leading-[56px]" @click="openCategory=!openCategory">
+          <div class="h-14 text-center ml-4">
+            <span>产品中心</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-down inline-block"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </div>
+          <ul x-show="openCategory">
+            <template x-for="it in parentCategories" :key="it.id">
+              <li>
+                <span class="flex justify-center items-center h-10 text-slate-500 leading-10" @click.stop="handleProductCategory(it.id)" x-text="it.name"></span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </li>
+      <template x-for="(item, index) in menuList" :key="item.id">
+        <li class="border-t border-t-slate-200 cursor-pointer">
+          <a class="flex justify-center items-center h-14 text-slate-500 leading-[56px]" :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
+        </li>
+      </template>
+    </ul>
+  </div>
+</header>
