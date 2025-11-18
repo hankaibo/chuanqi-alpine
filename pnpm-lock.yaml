@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 importers:
+
   .:
     dependencies:
       '@alpinejs/collapse':
@@ -49,6 +50,7 @@ importers:
         version: 5.3.1
 
 packages:
+
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
@@ -1168,6 +1170,7 @@ packages:
     hasBin: true
 
 snapshots:
+
   '@alloc/quick-lru@5.2.0': {}
 
   '@alpinejs/collapse@3.14.1': {}
