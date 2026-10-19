@@ -3,8 +3,10 @@ import collapse from '@alpinejs/collapse';
 import './style.css';
 import {headerData} from './components/header';
 import {footerData} from './components/footer';
+import {registerSiteStore} from './site/store';
 
 Alpine.plugin(collapse);
+registerSiteStore(Alpine);
 Alpine.data('headerData', headerData);
 Alpine.data('footerData', footerData);
 

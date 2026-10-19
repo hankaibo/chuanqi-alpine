@@ -1,5 +1,3 @@
-import {getIndustries, getCategories} from '../site/api';
-
 /**
  * 页头组件。
  * @param {string} page 当前页面标识,用于导航高亮(isLink)。
@@ -54,14 +52,16 @@ function headerData(page = '', productCategoryMode = 'navigate') {
     },
 
     async init() {
-      const [industries, categories] = await Promise.all([getIndustries(), getCategories()]);
+      this.isMobile = this.$store.site.isMobile;
+
+      await this.$store.site.load();
 
       // 导航栏使用数据
-      this.parentIndustries = industries;
+      this.parentIndustries = this.$store.site.industries;
       this.childIndustry = this.parentIndustries[0]?.children || [];
       this.grandsonIndustry = this.childIndustry[0]?.children || [];
 
-      this.parentCategories = categories;
+      this.parentCategories = this.$store.site.categories;
       this.childCategory = this.parentCategories[0]?.children || [];
       this.grandsonCategory = this.childCategory[0]?.children || [];
 
