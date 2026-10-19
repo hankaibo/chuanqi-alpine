@@ -1,4 +1,7 @@
-<header class="hidden md:block fixed top-0 w-full h-18 z-[1000] container-primary" :class="(isLink==='index' && swiperIndex) ? 'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'">
+<header
+  class="hidden md:block fixed top-0 w-full h-18 z-[1000] container-primary"
+  :class="(isLink==='index' && $store.site.swiperIndex) ? 'bg-white text-black shadow' : 'text-white bg-[rgba(0,0,0,0.6)]'"
+>
   <div class="flex justify-between relative">
     <div class="flex items-center">
       <a href="/">

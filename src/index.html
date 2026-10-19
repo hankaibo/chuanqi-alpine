@@ -229,29 +229,7 @@
                 <span class="text-xs lg:text-lg text-[#d8d8d8] pt-1">Application case</span>
               </h2>
 
-              <div
-                x-data="{
-                      tabSelected: 1,
-                      tabId: $id('tabs'),
-                      tabButtonClicked(tabButton, tab){
-                          this.tabSelected = tabButton.id.replace(this.tabId + '-', '');
-                          this.tabRepositionMarker(tabButton);
-                          this.getCases(tab.id);
-                      },
-                      tabRepositionMarker(tabButton){
-                          this.$refs.tabMarker.style.width=tabButton.offsetWidth + 'px';
-                          this.$refs.tabMarker.style.left=tabButton.offsetLeft + 'px';
-                      },
-                      tabContentActive(tabContent){
-                          return this.tabSelected == tabContent.id.replace(this.tabId + '-content-', '');
-                      },
-                      tabButtonActive(tabContent){
-                          const tabId = tabContent.id.split('-').slice(-1);
-                          return this.tabSelected == tabId;
-                      }
-                    }"
-                class="relative w-full"
-              >
+              <div x-data="tabs" class="relative w-full">
                 <div x-ref="tabButtons" class="relative px-20">
                   <div class="relative flex items-center text-gray-500 bg-white select-none py-2">
                     <template x-for="tab in industries" :key="tab.id">

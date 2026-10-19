@@ -185,7 +185,7 @@ Alpine.data('data', () => ({
       },
       on: {
         slideChange: () => {
-          this.$dispatch('set-swiper-index', outerSwiper.realIndex);
+          this.$store.site.swiperIndex = outerSwiper.realIndex;
         },
       },
     });
