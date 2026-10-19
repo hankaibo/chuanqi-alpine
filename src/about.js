@@ -3,7 +3,7 @@ import {getAbout} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 import Swiper from 'swiper';
-import {Autoplay, Pagination, Navigation, Mousewheel} from 'swiper/modules';
+import {Pagination, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
