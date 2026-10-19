@@ -80,4 +80,48 @@ const footerCompanies = [
   },
 ];
 
-export {menuList, mobileMenuList, popoverItems, footerProducts, footerSolutions, footerCases, footerNews, footerAbouts, footerCompanies};
+// 首页「联系我们」各办事处
+const contactCompanies = [
+  {
+    name: '北京总部',
+    mobile: '13810060503',
+    fax: '010-67874677',
+    email: 'sales@powerail.com.cn',
+    address: '北京市经济技术开发区北工大软件园26-2号楼三层',
+    addressEN: '3 / F, Building 26-2, BeIGU Software Park, Beijing Economic and Technological Development Zone',
+  },
+  {
+    name: '南京办事处',
+    mobile: '18915956527',
+    fax: '010-67874677',
+    email: 'caic@powerail.com.cn',
+    address: '南京市江宁区智江路300号麒麟科创园',
+    addressEN: 'Qilin Science Innovation Park, 300 Zhijiang Road, Jiangning District, Nanjing',
+  },
+  {
+    name: '株洲办事处',
+    mobile: '13810062921',
+    fax: '010-67874677',
+    email: 'tangz@powerail.com.cn',
+    address: '株洲市石峰区联城路79号轨道交通创新创业园',
+    addressEN: 'Rail transit innovation and entrepreneurship Park, No.79 Liancheng Road, Shifeng District, Zhuzhou City',
+  },
+  {
+    name: '西安办事处',
+    mobile: '13220186200',
+    fax: '010-67874677',
+    email: 'yangc@powerail.com.cn',
+    address: '西安市高新区锦业路69号',
+    addressEN: "69 Jinye Road, High tech Zone, Xi'an City",
+  },
+  {
+    name: '上海总部',
+    mobile: '13916848403',
+    fax: '010-67874677',
+    email: 'daidm@powerail.com.cn',
+    address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
+    addressEN: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai',
+  },
+];
+
+export {menuList, mobileMenuList, popoverItems, footerProducts, footerSolutions, footerCases, footerNews, footerAbouts, footerCompanies, contactCompanies};

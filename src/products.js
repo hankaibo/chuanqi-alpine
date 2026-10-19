@@ -1,5 +1,4 @@
 import Alpine from './bootstrap';
-import {getCategories} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 Alpine.data('data', () => ({
@@ -36,7 +35,8 @@ Alpine.data('data', () => ({
   },
 
   async getCategory(pId, index) {
-    const data = await getCategories();
+    await this.$store.site.load();
+    const data = this.$store.site.categories;
     // 获取所有行业数据
 
     let category = null;

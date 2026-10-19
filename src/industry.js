@@ -1,5 +1,4 @@
 import Alpine from './bootstrap';
-import {getIndustries} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 Alpine.data('data', () => ({
@@ -36,7 +35,8 @@ Alpine.data('data', () => ({
   },
 
   async getIndustry(pId, index) {
-    const data = await getIndustries();
+    await this.$store.site.load();
+    const data = this.$store.site.industries;
     let industry = null;
     if (pId) {
       industry = data.find((item) => item.id === pId);

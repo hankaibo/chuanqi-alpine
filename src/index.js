@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import * as api from './site/api';
+import {contactCompanies} from './site/config';
 import {getThumbnailUrl, observeOnce} from './utils';
 import {createReadOnlyEditor} from './read-only-editor';
 
@@ -23,6 +24,7 @@ Alpine.data('data', () => ({
   news: [], // 新闻资讯数据
   newsFirst: {}, // 第1条新闻资讯
   form: {}, // 留言信息
+  contactCompanies, // 联系我们各办事处
 
   /**
    * 获取行业数据
@@ -234,7 +236,8 @@ Alpine.data('data', () => ({
       });
     }
 
-    const industries = await api.getIndustries();
+    await this.$store.site.load();
+    const industries = this.$store.site.industries;
     // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
     this.industries = industries.map((item) => {
       if (!item.indexFile) {
@@ -247,7 +250,7 @@ Alpine.data('data', () => ({
       };
     });
 
-    const categories = await api.getCategories();
+    const categories = this.$store.site.categories;
     this.categories = categories.map((item) => {
       if (!item.indexFile) {
         return item;

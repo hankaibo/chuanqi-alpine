@@ -1,5 +1,5 @@
 import Alpine from './bootstrap';
-import {getIndustries, getCases as fetchCases} from './site/api';
+import {getCases as fetchCases} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 Alpine.data('data', () => ({
@@ -48,7 +48,8 @@ Alpine.data('data', () => ({
   },
 
   async init() {
-    const data = await getIndustries();
+    await this.$store.site.load();
+    const data = this.$store.site.industries;
     this.tabs = data;
     if (Array.isArray(data) && data.length) {
       this.getCases(data[0].id);

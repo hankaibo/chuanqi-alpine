@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+  display: none !important;
+}
+
 @layer components {
   .container-primary {
     @apply px-4 sm:px-8 lg:px-16 xl:px-32 2xl:px-64;
