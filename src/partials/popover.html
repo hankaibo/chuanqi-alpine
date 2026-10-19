@@ -17,21 +17,8 @@
   </svg>
 </span>
 <div x-ref="phoneRef" class="tooltip hidden bg-white min-w-36 rounded border-[#ebeef5] p-3 text-[#606266] text-sm shadow break-all">
-  <ul
-    class="py-1 px-2 space-y-5"
-    x-transition
-    x-data="{
-        items: [
-          {title:'客服电话',content:'010-67874677'},
-          {title:'北京总部',content:'张经理：13810060503'},
-          {title:'株洲办事处',content:'唐经理：13810062921'},
-          {title:'南京办事处',content:'蔡经理：18915956527'},
-          {title:'西安办事处',content:'杨经理：13220186200'},
-          {title:'上海总部',content:'戴经理：13916848403'},
-        ],
-      }"
-  >
-    <template x-for="item in items">
+  <ul class="py-1 px-2 space-y-5" x-transition>
+    <template x-for="item in popoverItems">
       <li>
         <span class="block pb-1.5 text-sm text-[#333333]" x-text="item.title"></span>
         <span class="text-xs text-primary whitespace-nowrap" x-text="item.content"></span>

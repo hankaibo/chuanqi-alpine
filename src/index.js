@@ -1,5 +1,4 @@
 import {nanoid} from 'nanoid';
-import {createPopper} from '@popperjs/core';
 import Alpine from './bootstrap';
 
 import Swiper from 'swiper';
@@ -11,44 +10,6 @@ import 'swiper/css/navigation';
 import * as api from './site/api';
 import {getThumbnailUrl, observeOnce} from './utils';
 import {createReadOnlyEditor} from './read-only-editor';
-
-Alpine.data('popoverData', () => ({
-  isMobile: window.matchMedia('(max-width: 768px)').matches,
-  popperInstance: null,
-
-  show(tooltip) {
-    tooltip.classList.remove('hidden');
-
-    this.popperInstance = createPopper(this.$el, tooltip, {
-      placement: 'left',
-      modifiers: [
-        {
-          name: 'offset',
-          options: {
-            offset: [0, 8],
-          },
-        },
-        {
-          name: 'arrow',
-          options: {
-            element: tooltip.querySelector('.arrow'),
-          },
-        },
-      ],
-    });
-
-    this.popperInstance.update();
-  },
-
-  hide(tooltip) {
-    tooltip.classList.add('hidden');
-
-    this.popperInstance.setOptions((options) => ({
-      ...options,
-      modifiers: [...options.modifiers, {name: 'eventListeners', enabled: false}],
-    }));
-  },
-}));
 
 Alpine.data('data', () => ({
   isMobile: window.matchMedia('(max-width: 768px)').matches,

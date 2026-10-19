@@ -1,52 +1,32 @@
 <footer class="hidden md:block p-16 pb-5 bg-[#171c2f] lg:px-16 xl:px-32 2xl:px-64 divide-y divide-[#353948]">
   <div class="pb-5 flex justify-between">
-    <ul
-      x-data="{
-          products:['DEWE产品系列', 'CPSS定制化电源系统', '功率分析仪及电流信号采集仪', '电力仿真系统', '检测装备及集成系统']
-        }"
-    >
+    <ul>
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">产品中心</li>
-      <template x-for="product in products">
+      <template x-for="product in footerProducts">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="product"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
-          solutions:['新能源检测', '轨道交通', '传统电力系统', '其他能源测试']
-        }"
-    >
+    <ul>
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">解决方案</li>
-      <template x-for="solution in solutions">
+      <template x-for="solution in footerSolutions">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="solution"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
-          cases:['新能源应用', '轨道交通', '电力系统应用']
-        }"
-    >
+    <ul>
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">案例展示</li>
-      <template x-for="c in cases">
+      <template x-for="c in footerCases">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="c"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
-          news:['公司新闻', '行业新闻']
-        }"
-    >
+    <ul>
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">新闻中心</li>
-      <template x-for="n in news">
+      <template x-for="n in footerNews">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="n"></li>
       </template>
     </ul>
-    <ul
-      x-data="{
-          abouts:['公司简介', '资质荣誉', '晋升空间', '组织架构']
-        }"
-    >
+    <ul>
       <li class="text-base font-medium text-[#d8d8d8] pb-2.5">关于我们</li>
-      <template x-for="about in abouts">
+      <template x-for="about in footerAbouts">
         <li class="text-sm font-normal text-[#888888] pb-2" x-text="about"></li>
       </template>
     </ul>
@@ -58,54 +38,8 @@
     </ul>
   </div>
 
-  <div
-    x-data="{
-        companies:[
-          {
-            title: '北京总部',
-            address: '北京市经济技术开发区北工大软件园26-2号楼三层',
-            phone: '13810060503',
-            tel: '010-67874677',
-            email: 'sales@powerail.com.cn',
-            addressEnglish: '3 / F, Building 26-2, BeIGU Software Park, Beijing Economic and Technological Development Zone'
-          },
-          {
-            title: '南京办事处',
-            address: '南京市鼓楼区软件园路2号',
-            phone: '13810060503',
-            tel: '010-67874677',
-            email: 'sales@powerail.com.cn',
-            addressEnglish: '2nd Floor, No. 2, Software Park Road, Xihu District, Nanjing, Jiangsu Province, China'
-          },
-          {
-            title: '杭州办事处',
-            address: '株洲市石峰区联城路79号轨道交通创新创业园',
-            phone: '13810060503',
-            tel: '010-67874677',
-            email: 'tangz@powerail.com.cn',
-            addressEnglish: 'Rail transit innovation and entrepreneurship Park, No.79 Liancheng Road, Shifeng District, Zhuzhou City'
-          },
-          {
-            title:'西安办事处',
-            address:'西安市高新区锦业路69号',
-            phone: '13220186200',
-            tel: '010-67874677',
-            email: 'yangc@powerail.com.cn',
-            addressEnglish: '69 Jinye Road, High tech Zone, Xi\'an City'
-          },
-          {
-            title:'上海总部',
-            address: '上海市虹口区中山北一路1200号柏航德必易园3号楼',
-            phone: '13916848403',
-            tel: '010-67874677',
-            email: 'daidm@powerail.com.cn',
-            addressEnglish: 'Building 3, Baihang Debi Yiyuan, No. 1200 Zhongshan North 1st Road, Hongkou District, Shanghai'
-          }
-        ]
-      }"
-    class="py-5 columns-3 xl:columns-5 gap-2 lg:gap-4 divide-x divide-[#353948]"
-  >
-    <template x-for="(contact,index) in companies" :key="index">
+  <div class="py-5 columns-3 xl:columns-5 gap-2 lg:gap-4 divide-x divide-[#353948]">
+    <template x-for="(contact,index) in footerCompanies" :key="index">
       <ul class="flex-shrink-0 flex-1 space-y-2 break-inside-avoid mb-4" :class="index===0?'border-none':'pl-4'">
         <li class="text-sm font-medium text-[#d8d8d8] pb-2.5" x-text="contact.title"></li>
         <li class="flex items-center gap-2 text-[#999999]">

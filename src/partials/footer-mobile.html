@@ -1,18 +1,4 @@
-<footer
-  x-data="{
-      open: false,
-      menuList: [
-        { id: '1', name: '首页', path: '/index' },
-        { id: '2', name: '行业应用', href: '/indutry' },
-        { id: '3', name: '产品中心', href: '/product' },
-        { id: '4', name: '工程案例', href: './cases.html' },
-        { id: '5', name: '资讯中心', href: './news.html' },
-        { id: '6', name: '诚邀才俊', href: './jobs.html' },
-        { id: '7', name: '关于我们', href: './about.html' },
-      ],
-    }"
-  class="md:hidden bg-[#171C2F] px-4 pt-12 sm:px-8"
->
+<footer class="md:hidden bg-[#171C2F] px-4 pt-12 sm:px-8">
   <div class="flex justify-between items-center">
     <img src="./images/logo.webp" class="w-24" />
     <span class="p-1 cursor-pointer" @click="handleTop">
@@ -36,7 +22,7 @@
   </div>
 
   <ul class="mt-3">
-    <template x-for="item in menuList" :key="item.id">
+    <template x-for="item in mobileMenuList" :key="item.id">
       <li class="border-b border-[#353948] py-3 text-white cursor-pointer" @click="handleLink(item.path)" x-text="item.name"></li>
     </template>
   </ul>

@@ -6,39 +6,7 @@
       </a>
     </div>
 
-    <nav
-      x-data="{
-          pIndex:0,
-          cIndex:0,
-          pId:'',
-          navigationMenuOpen: false,
-          navigationMenu: '',
-          navigationMenuCloseDelay: 200,
-          navigationMenuCloseTimeout: null,
-          navigationMenuLeave() {
-              let that = this;
-              this.navigationMenuCloseTimeout = setTimeout(() => {
-                  that.navigationMenuClose();
-              }, this.navigationMenuCloseDelay);
-          },
-          navigationMenuReposition(navElement) {
-              this.navigationMenuClearCloseTimeout();
-          },
-          navigationMenuClearCloseTimeout(){
-              clearTimeout(this.navigationMenuCloseTimeout);
-          },
-          navigationMenuClose(){
-              this.navigationMenuOpen = false;
-              this.navigationMenu = '';
-          },
-          menus: [
-            {id:'cases', name: '工程案例', href:'./cases.html'},
-            {id:'news', name: '资讯中心', href:'./news.html'},
-            {id:'jobs', name: '诚邀才俊', href:'./jobs.html'},
-            {id:'about', name: '关于我们', href:'./about.html'},
-          ]
-        }"
-    >
+    <nav x-data="navMenu">
       <div class="relative">
         <ul class="flex justify-center space-x-4 group">
           <li class="nav-item--primary" :class="isLink==='index' ? 'text-primary after:w-full': ''">
@@ -88,7 +56,7 @@
               </svg>
             </button>
           </li>
-          <template x-for="item in menus">
+          <template x-for="item in menuList">
             <li class="nav-item--primary" :class="isLink===item.id ? 'text-primary after:w-full': ''">
               <a :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
             </li>

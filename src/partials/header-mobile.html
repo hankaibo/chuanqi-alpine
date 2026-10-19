@@ -1,17 +1,4 @@
-<header
-  class="md:hidden sticky top-0 left-0 right-0 z-[9999]"
-  x-data="{
-      open: false,
-      openIndustry: false,
-      openCategory: false,
-      menuList: [
-        { id: '4', name: '工程案例', href: './cases.html' },
-        { id: '5', name: '资讯中心', href: './news.html' },
-        { id: '6', name: '诚邀才俊', href: './jobs.html' },
-        { id: '7', name: '关于我们', href: './about.html' },
-      ],
-    }"
->
+<header class="md:hidden sticky top-0 left-0 right-0 z-[9999]" x-data="mobileNav">
   <div class="flex justify-between items-center h-12 px-5 py-2 bg-white">
     <img src="./images/logo.webp" class="w-24" />
 
@@ -115,7 +102,7 @@
           </ul>
         </div>
       </li>
-      <template x-for="(item, index) in menuList" :key="item.id">
+      <template x-for="(item, index) in mobileMenuList" :key="item.id">
         <li class="border-t border-t-slate-200 cursor-pointer">
           <a class="flex justify-center items-center h-14 text-slate-500 leading-[56px]" :href="item.href" class="py-6" target="_blank" x-text="item.name"></a>
         </li>
