@@ -8,8 +8,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl, buildQueryString, observeOnce} from './utils';
+import * as api from './site/api';
+import {getThumbnailUrl, observeOnce} from './utils';
 import {createReadOnlyEditor} from './read-only-editor';
 
 Alpine.data('popoverData', () => ({
@@ -89,8 +89,7 @@ Alpine.data('data', () => ({
    * 获取产品数据，这些产品是后台配置专门在首页轮播显示的。
    */
   async getProducts() {
-    const res = await fetch('/api/v1/products/index');
-    const data = await res.json();
+    const data = await api.getProducts();
     this.products = data?.map((item) => ({
       ...item,
       // 使用缩略图，加快加载
@@ -133,16 +132,7 @@ Alpine.data('data', () => ({
     //   return this.industryCase[id];
     // }
     // 获取所有行业数据
-    const params = {
-      filters: {
-        industryId: id,
-      },
-    };
-
-    const queryString = buildQueryString(params);
-
-    const res = await fetch(`/api/v1/cases/index?${queryString}`);
-    const data = await res.json();
+    const data = await api.getCases(id);
     this.industryCase[id] = data.data?.map((item) => {
       return {
         ...item,
@@ -169,8 +159,7 @@ Alpine.data('data', () => ({
    * 获取关于我们数据。
    */
   async getAbout() {
-    const res = await fetch('/api/v1/about/1');
-    const data = await res.json();
+    const data = await api.getAbout();
     const {indexFile, indexContent} = data;
     let thumbnailUrl;
     if (Array.isArray(indexFile) && indexFile.length) {
@@ -189,8 +178,7 @@ Alpine.data('data', () => ({
    * 获取资讯中心数据。
    */
   async getNews() {
-    const res = await fetch(`/api/v1/news?currentPage=1&pageSize=4`);
-    const data = await res.json();
+    const data = await api.getNews(1, 4);
     this.news = data?.data.map((item) => {
       const {cover} = item;
       let thumbnailUrl;
@@ -216,13 +204,7 @@ Alpine.data('data', () => ({
     });
 
     try {
-      const res = await fetch('/api/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.form),
-      });
+      const res = await api.submitMessage(this.form);
     } catch (e) {
       console.error(e);
     } finally {
@@ -296,44 +278,42 @@ Alpine.data('data', () => ({
   },
 
   //
-  init() {
+  async init() {
     if (!this.isMobile) {
       this.$nextTick(() => {
         this.handleInitSwiper();
       });
     }
 
-    getIndusties((data) => {
-      // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
-      this.industries = data.map((item) => {
-        if (!item.indexFile) {
-          return item;
-        }
-        const thumbnailUrl = getThumbnailUrl(item.indexFile.path);
-        return {
-          ...item,
-          imageUrl: thumbnailUrl,
-        };
-      });
+    const industries = await api.getIndustries();
+    // swiper 轮播图使用数据，主要展示行业应用下的解决方案数据
+    this.industries = industries.map((item) => {
+      if (!item.indexFile) {
+        return item;
+      }
+      const thumbnailUrl = getThumbnailUrl(item.indexFile.path);
+      return {
+        ...item,
+        imageUrl: thumbnailUrl,
+      };
     });
-    //
-    getCategories((data) => {
-      this.categories = data.map((item) => {
-        if (!item.indexFile) {
-          return item;
-        }
-        const thumbnailUrl = getThumbnailUrl(item.indexFile.path);
-        return {
-          ...item,
-          imageUrl: thumbnailUrl,
-        };
-      });
 
-      this.$nextTick(() => {
-        setTimeout(() => {
-          this.outerSwiperRef?.update();
-        }, 1000);
-      });
+    const categories = await api.getCategories();
+    this.categories = categories.map((item) => {
+      if (!item.indexFile) {
+        return item;
+      }
+      const thumbnailUrl = getThumbnailUrl(item.indexFile.path);
+      return {
+        ...item,
+        imageUrl: thumbnailUrl,
+      };
+    });
+
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.outerSwiperRef?.update();
+      }, 1000);
     });
 
     this.getProducts();

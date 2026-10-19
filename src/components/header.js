@@ -1,4 +1,4 @@
-import {getIndusties, getCategories} from '../header';
+import {getIndustries, getCategories} from '../site/api';
 
 /**
  * 页头组件。
@@ -53,22 +53,20 @@ function headerData(page = '', productCategoryMode = 'navigate') {
       window.open(`product-detail.html?id=${productId}`, '_blank', 'noopener,noreferrer');
     },
 
-    init() {
-      getIndusties((data) => {
-        // 导航栏使用数据
-        this.parentIndustries = data;
-        this.childIndustry = this.parentIndustries[0]?.children || [];
-        this.grandsonIndustry = this.childIndustry[0]?.children || [];
-      });
+    async init() {
+      const [industries, categories] = await Promise.all([getIndustries(), getCategories()]);
+
+      // 导航栏使用数据
+      this.parentIndustries = industries;
+      this.childIndustry = this.parentIndustries[0]?.children || [];
+      this.grandsonIndustry = this.childIndustry[0]?.children || [];
+
+      this.parentCategories = categories;
+      this.childCategory = this.parentCategories[0]?.children || [];
+      this.grandsonCategory = this.childCategory[0]?.children || [];
+
       this.$watch('childIndustry', (newValue) => {
         this.grandsonIndustry = newValue[0]?.children || [];
-      });
-
-      getCategories((data) => {
-        // 导航栏
-        this.parentCategories = data;
-        this.childCategory = this.parentCategories[0]?.children || [];
-        this.grandsonCategory = this.childCategory[0]?.children || [];
       });
       this.$watch('childCategory', (newValue) => {
         this.grandsonCategory = newValue[0]?.children || [];

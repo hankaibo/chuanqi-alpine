@@ -1,5 +1,4 @@
 import Alpine from './bootstrap';
-import {getIndusties, getCategories} from './header';
 import {getThumbnailUrl} from './utils';
 
 import {createReadOnlyEditor} from './read-only-editor';

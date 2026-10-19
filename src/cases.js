@@ -1,6 +1,6 @@
 import Alpine from './bootstrap';
-import {getIndusties, getCategories} from './header';
-import {getThumbnailUrl, buildQueryString} from './utils';
+import {getIndustries, getCases as fetchCases} from './site/api';
+import {getThumbnailUrl} from './utils';
 
 Alpine.data('data', () => ({
   // 页面数据
@@ -32,16 +32,7 @@ Alpine.data('data', () => ({
       return this.tabContents[id];
     }
 
-    const params = {
-      filters: {
-        industryId: id,
-      },
-    };
-
-    const queryString = buildQueryString(params);
-    // 获取所有行业数据
-    const res = await fetch(`/api/v1/cases/index?${queryString}`);
-    const data = await res.json();
+    const data = await fetchCases(id);
     this.tabContents[id] = data.data?.map((item) => {
       return {
         ...item,
@@ -56,13 +47,12 @@ Alpine.data('data', () => ({
     window.open(`cases-detail.html?id=${id}`, '_blank', 'noopener,noreferrer');
   },
 
-  init() {
-    getIndusties((data) => {
-      this.tabs = data;
-      if (Array.isArray(data) && data.length) {
-        this.getCases(data[0].id);
-      }
-    });
+  async init() {
+    const data = await getIndustries();
+    this.tabs = data;
+    if (Array.isArray(data) && data.length) {
+      this.getCases(data[0].id);
+    }
   },
 }));
 

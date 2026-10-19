@@ -1,5 +1,4 @@
 import Alpine from './bootstrap';
-import {getIndusties, getCategories} from './header';
 
 Alpine.data('data', () => ({
   jobs: [],

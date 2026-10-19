@@ -1,5 +1,5 @@
 import Alpine from './bootstrap';
-import {getIndusties, getCategories} from './header';
+import {getCategories} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 Alpine.data('data', () => ({
@@ -36,25 +36,24 @@ Alpine.data('data', () => ({
   },
 
   async getCategory(pId, index) {
-    getCategories((data) => {
-      // 获取所有行业数据
+    const data = await getCategories();
+    // 获取所有行业数据
 
-      let category = null;
-      if (pId) {
-        category = data.find((item) => item.id === pId);
-      } else {
-        category = data[0];
-      }
+    let category = null;
+    if (pId) {
+      category = data.find((item) => item.id === pId);
+    } else {
+      category = data[0];
+    }
 
-      this.tabs = category?.children || [];
+    this.tabs = category?.children || [];
 
-      if (index && index !== 'undefined') {
-        this.tabContents = this.tabs[index]?.children;
-      } else {
-        this.tabSelected = index;
-        this.tabContents = this.tabs[0]?.children;
-      }
-    });
+    if (index && index !== 'undefined') {
+      this.tabContents = this.tabs[index]?.children;
+    } else {
+      this.tabSelected = index;
+      this.tabContents = this.tabs[0]?.children;
+    }
   },
 
   handleDetail(item) {

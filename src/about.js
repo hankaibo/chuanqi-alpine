@@ -1,5 +1,5 @@
 import Alpine from './bootstrap';
-import {getIndusties, getCategories} from './header';
+import {getAbout} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 import Swiper from 'swiper';
@@ -67,8 +67,7 @@ Alpine.data('data', () => ({
   ],
 
   async getList() {
-    const res = await fetch('/api/v1/about/1');
-    const data = await res.json();
+    const data = await getAbout();
     this.aboutData = {
       ...data,
       files: data.files.map(({id, path}) => {

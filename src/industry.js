@@ -1,5 +1,5 @@
 import Alpine from './bootstrap';
-import {getIndusties, getCategories} from './header';
+import {getIndustries} from './site/api';
 import {getThumbnailUrl} from './utils';
 
 Alpine.data('data', () => ({
@@ -36,23 +36,22 @@ Alpine.data('data', () => ({
   },
 
   async getIndustry(pId, index) {
-    getIndusties((data) => {
-      let industry = null;
-      if (pId) {
-        industry = data.find((item) => item.id === pId);
-      } else {
-        industry = data[0];
-      }
+    const data = await getIndustries();
+    let industry = null;
+    if (pId) {
+      industry = data.find((item) => item.id === pId);
+    } else {
+      industry = data[0];
+    }
 
-      this.tabs = industry?.children || [];
+    this.tabs = industry?.children || [];
 
-      if (index && index !== 'undefined') {
-        this.tabContents = this.tabs[index]?.children;
-      } else {
-        this.tabSelected = index;
-        this.tabContents = this.tabs[0]?.children;
-      }
-    });
+    if (index && index !== 'undefined') {
+      this.tabContents = this.tabs[index]?.children;
+    } else {
+      this.tabSelected = index;
+      this.tabContents = this.tabs[0]?.children;
+    }
   },
 
   handleDetail(item) {
