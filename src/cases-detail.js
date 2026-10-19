@@ -2,8 +2,7 @@ import Alpine from 'alpinejs';
 import {getIndusties, getCategories} from './header';
 import './style.css';
 
-import {createEditor} from '@wangeditor/editor';
-window.createEditor = createEditor;
+import {createReadOnlyEditor} from './read-only-editor';
 
 window.Alpine = Alpine;
 
@@ -111,17 +110,10 @@ Alpine.data('data', () => ({
     this.views = views;
     this.summary = summary;
 
-    this.initEditor(content);
+    await this.initEditor(content);
   },
   initEditor(data) {
-    createEditor({
-      selector: '#editor-container',
-      html: data,
-      mode: 'simple',
-      config: {
-        readOnly: true,
-      },
-    });
+    return createReadOnlyEditor(data);
   },
 }));
 

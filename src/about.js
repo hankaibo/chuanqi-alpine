@@ -3,12 +3,12 @@ import {getIndusties, getCategories} from './header';
 import {getThumbnailUrl} from './utils';
 import './style.css';
 
-import {createEditor} from '@wangeditor/editor';
 import Swiper from 'swiper';
 import {Autoplay, Pagination, Navigation, Mousewheel} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import {createReadOnlyEditor} from './read-only-editor';
 
 window.Alpine = Alpine;
 
@@ -192,14 +192,7 @@ Alpine.data('data', () => ({
   },
 
   initEditor(data) {
-    createEditor({
-      selector: '#editor-container',
-      html: data,
-      mode: 'simple',
-      config: {
-        readOnly: true,
-      },
-    });
+    return createReadOnlyEditor(data);
   },
 
   initMap() {

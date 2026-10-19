@@ -1,35 +1,37 @@
-// vite.config.js
 import {resolve} from 'path';
+import {fileURLToPath} from 'node:url';
 import {defineConfig, loadEnv} from 'vite';
 
+const projectRoot = fileURLToPath(new URL('.', import.meta.url));
+
 export default defineConfig(({mode}) => {
-  const env = loadEnv(mode, process.cwd());
+  const env = loadEnv(mode, projectRoot);
 
   return {
-    root: resolve(__dirname, 'src'),
+    root: resolve(projectRoot, 'src'),
     base: env.VITE_BASE_PATH || '/',
-    publicDir: resolve(__dirname, './public'),
+    publicDir: resolve(projectRoot, 'public'),
     build: {
-      outDir: resolve(__dirname, 'dist'),
-      chunkSizeWarningLimit: 1024,
-      rollupOptions: {
+      outDir: resolve(projectRoot, 'dist'),
+      emptyOutDir: true,
+      rolldownOptions: {
         input: {
-          header: resolve(__dirname, 'src/header.html'),
-          'header-mobile': resolve(__dirname, 'src/header-mobile.html'),
-          footer: resolve(__dirname, 'src/footer.html'),
-          'footer-mobile': resolve(__dirname, 'src/footer-mobile.html'),
-          popover: resolve(__dirname, 'src/popover.html'),
-          about: resolve(__dirname, 'src/about.html'),
-          jobs: resolve(__dirname, 'src/jobs.html'),
-          news: resolve(__dirname, 'src/news.html'),
-          'news-detail': resolve(__dirname, 'src/news-detail.html'),
-          cases: resolve(__dirname, 'src/cases.html'),
-          'cases-detail': resolve(__dirname, 'src/cases-detail.html'),
-          products: resolve(__dirname, 'src/products.html'),
-          'product-detail': resolve(__dirname, 'src/product-detail.html'),
-          industry: resolve(__dirname, 'src/industry.html'),
-          'solution-detail': resolve(__dirname, 'src/solution-detail.html'),
-          index: resolve(__dirname, 'src/index.html'),
+          header: resolve(projectRoot, 'src/header.html'),
+          'header-mobile': resolve(projectRoot, 'src/header-mobile.html'),
+          footer: resolve(projectRoot, 'src/footer.html'),
+          'footer-mobile': resolve(projectRoot, 'src/footer-mobile.html'),
+          popover: resolve(projectRoot, 'src/popover.html'),
+          about: resolve(projectRoot, 'src/about.html'),
+          jobs: resolve(projectRoot, 'src/jobs.html'),
+          news: resolve(projectRoot, 'src/news.html'),
+          'news-detail': resolve(projectRoot, 'src/news-detail.html'),
+          cases: resolve(projectRoot, 'src/cases.html'),
+          'cases-detail': resolve(projectRoot, 'src/cases-detail.html'),
+          products: resolve(projectRoot, 'src/products.html'),
+          'product-detail': resolve(projectRoot, 'src/product-detail.html'),
+          industry: resolve(projectRoot, 'src/industry.html'),
+          'solution-detail': resolve(projectRoot, 'src/solution-detail.html'),
+          index: resolve(projectRoot, 'src/index.html'),
         },
       },
     },
@@ -37,9 +39,7 @@ export default defineConfig(({mode}) => {
       proxy: {
         '/api': {
           target: 'http://localhost:3000', // 代理目标地址
-          // target: 'https://www.powerail.com.cn', // 代理目标地址
           changeOrigin: true, // 是否改变请求头中的 Origin 为目标 URL，默认为 true
-          // secure: false, // 如果代理目标是 HTTPS，且证书自签名，需要设置为 false，默认为 true
         },
       },
     },

@@ -3,7 +3,6 @@ import {createPopper} from '@popperjs/core';
 import Alpine from 'alpinejs';
 import './style.css';
 
-import {createEditor} from '@wangeditor/editor';
 import Swiper from 'swiper';
 import {Autoplay, Pagination, Navigation, Mousewheel} from 'swiper/modules';
 import 'swiper/css';
@@ -12,6 +11,7 @@ import 'swiper/css/navigation';
 
 import {getIndusties, getCategories} from './header';
 import {getThumbnailUrl, buildQueryString, observeOnce} from './utils';
+import {createReadOnlyEditor} from './read-only-editor';
 
 window.Alpine = Alpine;
 
@@ -256,16 +256,7 @@ Alpine.data('data', () => ({
       imageUrl: thumbnailUrl,
     };
     // 创建富文本
-    this.$nextTick(() => {
-      createEditor({
-        selector: '#editor-container',
-        html: indexContent,
-        mode: 'simple',
-        config: {
-          readOnly: true,
-        },
-      });
-    });
+    this.$nextTick(() => createReadOnlyEditor(indexContent));
   },
 
   /**
