@@ -7,10 +7,8 @@
  */
 function headerData(page = '', productCategoryMode = 'navigate') {
   return {
-    headerHtml: '',
     // 导航栏数据
     isLink: page,
-    isMobile: window.matchMedia('(max-width: 768px)').matches,
     swiperIndex: 0, // 当前最外部 swiper 的索引，方便切换 header 样式
 
     parentIndustries: [],
@@ -52,8 +50,6 @@ function headerData(page = '', productCategoryMode = 'navigate') {
     },
 
     async init() {
-      this.isMobile = this.$store.site.isMobile;
-
       await this.$store.site.load();
 
       // 导航栏使用数据
@@ -70,16 +66,6 @@ function headerData(page = '', productCategoryMode = 'navigate') {
       });
       this.$watch('childCategory', (newValue) => {
         this.grandsonCategory = newValue[0]?.children || [];
-      });
-
-      const localHtml = this.isMobile ? './header-mobile.html' : './header.html';
-      this.$nextTick(() => {
-        fetch(localHtml)
-          .then((response) => response.text())
-          .then((data) => {
-            this.headerHtml = data;
-          })
-          .catch((error) => console.error('Error loading header:', error));
       });
 
       window.addEventListener('set-swiper-index', (event) => {

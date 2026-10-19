@@ -14,7 +14,10 @@
   </head>
 
   <body>
-    <div x-data="headerData('cases')" x-html="headerHtml"></div>
+    <div x-data="headerData('cases')">
+      <!-- #include partials/header.html -->
+      <!-- #include partials/header-mobile.html -->
+    </div>
 
     <main x-data="data" class="flex flex-col justify-between">
       <div class="bg-[#f6f7f8] container-primary">
@@ -164,7 +167,10 @@
       </div>
     </main>
 
-    <div x-data="footerData" x-html="footerHtml"></div>
+    <div x-data="footerData">
+      <!-- #include partials/footer.html -->
+      <!-- #include partials/footer-mobile.html -->
+    </div>
 
     <script type="module" src="./cases.js"></script>
   </body>

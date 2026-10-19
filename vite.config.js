@@ -1,6 +1,7 @@
 import {resolve} from 'path';
 import {fileURLToPath} from 'node:url';
 import {defineConfig, loadEnv} from 'vite';
+import htmlInclude from './build/html-include.js';
 
 const projectRoot = fileURLToPath(new URL('.', import.meta.url));
 
@@ -11,16 +12,12 @@ export default defineConfig(({mode}) => {
     root: resolve(projectRoot, 'src'),
     base: env.VITE_BASE_PATH || '/',
     publicDir: resolve(projectRoot, 'public'),
+    plugins: [htmlInclude()],
     build: {
       outDir: resolve(projectRoot, 'dist'),
       emptyOutDir: true,
       rolldownOptions: {
         input: {
-          header: resolve(projectRoot, 'src/header.html'),
-          'header-mobile': resolve(projectRoot, 'src/header-mobile.html'),
-          footer: resolve(projectRoot, 'src/footer.html'),
-          'footer-mobile': resolve(projectRoot, 'src/footer-mobile.html'),
-          popover: resolve(projectRoot, 'src/popover.html'),
           about: resolve(projectRoot, 'src/about.html'),
           jobs: resolve(projectRoot, 'src/jobs.html'),
           news: resolve(projectRoot, 'src/news.html'),

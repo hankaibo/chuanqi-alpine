@@ -50,7 +50,10 @@
   </head>
 
   <body>
-    <div x-data="headerData('index')" x-html="headerHtml"></div>
+    <div x-data="headerData('index')">
+      <!-- #include partials/header.html -->
+      <!-- #include partials/header-mobile.html -->
+    </div>
 
     <main x-data="data" class="h-screen">
       <!-- Swiper -->
@@ -589,7 +592,9 @@
       </div>
     </main>
 
-    <div x-data="popoverData" x-html="popoverHtml" x-show="!isMobile" class="absolute right-3 bottom-3 flex flex-col py-5 px-2 bg-primary z-[1001] box-border shadow-md"></div>
+    <div x-data="popoverData" x-show="!isMobile" class="absolute right-3 bottom-3 flex flex-col py-5 px-2 bg-primary z-[1001] box-border shadow-md">
+      <!-- #include partials/popover.html -->
+    </div>
 
     <script type="module" src="./index.js"></script>
   </body>

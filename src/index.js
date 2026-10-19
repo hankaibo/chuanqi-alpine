@@ -13,7 +13,6 @@ import {getThumbnailUrl, observeOnce} from './utils';
 import {createReadOnlyEditor} from './read-only-editor';
 
 Alpine.data('popoverData', () => ({
-  popoverHtml: '',
   isMobile: window.matchMedia('(max-width: 768px)').matches,
   popperInstance: null,
 
@@ -48,17 +47,6 @@ Alpine.data('popoverData', () => ({
       ...options,
       modifiers: [...options.modifiers, {name: 'eventListeners', enabled: false}],
     }));
-  },
-
-  init() {
-    this.$nextTick(() => {
-      fetch('./popover.html')
-        .then((response) => response.text())
-        .then((data) => {
-          this.popoverHtml = data;
-        })
-        .catch((error) => console.error('Error loading popover:', error));
-    });
   },
 }));
 
