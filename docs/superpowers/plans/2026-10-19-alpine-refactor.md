@@ -48,17 +48,17 @@
 
 - Consumes: `getIndusties(cb)`、`getCategories(cb)`(来自现有 `src/header.js`,本任务暂不改);Alpine 3.x。
 - Produces:
-  - `src/components/header.js` → `export function headerData(page = '')`(Alpine.data 工厂)。字段:`headerHtml`、`isLink`(= `page`)、`isMobile`、`parentIndustries`、`childIndustry`、`grandsonIndustry`、`parentCategories`、`childCategory`、`grandsonCategory`;方法:`handleIndustry(pId, index = 0)`、`handleSolutionDetail(solutionId)`、`handleProductCategory(pId, index = 0)`、`handleProductDetail(productId)`、`init()`。
+  - `src/components/header.js` → `export function headerData(page = '', productCategoryMode = 'navigate')`(Alpine.data 工厂)。字段:`headerHtml`、`isLink`(= `page`)、`isMobile`、`parentIndustries`、`childIndustry`、`grandsonIndustry`、`parentCategories`、`childCategory`、`grandsonCategory`;方法:`handleIndustry(pId, index = 0)`、`handleSolutionDetail(solutionId)`、`handleProductCategory(pId, index = 0)`、`handleProductDetail(productId)`、`init()`。`productCategoryMode` 仅 `'refresh'` 时派发 `refreshCategory` 事件,否则默认跳转;`isLink` 与行为互相独立。
   - `src/components/footer.js` → `export function footerData()`。字段:`footerHtml`、`isMobile`;方法:`handleTop()`、`init()`。
   - `src/bootstrap.js` → `export default Alpine`;副作用:注册 `collapse` 插件、注册 `Alpine.data('headerData', headerData)` 与 `Alpine.data('footerData', footerData)`、`import './style.css'`、DEV 下 `window.Alpine = Alpine`。
 
 - [ ] **Step 1: 创建 `src/components/header.js`**
 
-把各页重复的 `headerData` 提取为带参工厂。签名 `headerData(page = '')`,内部:`isLink: page`,其余字段与现有完全一致。**保留 products 例外**,`handleProductCategory` 体内:
+把各页重复的 `headerData` 提取为带参工厂。签名 `headerData(page = '', productCategoryMode = 'navigate')`,内部:`isLink: page`,其余字段与现有完全一致。**保留 products 页例外**(注意:`product-detail`/`solution-detail` 的 `isLink` 也是 `products`,但它们用默认跳转,故行为由第二个参数决定,而非 `page`),`handleProductCategory` 体内:
 
 ```js
 handleProductCategory(pId, index = 0) {
-  if (page === 'products') {
+  if (productCategoryMode === 'refresh') {
     window.dispatchEvent(new CustomEvent('refreshCategory', { detail: { pId, index } }));
     return;
   }
@@ -156,18 +156,20 @@ git commit -m "refactor: 抽取共享 header/footer 组件与引导模块(index 
 
 将各页 `<div x-data="headerData" x-html="headerHtml"></div>` 改为传入页名,页名取值如下:
 
-| 文件                   | 参数                     |
-| ---------------------- | ------------------------ |
-| `about.html`           | `headerData('about')`    |
-| `cases.html`           | `headerData('cases')`    |
-| `cases-detail.html`    | `headerData('cases')`    |
-| `industry.html`        | `headerData('industry')` |
-| `jobs.html`            | `headerData('jobs')`     |
-| `news.html`            | `headerData('news')`     |
-| `news-detail.html`     | `headerData('news')`     |
-| `product-detail.html`  | `headerData('products')` |
-| `products.html`        | `headerData('products')` |
-| `solution-detail.html` | `headerData('industry')` |
+| 文件                   | 参数                                |
+| ---------------------- | ----------------------------------- |
+| `about.html`           | `headerData('about')`               |
+| `cases.html`           | `headerData('cases')`               |
+| `cases-detail.html`    | `headerData('cases')`               |
+| `industry.html`        | `headerData('industries')`          |
+| `jobs.html`            | `headerData('jobs')`                |
+| `news.html`            | `headerData('news')`                |
+| `news-detail.html`     | `headerData('news')`                |
+| `product-detail.html`  | `headerData('products')`            |
+| `products.html`        | `headerData('products', 'refresh')` |
+| `solution-detail.html` | `headerData('products')`            |
+
+> `productCategoryMode` 仅 `products.html` 传 `'refresh'`;`product-detail.html`/`solution-detail.html` 虽 `isLink === 'products'`,仍用默认跳转。
 
 页脚包裹 `<div x-data="footerData" x-html="footerHtml"></div>` 保持不变(无需参数)。
 
