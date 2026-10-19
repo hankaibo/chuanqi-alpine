@@ -21,7 +21,7 @@
     "@popperjs/core": "^2.11.8",
     "@wangeditor/editor": "^5.1.23",
     "alpinejs": "^3.14.1",
-    "nanoid": "^5.0.7",
+    "nanoid": "^5.1.16",
     "swiper": "^11.1.8"
   },
   "devDependencies": {
