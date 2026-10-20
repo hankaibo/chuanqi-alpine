@@ -6,8 +6,19 @@
   --breakpoint-3xl: 1792px;
 }
 
+/* v4 默认把 hover/group-hover 包进 @media (hover:hover),v3 没有;
+   按 D1「严格一致」钉回 v3 的选择器形态 */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (.group:hover &);
+
 /* v3 Preflight 兼容层:把 v4 改掉的行为钉回 v3(见 spec §6 一致性账本) */
 @layer base {
+  /* v4 Preflight 删掉了 v3 的这条;header 搜索框是 type="search" */
+  [type='search'] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+  }
+
   button,
   [role='button'] {
     cursor: pointer;
