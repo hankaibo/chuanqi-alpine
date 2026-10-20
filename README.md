@@ -32,6 +32,22 @@ pnpm check
 
 该命令会检查格式并执行生产构建。项目要求 Node.js `>=22.22.1`，并通过 `packageManager` 固定 pnpm 版本。
 
+#### 样式产物比对（升级 Tailwind 等影响样式的依赖时）
+
+本项目没有视觉回归测试。升级会影响样式产物的依赖（Tailwind、Vite 等）时，先与已确认的产物基线做规则级比对，确认没有静默的样式变化：
+
+```bash
+pnpm css:diff
+```
+
+它会先构建，再与 `scripts/css-baseline/` 中的基线逐条比对，报告写入 `css-report.md`（不入库）。发现差异时命令以非 0 退出，并分四节列出：仅基线有、仅新产物有、同名取值不同、仅颜色取值不同。
+
+确认差异符合预期后刷新基线，并与依赖升级一起提交：
+
+```bash
+pnpm css:baseline
+```
+
 ### 目录结构
 
 ```
@@ -39,6 +55,9 @@ pnpm check
 │   └── pre-commit                    提交前格式化暂存文件
 ├── dist                              构建产物（自动清理，不提交）
 ├── public                            原样复制到构建目录的资源
+├── scripts
+│   ├── css-baseline                  产物 CSS 基线（css:diff 的比对对象）
+│   └── css-diff.mjs                  产物 CSS 规则级比对脚本
 ├── src
 │   ├── components                    各页面共享的组件脚本（页头、页脚、导航、弹窗、Tab 等）
 │   ├── images                        图片目录

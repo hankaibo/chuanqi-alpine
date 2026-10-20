@@ -6,3 +6,5 @@ dist
 *.log
 pnpm-lock.yaml
 .superpowers/
+scripts/css-baseline/
+css-report.md
