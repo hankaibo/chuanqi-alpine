@@ -21,7 +21,7 @@ Alpine.data('data', () => ({
       return {
         ...item,
         publishedAt: item.publishedAt.substring(0, 19).replace('T', ' '),
-        imageUrl: getThumbnailUrl(item.cover.path),
+        imageUrl: getThumbnailUrl(item.cover?.path),
       };
     });
     this.total = data.total;

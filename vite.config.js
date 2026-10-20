@@ -1,6 +1,7 @@
 import {resolve} from 'path';
 import {fileURLToPath} from 'node:url';
 import {defineConfig, loadEnv} from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import htmlInclude from './build/html-include.js';
 
 const projectRoot = fileURLToPath(new URL('.', import.meta.url));
@@ -12,7 +13,7 @@ export default defineConfig(({mode}) => {
     root: resolve(projectRoot, 'src'),
     base: env.VITE_BASE_PATH || '/',
     publicDir: resolve(projectRoot, 'public'),
-    plugins: [htmlInclude()],
+    plugins: [tailwindcss(), htmlInclude()],
     build: {
       outDir: resolve(projectRoot, 'dist'),
       emptyOutDir: true,

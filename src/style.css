@@ -1,6 +1,28 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss' source(none);
+@source './**/*.{html,js}';
+
+@theme {
+  --color-primary: #4eb0b3;
+  --breakpoint-3xl: 1792px;
+}
+
+/* v3 Preflight 兼容层:把 v4 改掉的行为钉回 v3(见 spec §6 一致性账本) */
+@layer base {
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+}
+
+/* v3 的 theme.backgroundPosition 是 override;这里只补回页面实际用到的 bg-right-2 */
+@utility bg-right-2 {
+  background-position: right 8px center;
+}
 
 [x-cloak] {
   display: none !important;
