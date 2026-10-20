@@ -15,8 +15,6 @@
     "prepare": "husky",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "css:baseline": "vite build && rm -rf scripts/css-baseline && mkdir -p scripts/css-baseline && cp dist/assets/*.css scripts/css-baseline/",
-    "css:diff": "vite build && node scripts/css-diff.mjs scripts/css-baseline dist/assets css-report.md",
     "check": "pnpm format:check && pnpm build"
   },
   "lint-staged": {
