@@ -41,13 +41,9 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      # 构建期变量优先于 .env.production（Vite 的规则：已存在的 process.env 不会被 .env 文件覆盖）。
-      # 项目站点地址是 https://<user>.github.io/<repo>/，资源必须挂在这个前缀下；
-      # .env.production 里的 /temp/ 是给自有服务器部署用的。绑定自定义域名后这里改为 `/`。
+      # 资源前缀与接口地址都在 .env.production 里(Vite 构建时自动读取 production 环境)
       - name: Build
         run: pnpm build
-        env:
-          VITE_BASE_PATH: /chuanqi-alpine/
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

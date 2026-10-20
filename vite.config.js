@@ -13,6 +13,8 @@ export default defineConfig(({mode}) => {
     root: resolve(projectRoot, 'src'),
     base: env.VITE_BASE_PATH || '/',
     publicDir: resolve(projectRoot, 'public'),
+    // root 是 src/，env 文件在仓库根目录，需显式指定，否则 import.meta.env.VITE_* 取不到值
+    envDir: projectRoot,
     plugins: [tailwindcss(), htmlInclude()],
     build: {
       outDir: resolve(projectRoot, 'dist'),

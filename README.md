@@ -19,23 +19,25 @@ pnpm dev
 #### 编译
 
 ```bash
-### 目前编译公共基础路径为 /temp/，如果想替换为其它值，请修改 .env.production 中的 VITE_BASE_PATH。
-### 将生成的 dist 目录下的文件上传到服务器相应的目录即可。
 pnpm build
 ```
 
+构建读取 `.env.production`，其中两项决定产物如何对外访问：
+
+| 变量                | 当前值                             | 说明                                                     |
+| ------------------- | ---------------------------------- | -------------------------------------------------------- |
+| `VITE_BASE_PATH`    | `/chuanqi-alpine/`                 | 资源前缀，对应 GitHub Pages 项目站点路径                 |
+| `VITE_API_BASE_URL` | `https://api-chuanqi.mypandora.cn` | 后端地址；留空则请求走相对路径（开发环境的 `/api` 代理） |
+
+部署到自有服务器时，把 `VITE_BASE_PATH` 改成该站点的目录（例如 `/temp/`）再构建，然后把 `dist` 里的文件上传到对应目录。
+
+`VITE_*` 会在构建时内联进 JS/CSS，不是秘密，直接写在 `.env.production` 里即可，无需配置 GitHub Secrets。
+
 #### 部署
 
-两种目标的产物完全相同，只有资源前缀（`VITE_BASE_PATH`）不同：
+推送到 `main` 后，`.github/workflows/static.yml` 会执行 `pnpm install --frozen-lockfile`、`pnpm build`，并把 `dist` 发布到 GitHub Pages。
 
-| 目标         | 前缀                    | 配置位置                                       |
-| ------------ | ----------------------- | ---------------------------------------------- |
-| GitHub Pages | `/<仓库名>/`            | `.github/workflows/static.yml` 的 `Build` 步骤 |
-| 自有服务器   | 按部署目录，如 `/temp/` | `.env.production`                              |
-
-推送到 `main` 后，`.github/workflows/static.yml` 会执行 `pnpm install --frozen-lockfile` 和 `pnpm build`，并把 `dist` 发布到 GitHub Pages。仓库 Settings → Pages 的 **Source** 需设为 `GitHub Actions`。
-
-工作流里显式指定了 `VITE_BASE_PATH`，优先级高于 `.env.production`（Vite 不会用 `.env` 文件覆盖已存在的环境变量），因此改 `.env.production` 不会影响 GitHub Pages 的构建。自有服务器部署仍是 `pnpm build` 后把 `dist` 里的文件上传到对应目录。
+仓库侧只需一项设置：Settings → Pages → **Source** 选 `GitHub Actions`。若绑定自定义域名，把域名填在同一个页面，并把 `.env.production` 的 `VITE_BASE_PATH` 改为 `/`。
 
 #### 检查
 

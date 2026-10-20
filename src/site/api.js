@@ -1,25 +1,26 @@
 import {cachedFetch} from '../fetch-cache';
 import {buildQueryString} from '../utils';
+import {apiUrl} from './api-base';
 
 /**
  * 行业数据(带 sessionStorage 缓存),返回数组。
  */
 function getIndustries() {
-  return cachedFetch('/api/v1/industries/index');
+  return cachedFetch(apiUrl('/api/v1/industries/index'));
 }
 
 /**
  * 产品分类(带 sessionStorage 缓存),返回数组。
  */
 function getCategories() {
-  return cachedFetch('/api/v1/categories/index');
+  return cachedFetch(apiUrl('/api/v1/categories/index'));
 }
 
 /**
  * 首页轮播产品,返回数组。
  */
 async function getProducts() {
-  const res = await fetch('/api/v1/products/index');
+  const res = await fetch(apiUrl('/api/v1/products/index'));
   return res.json();
 }
 
@@ -28,7 +29,7 @@ async function getProducts() {
  */
 async function getCases(industryId) {
   const queryString = buildQueryString({filters: {industryId}});
-  const res = await fetch(`/api/v1/cases/index?${queryString}`);
+  const res = await fetch(apiUrl(`/api/v1/cases/index?${queryString}`));
   return res.json();
 }
 
@@ -36,7 +37,7 @@ async function getCases(industryId) {
  * 关于我们,返回原始对象。
  */
 async function getAbout(id = 1) {
-  const res = await fetch(`/api/v1/about/${id}`);
+  const res = await fetch(apiUrl(`/api/v1/about/${id}`));
   return res.json();
 }
 
@@ -44,7 +45,7 @@ async function getAbout(id = 1) {
  * 资讯中心列表,返回 { data: [...] }。
  */
 async function getNews(currentPage = 1, pageSize = 4) {
-  const res = await fetch(`/api/v1/news?currentPage=${currentPage}&pageSize=${pageSize}`);
+  const res = await fetch(apiUrl(`/api/v1/news?currentPage=${currentPage}&pageSize=${pageSize}`));
   return res.json();
 }
 
@@ -52,7 +53,7 @@ async function getNews(currentPage = 1, pageSize = 4) {
  * 新增留言。
  */
 function submitMessage(form) {
-  return fetch('/api/v1/messages', {
+  return fetch(apiUrl('/api/v1/messages'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

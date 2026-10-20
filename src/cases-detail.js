@@ -1,6 +1,7 @@
 import Alpine from './bootstrap';
 
 import {createReadOnlyEditor} from './read-only-editor';
+import {apiUrl} from './site/api-base';
 
 Alpine.data('data', () => ({
   name: '',
@@ -11,7 +12,7 @@ Alpine.data('data', () => ({
   async getDetail() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
-    const res = await fetch(`/api/v1/cases/${id}`);
+    const res = await fetch(apiUrl(`/api/v1/cases/${id}`));
     const data = await res.json();
     const {name, publishedAt, views, summary, content} = data;
     this.name = name;

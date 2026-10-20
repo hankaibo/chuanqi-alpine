@@ -1,5 +1,6 @@
 import Alpine from './bootstrap';
 import {getThumbnailUrl} from './utils';
+import {apiUrl} from './site/api-base';
 
 Alpine.data('data', () => ({
   loading: false,
@@ -13,7 +14,7 @@ Alpine.data('data', () => ({
   },
   async getList() {
     this.loading = true;
-    const res = await fetch(`/api/v1/news?pageSize=${this.queryParams.pageSize}&currentPage=${this.queryParams.currentPage}`);
+    const res = await fetch(apiUrl(`/api/v1/news?pageSize=${this.queryParams.pageSize}&currentPage=${this.queryParams.currentPage}`));
     const data = await res.json();
     this.loading = false;
     this.hasNextPage = data.hasNextPage;
