@@ -8,12 +8,6 @@
     "node": ">=22.22.1",
     "pnpm": ">=10"
   },
-  "pnpm": {
-    "overrides": {
-      "@babel/runtime": "^7.26.10",
-      "prismjs": "^1.30.0"
-    }
-  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -30,12 +24,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@alpinejs/collapse": "^3.17.4",
-    "@popperjs/core": "^2.11.8",
-    "@wangeditor/editor": "^5.1.23",
-    "alpinejs": "^3.17.4",
-    "nanoid": "^3.3.20",
-    "swiper": "^14.3.0"
+    "@alpinejs/collapse": "3.17.4",
+    "@popperjs/core": "2.11.8",
+    "@wangeditor/editor": "5.1.23",
+    "alpinejs": "3.17.4",
+    "nanoid": "3.3.20",
+    "swiper": "14.3.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",
