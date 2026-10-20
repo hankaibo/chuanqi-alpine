@@ -40,17 +40,16 @@ pnpm check
 ├── dist                              构建产物（自动清理，不提交）
 ├── public                            原样复制到构建目录的资源
 ├── src
+│   ├── components                    各页面共享的组件脚本（页头、页脚、导航、弹窗、Tab 等）
 │   ├── images                        图片目录
+│   ├── partials                      公共页面片段（页头、页脚、移动端菜单、弹窗）
+│   ├── site                          站点级模块（API 请求、站点配置、全局 store）
 │   ├── svg                           页面中使用到的 svg 文件，方便打开某个 svg 复制到 html 页面中
+│   ├── bootstrap.js                  应用入口，注册 Alpine 组件与指令
 │   ├── read-only-editor.js           延迟加载只读富文本编辑器
-│   ├── footer-mobile.html            手机模式下公共 footer 页面片段
-│   ├── footer.html                   公共 footer 页面片段
-│   ├── header-mobile.html            手机模式下公共 header 页面片段
-│   ├── header.html                   公共 header 页面片段
-│   ├── popover.html                  首页右下角弹窗页面片段
 │   ├── xxx.html                      xxx页面
 │   ├── xxx.js                        xxx页面所引用的 js 文件
-│   ├── style.css                     样式文件
+│   ├── style.css                     样式文件（Tailwind CSS v4 配置与全局样式）
 │   └── utils.js                      js工具方法文件
 ├── .editorconfig                     编辑器配置文件
 ├── .env.development                  开发环境配置文件
@@ -59,8 +58,6 @@ pnpm check
 ├── .prettierignore                   prettier 忽略配置文件
 ├── .prettierrc                       prettier 配置文件
 ├── package.json                      依赖、运行时和脚本配置
-├── postcss.config.cjs                css 预处理配置文件
 ├── README.md                         本文件
-├── tailwind.config.js                tailwindcss 配置文件
 └── vite.config.js                    vite 配置文件
 ```
