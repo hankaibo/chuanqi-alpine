@@ -24,6 +24,19 @@ pnpm dev
 pnpm build
 ```
 
+#### 部署
+
+两种目标的产物完全相同，只有资源前缀（`VITE_BASE_PATH`）不同：
+
+| 目标         | 前缀                    | 配置位置                                       |
+| ------------ | ----------------------- | ---------------------------------------------- |
+| GitHub Pages | `/<仓库名>/`            | `.github/workflows/static.yml` 的 `Build` 步骤 |
+| 自有服务器   | 按部署目录，如 `/temp/` | `.env.production`                              |
+
+推送到 `main` 后，`.github/workflows/static.yml` 会执行 `pnpm install --frozen-lockfile` 和 `pnpm build`，并把 `dist` 发布到 GitHub Pages。仓库 Settings → Pages 的 **Source** 需设为 `GitHub Actions`。
+
+工作流里显式指定了 `VITE_BASE_PATH`，优先级高于 `.env.production`（Vite 不会用 `.env` 文件覆盖已存在的环境变量），因此改 `.env.production` 不会影响 GitHub Pages 的构建。自有服务器部署仍是 `pnpm build` 后把 `dist` 里的文件上传到对应目录。
+
 #### 检查
 
 ```bash

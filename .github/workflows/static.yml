@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+# 构建并部署静态站点到 GitHub Pages
 name: Deploy static content to Pages
 
 on:
@@ -22,7 +22,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -31,13 +30,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # 构建期变量优先于 .env.production（Vite 的规则：已存在的 process.env 不会被 .env 文件覆盖）。
+      # 项目站点地址是 https://<user>.github.io/<repo>/，资源必须挂在这个前缀下；
+      # .env.production 里的 /temp/ 是给自有服务器部署用的。绑定自定义域名后这里改为 `/`。
+      - name: Build
+        run: pnpm build
+        env:
+          VITE_BASE_PATH: /chuanqi-alpine/
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # 上传构建产物，而不是仓库源码
+          path: dist
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
